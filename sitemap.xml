@@ -18,6 +18,36 @@
   </url>
   
   <url>
+    <loc></loc>
+    <lastmod>2021-03-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://mohamed-elleuch.me/tag/academic/</loc>
+    <lastmod>2021-03-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://mohamed-elleuch.me/writeups/hacklockad/</loc>
+    <lastmod>2021-03-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc></loc>
+    <lastmod>2021-03-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://mohamed-elleuch.me/writeups/</loc>
+    <lastmod>2021-03-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://mohamed-elleuch.me/tags/</loc>
+    <lastmod>2021-03-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://mohamed-elleuch.me/slides/</loc>
     <lastmod>2019-02-05T00:00:00+00:00</lastmod>
   </url>
@@ -28,22 +58,12 @@
   </url>
   
   <url>
-    <loc></loc>
-    <lastmod>2013-07-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://mohamed-elleuch.me/publication-type/1/</loc>
     <lastmod>2013-07-01T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://mohamed-elleuch.me/publication/example/</loc>
-    <lastmod>2013-07-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc></loc>
     <lastmod>2013-07-01T00:00:00+00:00</lastmod>
   </url>
   
@@ -73,14 +93,6 @@
   
   <url>
     <loc>https://mohamed-elleuch.me/categories/</loc>
-  </url>
-  
-  <url>
-    <loc>https://mohamed-elleuch.me/writeups/</loc>
-  </url>
-  
-  <url>
-    <loc>https://mohamed-elleuch.me/tags/</loc>
   </url>
   
 </urlset>
