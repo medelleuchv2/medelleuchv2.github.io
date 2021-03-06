@@ -5,7 +5,7 @@
     <link>https://mohamed-elleuch.me/tag/academic/</link>
       <atom:link href="https://mohamed-elleuch.me/tag/academic/index.xml" rel="self" type="application/rss+xml" />
     <description>Academic</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>Copyright © Mohamed Elleuch 2021</copyright><lastBuildDate>Tue, 23 Mar 2021 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>Copyright © Mohamed Elleuch 2021</copyright><lastBuildDate>Tue, 23 Feb 2021 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://mohamed-elleuch.me/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_512x512_fill_lanczos_center_2.png</url>
       <title>Academic</title>
@@ -15,7 +15,7 @@
     <item>
       <title>HackLock Active Directory Workshop Writeup</title>
       <link>https://mohamed-elleuch.me/writeups/hacklockad/</link>
-      <pubDate>Tue, 23 Mar 2021 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 23 Feb 2021 00:00:00 +0000</pubDate>
       <guid>https://mohamed-elleuch.me/writeups/hacklockad/</guid>
       <description>&lt;h1 id=&#34;p-stylecolorredoverview-of-the-network-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Overview of the network &lt;/p&gt;&lt;/h1&gt;
 &lt;p&gt;&lt;img class=&#34;special-img-class&#34; src=&#34;archi.png

