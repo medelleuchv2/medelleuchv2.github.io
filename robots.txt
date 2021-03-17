@@ -1,3 +1,2 @@
 User-agent: *
-
-Sitemap: https://mohamed-elleuch.me/sitemap.xml
+hi
