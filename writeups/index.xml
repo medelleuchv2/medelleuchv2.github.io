@@ -27,7 +27,7 @@
 &lt;ul&gt;
 &lt;li&gt;Port 22 running OpenSSH 8.0 ; Recent version, no need waste time on it&lt;/li&gt;
 &lt;li&gt;Port 80 running nginx ; robots.txt &amp;ndash;&amp;gt; /weather&lt;/li&gt;
-&lt;li&gt;Port 9001 running Medusa httpd 1.12 ; If we were on linux i think this should be something interesting&lt;/li&gt;
+&lt;li&gt;Port 9001 running Medusa httpd 1.12 ; If we were on linux i think this should be something to look at&lt;/li&gt;
 &lt;/ul&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Skipping the gobuster part, it will only show us robots.txt. I do prefer Dirb when it comes to directory bruteforcing&lt;/p&gt;
@@ -37,7 +37,7 @@
 &lt;p&gt;You can clone the SecLists repo from here &lt;a href=&#34;https://github.com/danielmiessler/SecLists&#34;&gt;https://github.com/danielmiessler/SecLists&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;We already got  &lt;strong&gt;/weather/&lt;/strong&gt; from the nmap results, let&amp;rsquo;s see enum more&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;dirb http://10.10.10.218/weather/ /opt/SecLists/Discovery/Web-Content/raft-small-directories.txt -R
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;dirb -R http://10.10.10.218/weather/ /opt/SecLists/Discovery/Web-Content/raft-small-directories.txt 
 &lt;/code&gt;&lt;/pre&gt;
 &lt;img src=&#34;dirb.png&#34;&gt;
 &lt;hr&gt;
@@ -102,7 +102,7 @@ And it worked! Let&#39;s login to the user
 &lt;h1 id=&#34;p-stylecolordarkredroot-privescp&#34;&gt;&lt;p style=&#34;color:darkred&#34;&gt;Root PrivEsc&lt;/p&gt;&lt;/h1&gt;
 &lt;p&gt;An interesting backups file which contains an encrypted tar.gz file&lt;/p&gt;
 &lt;img src=&#34;back.png&#34;&gt;
-&lt;p&gt;Because we&amp;rsquo;re on an OpenBSD box, we&amp;rsquo;re gonna use netpgp to decrypt then extract its content&lt;/p&gt;
+&lt;p&gt;Because we&amp;rsquo;re on an NetBSD box, we&amp;rsquo;re gonna use netpgp to decrypt then extract its content&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;netpgp --decrypt devel_backup-2020-09-16.tar.gz.enc --output=backup.tar.gz
 &lt;/code&gt;&lt;/pre&gt;
 &lt;img src=&#34;tar.png&#34;&gt;
@@ -114,7 +114,7 @@ And it worked! Let&#39;s login to the user
 &lt;p&gt;&lt;code&gt;littlebear&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;Let&amp;rsquo;s try to switch to the root user with this password!&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.vultr.com/docs/introduction-to-doas-on-openbsd&#34;&gt;https://www.vultr.com/docs/introduction-to-doas-on-openbsd&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.vultr.com/docs/introduction-to-doas-on-NetBSD&#34;&gt;https://www.vultr.com/docs/introduction-to-doas-on-NetBSD&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;doas su
 &lt;/code&gt;&lt;/pre&gt;
@@ -125,11 +125,11 @@ And it worked! Let&#39;s login to the user
 &lt;p&gt;Let&amp;rsquo;s see what caused the lua injection!&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;cat /home/r.michaels/devel/webapi/weather.lua
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Going through the code we can see what just exploited!&lt;/p&gt;
+&lt;p&gt;Going through the code we can see the injection point!&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-lua&#34;&gt;httpd.write(&#39;&amp;quot;error&amp;quot;: &amp;quot;unknown city: &#39; .. city .. &#39;&amp;quot;}&#39;)
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;basically what we have done is&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-lua&#34;&gt;httpd.write(&#39;&amp;quot;error&amp;quot;: &amp;quot;unknown city: &#39;hi&#39;);os.execute(&amp;quot;id&amp;quot;) -- &#39;&amp;quot;}&#39;)
+&lt;pre&gt;&lt;code class=&#34;language-lua&#34;&gt;httpd.write(&#39;&amp;quot;error&amp;quot;: &amp;quot;unknown city: hi&#39;);os.execute(&amp;quot;id&amp;quot;) -- &#39;&amp;quot;}&#39;)
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;To avoid this kind of injection, we should validate and sanitize the &amp;ldquo;city&amp;rdquo; input. Scanning the city variable for escape characters and special symbols, making a blacklist for any suspicious word {os,execute,print,&amp;hellip;}
 Or just by removing the &amp;lsquo;.. city ..&amp;rsquo; part!&lt;/p&gt;
