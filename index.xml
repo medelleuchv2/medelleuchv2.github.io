@@ -179,8 +179,8 @@ puts cookies[:cookie]
 &lt;hr&gt;
 &lt;h1 id=&#34;p-stylecolorreduser-privesc-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;User PrivEsc &lt;/p&gt;&lt;/h1&gt;
 &lt;p&gt;So now we&amp;rsquo;re on a docker container as the &lt;strong&gt;git&lt;/strong&gt; user!
-The trick now is to change the gitlab&amp;rsquo;s admin (Which is id=1) password
-Going through gitlab&amp;rsquo;s docs to get the right syntax
+The trick now is to change the gitlab&amp;rsquo;s admin (who is id=1) password&lt;/p&gt;
+&lt;p&gt;Going through gitlab&amp;rsquo;s docs to get the right syntax
 &lt;a href=&#34;https://docs.gitlab.com/ee/security/reset_user_password.html&#34;&gt;https://docs.gitlab.com/ee/security/reset_user_password.html&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;It may take a while to run&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;gitlab-rails console -e production

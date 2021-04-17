@@ -832,8 +832,8 @@ puts cookies[:cookie]
 <hr>
 <h1 id="p-stylecolorreduser-privesc-p"><p style="color:RED">User PrivEsc </p></h1>
 <p>So now we&rsquo;re on a docker container as the <strong>git</strong> user!
-The trick now is to change the gitlab&rsquo;s admin (Which is id=1) password
-Going through gitlab&rsquo;s docs to get the right syntax
+The trick now is to change the gitlab&rsquo;s admin (who is id=1) password</p>
+<p>Going through gitlab&rsquo;s docs to get the right syntax
 <a href="https://docs.gitlab.com/ee/security/reset_user_password.html">https://docs.gitlab.com/ee/security/reset_user_password.html</a></p>
 <p>It may take a while to run</p>
 <pre><code class="language-bash">gitlab-rails console -e production
