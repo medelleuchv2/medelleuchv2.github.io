@@ -86,7 +86,7 @@ Host script results:
 &lt;img src=&#34;dw.png&#34;&gt;
 &lt;h2 id=&#34;p-stylecolorgreensuper-secure-serverp&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Super Secure Server&lt;/p&gt;&lt;/h2&gt;
 &lt;p&gt;So basically from the name of the box,finding an executable and also the &lt;em&gt;essfunc.dll&lt;/em&gt; which comes with the vulnserver, we can presume we&amp;rsquo;re going to deal with a vulnerability!&lt;/p&gt;
-&lt;p&gt;We&amp;rsquo;re still missing something, on what port is this service is running?&lt;/p&gt;
+&lt;p&gt;We&amp;rsquo;re still missing something, on which port is this service is running?&lt;/p&gt;
 &lt;p&gt;Let&amp;rsquo;s run a full port nmap scan again&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;sudo nmap -T4 -p- 3.121.99.159 -v
 &lt;/code&gt;&lt;/pre&gt;

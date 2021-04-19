@@ -106,7 +106,7 @@ Host script results:
 &lt;img src=&#34;dw.png&#34;&gt;
 &lt;h2 id=&#34;p-stylecolorgreensuper-secure-serverp&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Super Secure Server&lt;/p&gt;&lt;/h2&gt;
 &lt;p&gt;So basically from the name of the box,finding an executable and also the &lt;em&gt;essfunc.dll&lt;/em&gt; which comes with the vulnserver, we can presume we&amp;rsquo;re going to deal with a vulnerability!&lt;/p&gt;
-&lt;p&gt;We&amp;rsquo;re still missing something, on what port is this service is running?&lt;/p&gt;
+&lt;p&gt;We&amp;rsquo;re still missing something, on which port is this service is running?&lt;/p&gt;
 &lt;p&gt;Let&amp;rsquo;s run a full port nmap scan again&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;sudo nmap -T4 -p- 3.121.99.159 -v
 &lt;/code&gt;&lt;/pre&gt;
@@ -444,7 +444,7 @@ Service Info: Host: laboratory.htb; OS: Linux; CPE: cpe:/o:linux:linux_kernel
 &lt;/ul&gt;
 &lt;img src=&#34;pro.png&#34;&gt;
 &lt;ul&gt;
-&lt;li&gt;Let&amp;rsquo;s let&amp;rsquo;s an issue in one of these projets containing&lt;/li&gt;
+&lt;li&gt;Let&amp;rsquo;s create an issue in one of these projets&lt;/li&gt;
 &lt;/ul&gt;
 &lt;pre&gt;&lt;code&gt;![a](/uploads/11111111111111111111111111111111/../../../../../../../../../../../../../../etc/passwd)
 &lt;/code&gt;&lt;/pre&gt;
