@@ -131,7 +131,7 @@ UNKNOWN COMMAND
 &lt;a href=&#34;https://github.com/corelan/mona&#34;&gt;https://github.com/corelan/mona&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;After opening the executeable with the debbuger
-we first we&amp;rsquo;re gonna set a working directory for mona at the button of the debbuger window&lt;/p&gt;
+we first we&amp;rsquo;re gonna set a working directory for mona at the buttom of the debbuger window&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-mona&#34;&gt;!mona config -set workingfolder c:\mona\%p
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;It should look like this&lt;/p&gt;
