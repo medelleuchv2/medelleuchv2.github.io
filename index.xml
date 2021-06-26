@@ -33,6 +33,156 @@
     </item>
     
     <item>
+      <title>HackTheBox - Spectra Writeup</title>
+      <link>https://mohamed-elleuch.me/writeups/htb-spectra/</link>
+      <pubDate>Sat, 26 Jun 2021 00:00:00 +0000</pubDate>
+      <guid>https://mohamed-elleuch.me/writeups/htb-spectra/</guid>
+      <description>&lt;h1 id=&#34;p-stylecolorredinformation-gathering-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Information Gathering &lt;/p&gt;&lt;/h1&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;p-stylecolorgreennmap-scan-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Nmap scan &lt;/p&gt;&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;sudo nmap -sC -sV 10.10.10.229 -v
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;22/tcp   open  ssh              OpenSSH 8.1 (protocol 2.0)
+| ssh-hostkey: 
+|_  4096 52:47:de:5c:37:4f:29:0e:8e:1d:88:6e:f9:23:4d:5a (RSA)
+80/tcp   open  http             nginx 1.17.4
+| http-methods: 
+|_  Supported Methods: GET HEAD
+|_http-server-header: nginx/1.17.4
+|_http-title: Site doesn\&#39;t have a title (text/html).
+3306/tcp open  mysql            MySQL (unauthorized)
+|_ssl-cert: ERROR: Script execution failed (use -d to debug)
+|_ssl-date: ERROR: Script execution failed (use -d to debug)
+|_sslv2: ERROR: Script execution failed (use -d to debug)
+|_tls-alpn: ERROR: Script execution failed (use -d to debug)
+|_tls-nextprotoneg: ERROR: Script execution failed (use -d to debug)
+8081/tcp open  blackice-icecap?
+| fingerprint-strings: 
+|   FourOhFourRequest, GetRequest: 
+|     HTTP/1.1 200 OK
+|     Content-Type: text/plain
+|     Date: Sat, 26 Jun 2021 10:57:52 GMT
+|     Connection: close
+|     Hello World
+|   HTTPOptions: 
+|     HTTP/1.1 200 OK
+|     Content-Type: text/plain
+|     Date: Sat, 26 Jun 2021 10:57:58 GMT
+|     Connection: close
+|_    Hello World
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We have 4 ports open&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;p-stylecolorgreenweb-enum-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Web Enum &lt;/p&gt;&lt;/h2&gt;
+&lt;p&gt;First let&amp;rsquo;s add &lt;code&gt;spectra.htb&lt;/code&gt; to &lt;code&gt;/etc/hosts&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;echo &amp;quot;10.10.10.229 spectra.htb&amp;quot; &amp;gt;&amp;gt; /etc/hosts
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;web1.png&#34;&gt;
+&lt;p&gt;Let&amp;rsquo;s check both of these pages&lt;/p&gt;
+&lt;img src=&#34;web2.png&#34;&gt;
+&lt;p&gt;Just a simple wordpress page&lt;/p&gt;
+&lt;img src=&#34;web3.png&#34;&gt;
+&lt;p&gt;From this error we can know that we&amp;rsquo;re dealing with another wordpress page but it&amp;rsquo;s misconfigured&lt;/p&gt;
+&lt;img src=&#34;dirlist.png&#34;&gt;
+&lt;p&gt;We have also directory listing on &lt;code&gt;/testing/&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;We can see aswell an interesting file &lt;code&gt;wp-config.php.save&lt;/code&gt; Which seems to be a backup of the original config file&lt;/p&gt;
+&lt;img src=&#34;wpconfig.png&#34;&gt;
+&lt;p&gt;We get credentials&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-php&#34;&gt;
+/** MySQL database username */
+define( &#39;DB_USER&#39;, &#39;devtest&#39; );
+
+/** MySQL database password */
+define( &#39;DB_PASSWORD&#39;, &#39;devteam01&#39; );
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let&amp;rsquo;s try to login&lt;/p&gt;
+&lt;img src=&#34;devtest.png&#34;&gt;
+&lt;p&gt;We couldn&amp;rsquo;t login with this username!
+This is an easy rated machine, we can manually check if this password works with any default username &lt;code&gt;admin/administrator&lt;/code&gt; for exemple&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Admin user doesn&amp;rsquo;t exist&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;administrator exists ; let&amp;rsquo;s try the password we got&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;img src=&#34;login.png&#34;&gt;
+&lt;p&gt;And we&amp;rsquo;re in&lt;/p&gt;
+&lt;h1 id=&#34;p-stylecolorredfoothold-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Foothold &lt;/p&gt;&lt;/h1&gt;
+&lt;hr&gt;
+&lt;p&gt;Let&amp;rsquo;s create our malicious plugin&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;I&amp;rsquo;ll use pentestmonkey&amp;rsquo;s php revshell &lt;a href=&#34;https://github.com/pentestmonkey/php-reverse-shell&#34;&gt;https://github.com/pentestmonkey/php-reverse-shell&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;img src=&#34;rev.png&#34;&gt;
+&lt;p&gt;Let&amp;rsquo;s now upload thiss plugin&lt;/p&gt;
+&lt;img src=&#34;revzip.png&#34;&gt;
+&lt;p&gt;Let&amp;rsquo;s setup a listener and install the plugin&lt;/p&gt;
+&lt;img src=&#34;install.png&#34;&gt;
+&lt;img src=&#34;foothold.png&#34;&gt;
+&lt;p&gt;And we&amp;rsquo;re on the box&lt;/p&gt;
+&lt;h1 id=&#34;p-stylecolorreduser-flag-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;User Flag &lt;/p&gt;&lt;/h1&gt;
+&lt;hr&gt;
+&lt;p&gt;After enumerating a bit, we can see an interesting file in &lt;code&gt;/opt/&lt;/code&gt;&lt;/p&gt;
+&lt;img src=&#34;autologin.png&#34;&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;# Copyright 2016 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+description   &amp;quot;Automatic login at boot&amp;quot;
+author        &amp;quot;chromium-os-dev@chromium.org&amp;quot;
+# After boot-complete starts, the login prompt is visible and is accepting
+# input.
+start on started boot-complete
+script
+  passwd=
+  # Read password from file. The file may optionally end with a newline.
+  for dir in /mnt/stateful_partition/etc/autologin /etc/autologin; do
+    if [ -e &amp;quot;${dir}/passwd&amp;quot; ]; then
+      passwd=&amp;quot;$(cat &amp;quot;${dir}/passwd&amp;quot;)&amp;quot;
+      break
+    fi
+  done
+  if [ -z &amp;quot;${passwd}&amp;quot; ]; then
+    exit 0
+  fi
+  # Inject keys into the login prompt.
+  #
+  # For this to work, you must have already created an account on the device.
+  # Otherwise, no login prompt appears at boot and the injected keys do the
+  # wrong thing.
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;So as the comment says it&amp;rsquo;s going to get the password from  &lt;code&gt;/mnt/stateful_partition/etc/autologin/passwd&lt;/code&gt; or &lt;code&gt;/etc/autologin/passwd&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s try both of these&lt;/p&gt;
+&lt;img src=&#34;user.png&#34;&gt;
+&lt;p&gt;And we get a password!!&lt;/p&gt;
+&lt;p&gt;we can ssh into the box as the user &lt;code&gt;katie&lt;/code&gt;&lt;/p&gt;
+&lt;img src=&#34;katie.png&#34;&gt;
+&lt;h1 id=&#34;p-stylecolorredroot-flag-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Root Flag &lt;/p&gt;&lt;/h1&gt;
+&lt;hr&gt;
+&lt;p&gt;Let&amp;rsquo;s check if we can run anything as root&lt;/p&gt;
+&lt;img src=&#34;sudo.png&#34;&gt;
+&lt;p&gt;initctl binary own SUDO privileges. This binary allows us to interact with Upstart!&lt;/p&gt;
+&lt;p&gt;initctl uses the configuration files located at &lt;code&gt;/etc/init&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;The trick is to either create our own config file or inject a malicious code on an existing config file then restart it in order to execute our code&lt;/p&gt;
+&lt;img src=&#34;error.png&#34;&gt;
+&lt;p&gt;Sadly we don&amp;rsquo;t have write access!&lt;/p&gt;
+&lt;p&gt;Scrolling a bit in the files we can see that we can edit few files because we&amp;rsquo;re in the &lt;code&gt;developers&lt;/code&gt; group&lt;/p&gt;
+&lt;img src=&#34;test.png&#34;&gt;
+&lt;p&gt;Let&amp;rsquo;s edit one of these&lt;/p&gt;
+&lt;img src=&#34;test1.png&#34;&gt;
+&lt;p&gt;Then we need to start the service&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;sudo /sbin/initctl start test
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;root.png&#34;&gt;
+&lt;p&gt;And we rooted the box&lt;/p&gt;
+&lt;h2 id=&#34;thanks-for-reading-hope-you-enjoyed-it&#34;&gt;Thanks for reading hope you enjoyed it!&lt;/h2&gt;
+</description>
+    </item>
+    
+    <item>
       <title>HackTheBox - Tentacle Writeup</title>
       <link>https://mohamed-elleuch.me/writeups/htb-tentacle/</link>
       <pubDate>Fri, 18 Jun 2021 00:00:00 +0000</pubDate>
