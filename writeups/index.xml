@@ -94,7 +94,7 @@ sha512: CZsOB2[-SNIP-]2tW5UhzwqzLVkkpzAbuIw==
 &lt;hr&gt;
 &lt;h1 id=&#34;p-stylecolorred-privesc-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt; PrivEsc &lt;/p&gt;&lt;/h1&gt;
 &lt;hr&gt;
-&lt;p&gt;Before running any enumerating tool, i always check the Program file folders to check if we have any Software  (a aka free win) installed in the system!&lt;/p&gt;
+&lt;p&gt;Before running any enumerating tool, i always check the Program file, the documents and Downloads folders to check if we have any custom Software  (a aka free win) installed in the system!&lt;/p&gt;
 &lt;img src=&#34;portable.png&#34;&gt;
 &lt;p&gt;We  can copy the whole file and try to retrieve the encrypted like the machine &lt;code&gt;sharp&lt;/code&gt; but let&amp;rsquo;s keep enumerating!&lt;/p&gt;
 &lt;blockquote&gt;
