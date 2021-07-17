@@ -158,7 +158,7 @@ if($_SERVER[&#39;REQUEST_METHOD&#39;] === \&amp;quot;POST\&amp;quot;){
 &lt;p&gt;Let&amp;rsquo;s to import anything&lt;/p&gt;
 &lt;img src=&#34;succ.png&#34;&gt;
 &lt;p&gt;It worked!&lt;/p&gt;
-&lt;p&gt;As the page mentions, Let&amp;rsquo;s upload the reverse shell!&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s upload the reverse shell!&lt;/p&gt;
 &lt;img src=&#34;foothold.png&#34;&gt;
 &lt;p&gt;And we&amp;rsquo;re in&lt;/p&gt;
 &lt;hr&gt;
