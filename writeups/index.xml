@@ -170,7 +170,7 @@ console.log(&#39;Listening on port 3000...&#39;);
   &amp;quot;devDependencies&amp;quot;: {}
   }
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;There is an interesting /upload endpoint, let&amp;rsquo;s try if we can upload anything! but sadly that didn&amp;rsquo;t work, we didn&amp;rsquo;t have permessions&lt;/p&gt;
+&lt;p&gt;There is an interesting /upload endpoint, let&amp;rsquo;s try if we can upload anything! but sadly that didn&amp;rsquo;t work, we didn&amp;rsquo;t have permissions&lt;/p&gt;
 &lt;p&gt;After searching a bit we can find that loadsh 4.17.4 is vulnerable to Prototype Pollution&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;a href=&#34;https://snyk.io/test/npm/lodash/4.17.4&#34;&gt;https://snyk.io/test/npm/lodash/4.17.4&lt;/a&gt;&lt;/p&gt;
