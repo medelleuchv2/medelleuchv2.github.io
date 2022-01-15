@@ -260,7 +260,7 @@
   
   
   
-  <link rel="stylesheet" href="/css/wowchemy.8028d170b3ecf9438246932e1cbcdf6c.css" />
+  <link rel="stylesheet" href="/css/wowchemy.a5f2a0403faf5be0213f07cb8d40527c.css" />
 
   
 
@@ -281,8 +281,8 @@
     <link rel="manifest" href="/index.webmanifest" />
   
 
-  <link rel="icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_32x32_fill_lanczos_center_2.png" />
-  <link rel="apple-touch-icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_180x180_fill_lanczos_center_2.png" />
+  <link rel="icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_180x180_fill_lanczos_center_3.png" />
 
   <link rel="canonical" href="https://mohamed-elleuch.me/writeups/htb-ready/" />
 
@@ -341,7 +341,7 @@
   
   
   
-  <script src="/js/wowchemy-init.min.76abe0ff166961e9adc403995f18189f.js"></script>
+  <script src="/js/wowchemy-init.min.eca9bbc7a71accd5ebd9eee0ff004132.js"></script>
 
   
 
@@ -729,7 +729,7 @@ etc..
 <img src="CRLF1.png" style="filter: drop-shadow(0 0 0.75rem crimson);">
 <p>This vulnerability will come handy later on by adding newlines to our payload and that&rsquo;s by chaining both of these vulnerabilities in order to get an RCE.</p>
 <p>So now we understood what will be causing the RCE, we can dive in and get our shell!</p>
-<p>We&rsquo;ll be using the payload mentioned here: <a href="https://hackerone.com/reports/299473">https://hackerone.com/reports/299473</a></p>
+<p>We&rsquo;ll be using the payload mentioned here: <a href="https://hackerone.com/reports/299473" target="_blank" rel="noopener">https://hackerone.com/reports/299473</a></p>
 <pre><code>
  multi
  sadd resque:gitlab:queues system_hook_push
@@ -798,7 +798,7 @@ etc..
 <img src="Priv.png" style="filter: drop-shadow(0 0 0.75rem crimson);">
 <p>It seems like we&rsquo;re in a privileged docker!</p>
 <blockquote>
-<p>An interesting blog post to check ! <a href="https://blog.trailofbits.com/2019/07/19/understanding-docker-container-escapes/">https://blog.trailofbits.com/2019/07/19/understanding-docker-container-escapes/</a></p>
+<p>An interesting blog post to check ! <a href="https://blog.trailofbits.com/2019/07/19/understanding-docker-container-escapes/" target="_blank" rel="noopener">https://blog.trailofbits.com/2019/07/19/understanding-docker-container-escapes/</a></p>
 </blockquote>
 <pre><code>mkdir /tmp/cgrp &amp;&amp; mount -t cgroup -o rdma cgroup /tmp/cgrp &amp;&amp; mkdir /tmp/cgrp/x
  
@@ -1217,7 +1217,7 @@ And yeaah! we can access the box's file system
       
     
     
-    <script src="/en/js/wowchemy.min.a10ad2a6b25aea7a22d6392d483b454d.js"></script>
+    <script src="/en/js/wowchemy.min.e20609e6ad3f7fce339ee2e74f13682b.js"></script>
 
     
 

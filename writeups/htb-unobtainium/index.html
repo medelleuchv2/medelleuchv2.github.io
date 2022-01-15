@@ -260,7 +260,7 @@
   
   
   
-  <link rel="stylesheet" href="/css/wowchemy.8028d170b3ecf9438246932e1cbcdf6c.css" />
+  <link rel="stylesheet" href="/css/wowchemy.a5f2a0403faf5be0213f07cb8d40527c.css" />
 
   
 
@@ -281,8 +281,8 @@
     <link rel="manifest" href="/index.webmanifest" />
   
 
-  <link rel="icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_32x32_fill_lanczos_center_2.png" />
-  <link rel="apple-touch-icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_180x180_fill_lanczos_center_2.png" />
+  <link rel="icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_180x180_fill_lanczos_center_3.png" />
 
   <link rel="canonical" href="https://mohamed-elleuch.me/writeups/htb-unobtainium/" />
 
@@ -341,7 +341,7 @@
   
   
   
-  <script src="/js/wowchemy-init.min.76abe0ff166961e9adc403995f18189f.js"></script>
+  <script src="/js/wowchemy-init.min.eca9bbc7a71accd5ebd9eee0ff004132.js"></script>
 
   
 
@@ -846,11 +846,11 @@ console.log('Listening on port 3000...');
 <p>There is an interesting /upload endpoint, let&rsquo;s try if we can upload anything! but sadly that didn&rsquo;t work, we didn&rsquo;t have permissions</p>
 <p>After searching a bit we can find that loadsh 4.17.4 is vulnerable to Prototype Pollution</p>
 <blockquote>
-<p><a href="https://snyk.io/test/npm/lodash/4.17.4">https://snyk.io/test/npm/lodash/4.17.4</a></p>
+<p><a href="https://snyk.io/test/npm/lodash/4.17.4" target="_blank" rel="noopener">https://snyk.io/test/npm/lodash/4.17.4</a></p>
 </blockquote>
 <p>And also google-cloudstorage-commands is vulnerable to RCE</p>
 <blockquote>
-<p><a href="https://snyk.io/vuln/SNYK-JS-GOOGLECLOUDSTORAGECOMMANDS-1050431">https://snyk.io/vuln/SNYK-JS-GOOGLECLOUDSTORAGECOMMANDS-1050431</a></p>
+<p><a href="https://snyk.io/vuln/SNYK-JS-GOOGLECLOUDSTORAGECOMMANDS-1050431" target="_blank" rel="noopener">https://snyk.io/vuln/SNYK-JS-GOOGLECLOUDSTORAGECOMMANDS-1050431</a></p>
 </blockquote>
 <p>The next step to do now is pretty straightforward after knowing these 2 exploits!</p>
 <p>The /upload endpoint is what we&rsquo;ll be looking for now! It will be enough to get us into the machine</p>
@@ -1043,7 +1043,7 @@ certificate-controller-token-thnxw               kubernetes.io/service-account-t
 </code></pre>
 <p>Now it&rsquo;s pretty much over!</p>
 <blockquote>
-<p><a href="https://labs.bishopfox.com/tech-blog/bad-pods-kubernetes-pod-privilege-escalation">https://labs.bishopfox.com/tech-blog/bad-pods-kubernetes-pod-privilege-escalation</a></p>
+<p><a href="https://labs.bishopfox.com/tech-blog/bad-pods-kubernetes-pod-privilege-escalation" target="_blank" rel="noopener">https://labs.bishopfox.com/tech-blog/bad-pods-kubernetes-pod-privilege-escalation</a></p>
 </blockquote>
 <p>The only think left to check is if we&rsquo;re able to create pods</p>
 <pre><code>./kc --token=&lt;token&gt; auth can-i create pod
@@ -1474,7 +1474,7 @@ spec:
       
     
     
-    <script src="/en/js/wowchemy.min.a10ad2a6b25aea7a22d6392d483b454d.js"></script>
+    <script src="/en/js/wowchemy.min.e20609e6ad3f7fce339ee2e74f13682b.js"></script>
 
     
 

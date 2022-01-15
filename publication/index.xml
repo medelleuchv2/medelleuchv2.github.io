@@ -7,7 +7,7 @@
     <description>Publications</description>
     <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>Copyright © Mohamed Elleuch 2021</copyright><lastBuildDate>Thu, 01 Jul 2021 00:00:00 +0000</lastBuildDate>
     <image>
-      <url>https://mohamed-elleuch.me/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_512x512_fill_lanczos_center_2.png</url>
+      <url>https://mohamed-elleuch.me/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_512x512_fill_lanczos_center_3.png</url>
       <title>Publications</title>
       <link>https://mohamed-elleuch.me/publication/</link>
     </image>
@@ -40,25 +40,25 @@
 &lt;hr&gt;
 &lt;hr&gt;
 &lt;h1 id=&#34;p-stylecolorred-cyber-security-introduction-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt; Cyber Security Introduction &lt;/p&gt;&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&#34;unknown_infected.png&#34; width=&#34;400&#34; height=&#34;500&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;unknown_infected.png&#34; width=&#34;400&#34; height=&#34;500&#34; /&gt;
 &lt;p&gt;This section contains only one room &lt;code&gt;Learning Cyber Security&lt;/code&gt;  which gives a General Introduction to Cyber Security, how important some aspects are in this field and an opportunity to get your hands dirty!&lt;/p&gt;
 &lt;hr&gt;
 &lt;hr&gt;
 &lt;h1 id=&#34;p-stylecolorred-network-fundamentals-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt; Network Fundamentals &lt;/p&gt;&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&#34;network-vulnerabilities.png&#34; width=&#34;400&#34; height=&#34;500&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;network-vulnerabilities.png&#34; width=&#34;400&#34; height=&#34;500&#34; /&gt;
 &lt;p&gt;This is the heart and soul of it, It&amp;rsquo;s understanding how devices interact with each other and how data gets from point X to point Y. A strong knowledge &amp;amp; foundation in networking will you a very good troubleshooter whether you&amp;rsquo;re red teaming, defending or IT ops. You&amp;rsquo;ll have a general idea at first, few basics that you need to know to start building your knowledge ( What&amp;rsquo;s a protocol and few examples of it, .. I&amp;rsquo;ll not spoil more I&amp;rsquo;ll let you discover everything else by yourself).&lt;br&gt;
 And surely you&amp;rsquo;ll learn about the OSI Model which is one of th conceptual model that governs the computer networking ( There is the TCP/IP Model aswell). You&amp;rsquo;ll also understand what a packet or a frame and how data is divided into small pieces (PDU SDU.. ) And finally you&amp;rsquo;ll learn how to expend your network.&lt;/p&gt;
 &lt;hr&gt;
 &lt;hr&gt;
 &lt;h1 id=&#34;p-stylecolorred-how-the-web-works-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt; How The Web Works &lt;/p&gt;&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&#34;application-vulnerabilities.png&#34; width=&#34;400&#34; height=&#34;500&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;application-vulnerabilities.png&#34; width=&#34;400&#34; height=&#34;500&#34; /&gt;
 &lt;p&gt;This section is the most interesting one for me and i am sure that beginners will benefit from the amount of knowledge that they&amp;rsquo;re presenting. It covers so many aspects of the web and how it works!&lt;br&gt;
 This section will not only give a solid understanding but also an opportunity to practice what you have learnt! &lt;br&gt;
 If i started my pentesting journey with these rooms that would have saved a lot of time for me!&lt;/p&gt;
 &lt;hr&gt;
 &lt;hr&gt;
 &lt;h1 id=&#34;p-stylecolorred-linux-fundamentals-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt; Linux Fundamentals &lt;/p&gt;&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&#34;linux-fundamentals.png&#34; width=&#34;400&#34; height=&#34;500&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;linux-fundamentals.png&#34; width=&#34;400&#34; height=&#34;500&#34; /&gt;
 &lt;p&gt;As a beginner you must learn linux or else you&amp;rsquo;re going nowhere in this field! They are many roles within cyber security that requires you have basic &amp;amp; fondamental understanding of linux and how it works! You don&amp;rsquo;t need to be a linux expert to excel here by all means  but having a fairly good understanding about how this operating system works will greatly help in your journey! &lt;br&gt;
 And this section will teach almost all the basics that you need to start getting your hands dirty in the other labs in this platforme or maybe another path.
 &lt;br&gt;
@@ -66,7 +66,7 @@ After doing this section i highly recommand trying the Linux challenges room! Yo
 &lt;hr&gt;
 &lt;hr&gt;
 &lt;h1 id=&#34;p-stylecolorred-windows-fundamentals-p&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt; Windows Fundamentals &lt;/p&gt;&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&#34;hacking-windows2.png&#34; width=&#34;400&#34; height=&#34;500&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;hacking-windows2.png&#34; width=&#34;400&#34; height=&#34;500&#34; /&gt;
 &lt;p&gt;You maybe already familar with windows as most of us grew using windows! But do you really know how it works? Have you dig into the configurations and tried to play with them and understood nothing?! &lt;br&gt;&lt;/p&gt;
 &lt;p&gt;You may 98% of the time use Linux as an attacker! But most of the time you can&amp;rsquo;t really know what OS you&amp;rsquo;re attacking! As we know most of the companies uses Windows and to be exact an Active Directory infrastructure. In order to attack a windows machine or trying to privesc to administrator you&amp;rsquo;ll need to understand the basics of Windows! &lt;br&gt;
 I don&amp;rsquo;t think you&amp;rsquo;ll need more resources about &amp;ldquo;Windows Basics&amp;rdquo; after completing this section it simply covers everything you need to know as a beginner! &lt;br&gt;&lt;/p&gt;

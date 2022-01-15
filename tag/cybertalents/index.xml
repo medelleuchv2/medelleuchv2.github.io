@@ -7,7 +7,7 @@
     <description>CyberTalents</description>
     <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>Copyright © Mohamed Elleuch 2021</copyright><lastBuildDate>Mon, 19 Apr 2021 00:00:00 +0000</lastBuildDate>
     <image>
-      <url>https://mohamed-elleuch.me/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_512x512_fill_lanczos_center_2.png</url>
+      <url>https://mohamed-elleuch.me/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_512x512_fill_lanczos_center_3.png</url>
       <title>CyberTalents</title>
       <link>https://mohamed-elleuch.me/tag/cybertalents/</link>
     </image>
@@ -127,8 +127,8 @@ UNKNOWN COMMAND
 &lt;h1 id=&#34;p-stylecolorredpreparing-the-debuggerp&#34;&gt;&lt;p style=&#34;color:RED&#34;&gt;Preparing the debugger&lt;/p&gt;&lt;/h1&gt;
 &lt;blockquote&gt;
 &lt;p&gt;I&amp;rsquo;ll be using Immunity debbuger &amp;amp; mona for this
-&lt;a href=&#34;https://www.immunityinc.com/products/debugger/&#34;&gt;https://www.immunityinc.com/products/debugger/&lt;/a&gt;
-&lt;a href=&#34;https://github.com/corelan/mona&#34;&gt;https://github.com/corelan/mona&lt;/a&gt;&lt;/p&gt;
+&lt;a href=&#34;https://www.immunityinc.com/products/debugger/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://www.immunityinc.com/products/debugger/&lt;/a&gt;
+&lt;a href=&#34;https://github.com/corelan/mona&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://github.com/corelan/mona&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;After opening the executeable with the debbuger
 we first we&amp;rsquo;re gonna set a working directory for mona at the buttom of the debbuger window&lt;/p&gt;

